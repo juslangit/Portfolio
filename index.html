@@ -279,6 +279,92 @@ p{margin:.7em 0}
 .tl p{margin:2px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.5}
 
 /* ============================================================
+   Work gallery — filter tabs + image cards
+   ============================================================ */
+.filters{
+  display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px;
+}
+.filter{
+  font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  padding:9px 17px;border-radius:999px;
+  background:#fff;border:1px solid var(--line);color:var(--ink-soft);
+  transition:background-color .25s var(--ease),color .25s var(--ease),
+             border-color .25s var(--ease),transform .25s var(--ease);
+}
+.filter:hover{transform:translateY(-1px);color:var(--ink)}
+.filter[aria-pressed="true"]{
+  background:var(--ink);border-color:var(--ink);color:var(--paper);
+}
+.filter .n{
+  opacity:.55;font-size:12px;margin-left:5px;font-variant-numeric:tabular-nums;
+}
+
+.gallery{
+  display:grid;gap:16px;margin-top:18px;
+  grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+}
+@media(max-width:640px){.gallery{grid-template-columns:1fr;gap:13px}}
+
+.work{
+  display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;box-shadow:var(--shadow);text-decoration:none;color:inherit;
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease),opacity .35s var(--ease);
+}
+.work:hover{transform:translateY(-5px);box-shadow:var(--shadow-lift)}
+.work.wide{grid-column:span 2}
+@media(max-width:980px){.work.wide{grid-column:span 1}}
+
+.shot{
+  position:relative;aspect-ratio:4/3;overflow:hidden;
+  background:var(--paper-2);border-bottom:1px solid var(--line);
+}
+.work.wide .shot{aspect-ratio:16/9}
+.shot img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;
+  transition:transform .7s var(--ease);
+}
+.work:hover .shot img{transform:scale(1.045)}
+
+/* typographic tile for work with no photograph */
+.shot.tile{
+  display:grid;place-items:center;text-align:center;padding:22px;
+  border-bottom:1px solid var(--line);
+}
+.shot.tile .glyph{font-size:40px;line-height:1;margin-bottom:10px;display:block}
+.shot.tile .tname{
+  display:block;
+  font-weight:800;letter-spacing:-.02em;font-size:1.05rem;color:var(--ink);
+}
+.shot.tile .tsub{
+  display:block;
+  font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.4;
+}
+.tile-mint{background:linear-gradient(150deg,var(--mint),#eef7f2)}
+.tile-rose{background:linear-gradient(150deg,var(--rose),#fff0f3)}
+.tile-lilac{background:linear-gradient(150deg,var(--lilac),#f2eefb)}
+
+.work-body{padding:18px 19px 20px;display:flex;flex-direction:column;gap:9px;flex:1}
+.work-head{display:flex;align-items:flex-start;gap:10px}
+.work-head h3{font-size:1.04rem;flex:1;min-width:0}
+.work-body p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-soft)}
+.work .chips{margin-top:auto;padding-top:4px}
+.work .chip{background:var(--paper-2)}
+.work .foot{
+  margin-top:2px;font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:7px;
+}
+.cat{
+  font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  padding:4px 8px;border-radius:6px;white-space:nowrap;flex:0 0 auto;
+}
+.cat-code{background:#d9e8fb;color:#2f6bb0}
+.cat-game{background:#e6dcf8;color:#6b4fb0}
+.cat-3d{background:#d9f2e4;color:#20714f}
+.cat-hw{background:#ffe1cc;color:#a35c13}
+
+.work.hide{display:none}
+
+/* ============================================================
    Scroll reveal
    ============================================================ */
 .rv{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -368,7 +454,6 @@ p{margin:.7em 0}
     <a class="brand" href="#top"><span class="mark">🫧</span> Luqman Hakeem</a>
     <div class="nav-links">
       <a href="#work">Work</a>
-      <a href="#craft">3D &amp; Games</a>
       <a href="#about">About</a>
       <a class="nav-cta" href="#contact">Get in touch</a>
     </div>
@@ -410,9 +495,9 @@ p{margin:.7em 0}
       <p class="tiny muted" style="margin-top:8px">Python ETL over PLANMalaysia + OpenStreetMap, rendered in one browser tab.</p>
     </div>
     <div class="card c-peach span-3 rv">
-      <p class="eyebrow">Shipped projects</p>
-      <div class="stat" data-count="9">0</div>
-      <p class="tiny muted" style="margin-top:8px">Web apps, developer tools, Blender add-ons and games — built, not tutorialed.</p>
+      <p class="eyebrow">Projects on this page</p>
+      <div class="stat" data-count="20">0</div>
+      <p class="tiny muted" style="margin-top:8px">Web apps, developer tools, games, 3D work and one handheld console — built, not tutorialed.</p>
     </div>
     <div class="card c-lilac span-3 rv">
       <p class="eyebrow">Sports simulated</p>
@@ -428,188 +513,205 @@ p{margin:.7em 0}
 
   <!-- ============ WORK ============ -->
   <div class="section-head" id="work">
-    <h2>Selected work</h2>
-    <p>Tools I actually use, built end to end. Open repos where I can share them.</p>
+    <h2>Work</h2>
+    <p>Twenty projects across code, games, 3D and hardware. Filter by what you came for.</p>
   </div>
 
-  <section class="bento">
-    <a class="card c-butter span-7 proj tilt rv" href="https://github.com/juslangit/print-quote" target="_blank" rel="noopener">
-      <div class="proj-top">
-        <span class="proj-icon">🖨️</span>
-        <div>
-          <h3>Print Quote</h3>
-          <p class="tiny muted" style="margin-top:2px">Instant 3D-printing price from an STL file</p>
-        </div>
-        <div class="proj-meta">
-          <span class="tag live">Public repo</span>
-          <span class="tag">Three.js</span>
-        </div>
-      </div>
-      <p>
-        Drag an STL into the browser and get a price. The page parses the triangle mesh
-        itself — no server, no upload — works out solid volume, shell and infill, converts
-        that to grams and hours, then prices the job against filament cost, machine rate
-        and margin. The STL parser is hand-written; Three.js only draws the result.
-      </p>
-      <div class="chips">
-        <span class="chip">Hand-written STL parser</span>
-        <span class="chip">Mesh volume maths</span>
-        <span class="chip">Vanilla JS</span>
-        <span class="chip">Zero backend</span>
-      </div>
-      <span class="foot">View repository <span class="arrow">→</span></span>
-    </a>
-
-    <a class="card c-sky span-5 proj tilt rv" href="https://github.com/juslangit/claude-chat" target="_blank" rel="noopener">
-      <div class="proj-top">
-        <span class="proj-icon">💬</span>
-        <div>
-          <h3>Claude Chat</h3>
-          <p class="tiny muted" style="margin-top:2px">Run an AI coding agent from your phone</p>
-        </div>
-        <div class="proj-meta"><span class="tag live">Public repo</span></div>
-      </div>
-      <p>
-        A WhatsApp-style web app that drives Claude Code running on my Mac at home. Each
-        chat on the phone is a real terminal session over a private Tailscale network.
-        Node with built-in modules only — no dependencies, no framework.
-      </p>
-      <div class="chips">
-        <span class="chip">Node.js</span>
-        <span class="chip">tmux</span>
-        <span class="chip">Tailscale</span>
-        <span class="chip">PWA</span>
-      </div>
-      <span class="foot">View repository <span class="arrow">→</span></span>
-    </a>
-
-    <div class="card c-mint span-5 proj tilt rv">
-      <div class="proj-top">
-        <span class="proj-icon">🗺️</span>
-        <div>
-          <h3>Peta Lot Tanah</h3>
-          <p class="tiny muted" style="margin-top:2px">64,770 land lots on one interactive map</p>
-        </div>
-        <div class="proj-meta"><span class="tag wip">In testing</span></div>
-      </div>
-      <p>
-        Every cadastral lot within 5&nbsp;km of a point in Klang, Selangor. A Python
-        pipeline pulls lots from PLANMalaysia iPLAN and buildings from OpenStreetMap,
-        joins them, and bakes a single data file. The map colours lots by built-vs-empty,
-        by size, and by JUPEM area code — and opens straight from disk, no server.
-      </p>
-      <div class="chips">
-        <span class="chip">Python ETL</span>
-        <span class="chip">Leaflet</span>
-        <span class="chip">GeoJSON</span>
-        <span class="chip">OpenStreetMap</span>
-      </div>
-      <span class="foot" style="color:var(--ink-faint)">Write-up coming soon</span>
-    </div>
-
-    <a class="card c-rose span-7 proj tilt rv" href="https://github.com/juslangit/pipeline" target="_blank" rel="noopener">
-      <div class="proj-top">
-        <span class="proj-icon">🔧</span>
-        <div>
-          <h3>Pipeline</h3>
-          <p class="tiny muted" style="margin-top:2px">Blender → Unreal batch exporter · open source</p>
-        </div>
-        <div class="proj-meta">
-          <span class="tag live">GPL-3.0</span>
-          <span class="tag">Blender add-on</span>
-        </div>
-      </div>
-      <p>
-        Every Blender-to-Unreal handoff repeats the same chores: apply transforms, rename
-        to <code>SM_</code>/<code>SK_</code>, drop the pivot to the floor, keep collision
-        meshes attached, export one object at a time. Pipeline does all of it in one click
-        — four export modes, FBX and glTF, plus a validation pass. Its test suite runs
-        Blender headless and re-imports the FBX to measure that the pivot, rotation and
-        unit scale actually survived the round trip.
-      </p>
-      <div class="chips">
-        <span class="chip">Python</span>
-        <span class="chip">Blender API (bpy)</span>
-        <span class="chip">25 headless tests</span>
-        <span class="chip">FBX round-trip checks</span>
-      </div>
-      <span class="foot">View repository <span class="arrow">→</span></span>
-    </a>
-  </section>
-
-  <!-- ============ 3D & GAMES ============ -->
-  <div class="section-head" id="craft">
-    <h2>3D &amp; games</h2>
-    <p>Where the visual instinct comes from. Modelling, level design and engine work.</p>
+  <div class="filters" role="group" aria-label="Filter work by category">
+    <button class="filter" data-filter="all"  aria-pressed="true">All <span class="n">20</span></button>
+    <button class="filter" data-filter="code" aria-pressed="false">Coding <span class="n">6</span></button>
+    <button class="filter" data-filter="game" aria-pressed="false">Game Dev <span class="n">6</span></button>
+    <button class="filter" data-filter="3d"   aria-pressed="false">3D <span class="n">7</span></button>
+    <button class="filter" data-filter="hw"   aria-pressed="false">Hardware <span class="n">1</span></button>
   </div>
 
-  <section class="bento">
-    <div class="card c-lilac span-6 proj tilt rv">
-      <div class="proj-top">
-        <span class="proj-icon">🏸</span>
-        <div>
-          <h3>Referee For Fun</h3>
-          <p class="tiny muted" style="margin-top:2px">You are the umpire, not the athlete</p>
+  <section class="gallery" id="gallery">
+    <div class="work rv wide" data-cat="code">
+        <div class="shot"><img src="img/peta-lot-tanah.jpg" alt="Satellite map of Klang with 64,770 land lots shaded red and green" loading="lazy" width="880" height="591"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Peta Lot Tanah</h3><span class="cat cat-code">Coding</span></div>
+          <p>Every cadastral land lot within 5&nbsp;km of a point in Klang, Selangor — 64,770 of them. A Python pipeline pulls lots from PLANMalaysia iPLAN and buildings from OpenStreetMap, joins them and bakes one data file. Colours lots by built-vs-empty, by size, and by JUPEM area code.</p>
+          <div class="chips"><span class="chip">Python ETL</span><span class="chip">Leaflet</span><span class="chip">GeoJSON</span><span class="chip">OpenStreetMap</span></div>
         </div>
-        <div class="proj-meta"><span class="tag priv">Private repo</span><span class="tag">Godot</span></div>
       </div>
-      <p>
-        A first-person game where the match is physically simulated in front of you and
-        the engine always knows the truth. Pick a team to favour, then bend every close
-        call — the only limit is how much suspicion the crowd will tolerate. Five sports
-        share one official and one reputation.
-      </p>
-      <div class="chips"><span class="chip">Godot 4</span><span class="chip">GDScript</span><span class="chip">Physics simulation</span><span class="chip">macOS + Windows builds</span></div>
-    </div>
-
-    <div class="card c-butter span-6 proj tilt rv">
-      <div class="proj-top">
-        <span class="proj-icon">🍜</span>
-        <div>
-          <h3>Kedai Runtuh</h3>
-          <p class="tiny muted" style="margin-top:2px">One-thumb mamak stacking game</p>
+    <a class="work rv" data-cat="code" href="https://github.com/juslangit/print-quote" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/print-quote.jpg" alt="Print Quote app showing a green torus knot and a RM30.43 estimate" loading="lazy" width="880" height="591"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Print Quote</h3><span class="cat cat-code">Coding</span></div>
+          <p>Drag an STL into the browser and get a printing price. The page parses the triangle mesh itself — no server, no upload — works out solid volume, shell and infill, converts that to grams and hours, then prices it against filament cost, machine rate and margin.</p>
+          <div class="chips"><span class="chip">Hand-written STL parser</span><span class="chip">Three.js</span><span class="chip">Vanilla JS</span><span class="chip">Zero backend</span></div>
+          <span class="foot">View repository <span class="arrow">→</span></span>
         </div>
-        <div class="proj-meta"><span class="tag wip">Prototype</span><span class="tag">Godot</span></div>
+      </a>
+    <a class="work rv" data-cat="code" href="https://github.com/juslangit/claude-chat" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/claude-chat.jpg" alt="Claude Chat phone interface showing a conversation and a slash command" loading="lazy" width="643" height="880"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Claude Chat</h3><span class="cat cat-code">Coding</span></div>
+          <p>A WhatsApp-style web app that drives an AI coding agent running on my Mac at home. Each chat on the phone is a real terminal session over a private Tailscale network. Node with built-in modules only — no dependencies, no framework.</p>
+          <div class="chips"><span class="chip">Node.js</span><span class="chip">tmux</span><span class="chip">Tailscale</span><span class="chip">PWA</span></div>
+          <span class="foot">View repository <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="code" href="https://github.com/juslangit/pipeline" target="_blank" rel="noopener">
+        <div class="shot tile tile-rose">
+          <div><span class="glyph">🔧</span><span class="tname">Pipeline</span><span class="tsub">Blender → Unreal · open source</span></div>
+        </div>
+        <div class="work-body">
+          <div class="work-head"><h3>Pipeline</h3><span class="cat cat-code">Coding</span></div>
+          <p>A Blender add-on that batch-exports a scene to Unreal with the naming, unit scale, pivots and collision meshes Unreal expects. Four export modes, FBX and glTF. Its tests run Blender headless and re-import the FBX to measure that the pivot, rotation and scale survived the round trip.</p>
+          <div class="chips"><span class="chip">Python</span><span class="chip">Blender API</span><span class="chip">25 headless tests</span><span class="chip">GPL-3.0</span></div>
+          <span class="foot">View repository <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <div class="work rv" data-cat="code">
+        <div class="shot"><img src="img/tuition-lms.jpg" alt="Cerdik tuition platform dashboard showing two course cards" loading="lazy" width="880" height="323"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Cerdik — tuition platform</h3><span class="cat cat-code">Coding</span></div>
+          <p>A learning platform for a tuition centre: students open materials and track progress, parents see attendance and fees, the centre sees enrolment and revenue. Built as a working demo to answer a client brief rather than claim past work.</p>
+          <div class="chips"><span class="chip">Single-file demo</span><span class="chip">Three role views</span><span class="chip">Client work</span></div>
+        </div>
       </div>
-      <p>
-        Food swings from a hook above a tower. One tap drops it. Land it and the tower
-        grows, the camera rises, the swing speeds up. Miss and the whole order collapses —
-        with real physics, so it never falls the same way twice.
-      </p>
-      <div class="chips"><span class="chip">Godot 4</span><span class="chip">Mobile</span><span class="chip">Rigid-body physics</span><span class="chip">3D art</span></div>
-      <span class="foot">Playable right here — find the 🍜 <span class="arrow">↓</span></span>
-    </div>
-
-    <div class="card span-12 rv">
-      <p class="eyebrow">Earlier work — university &amp; competition projects</p>
-      <div class="tiles">
-        <div class="tile">
-          <span class="yr">2024</span>
-          <h3>Rotting Classroom</h3>
-          <p>Wave-based FPS zombie game. Final year project at UTeM, built in Unreal Engine 5 with Blender assets.</p>
+    <div class="work rv" data-cat="code">
+        <div class="shot tile tile-lilac">
+          <div><span class="glyph">🎙️</span><span class="tname">Siti</span><span class="tsub">Voice AI · retrieval · memory</span></div>
         </div>
-        <div class="tile">
-          <span class="yr">2023</span>
-          <h3>Madani Makan Mania</h3>
-          <p>Unreal Engine workshop project. I made every 3D asset in the game and designed all three levels.</p>
+        <div class="work-body">
+          <div class="work-head"><h3>Siti — voice assistant</h3><span class="cat cat-code">Coding</span></div>
+          <p>A hands-free AI assistant for the drive to work. Open a page on the phone, tap once, and it listens, answers aloud and listens again. It knows my project notes, can save new facts to a vector store, and searches the web.</p>
+          <div class="chips"><span class="chip">Claude API</span><span class="chip">Supabase edge functions</span><span class="chip">pgvector</span><span class="chip">Speech I/O</span></div>
         </div>
-        <div class="tile">
-          <span class="yr">2023</span>
-          <h3>Dimanakah Riri?</h3>
-          <p>Educational game for children, inspired by the Dewan Bahasa dan Pustaka book <em>Tolong Cari Ibuku</em>. Built for the FTMK × DBP competition.</p>
-        </div>
-        <div class="tile"><span class="yr">2023</span><h3>Toki Top</h3><p>Game project — 3D assets and gameplay programming.</p></div>
-        <div class="tile"><span class="yr">2023</span><h3>Master League</h3><p>Game project — 3D assets and gameplay programming.</p></div>
-        <div class="tile"><span class="yr">2023</span><h3>Autocat</h3><p>Game project — 3D assets and gameplay programming.</p></div>
-        <div class="tile"><span class="yr">2023</span><h3>Flagship Mountain</h3><p>Game project — level design and 3D environment art.</p></div>
       </div>
-      <div class="btn-row">
-        <a class="btn btn-ghost magnet" href="https://www.behance.net/luqmanhakeem1891" target="_blank" rel="noopener">
-          Full 3D portfolio on Behance <span aria-hidden="true">↗</span>
-        </a>
+    <div class="work rv wide" data-cat="game">
+        <div class="shot"><img src="img/referee-for-fun.jpg" alt="Badminton rally seen from the umpire's chair, scoreboard reading 0-2" loading="lazy" width="880" height="552"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Referee For Fun</h3><span class="cat cat-game">Game Dev</span></div>
+          <p>A first-person game where you are the umpire, not the athlete. The match is physically simulated in front of you and the engine always knows the truth — so you can bend every close call, limited only by how much suspicion the crowd tolerates. Five sports share one official and one reputation.</p>
+          <div class="chips"><span class="chip">Godot 4</span><span class="chip">GDScript</span><span class="chip">Physics simulation</span><span class="chip">macOS + Windows</span></div>
+        </div>
       </div>
-    </div>
+    <div class="work rv" data-cat="game">
+        <div class="shot"><img src="img/kedai-runtuh.jpg" alt="Kedai Runtuh gameplay, a tower of food with PERFECT on screen" loading="lazy" width="810" height="880"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Kedai Runtuh</h3><span class="cat cat-game">Game Dev</span></div>
+          <p>One-thumb mamak stacking game. Food swings from a hook; one tap drops it. Land it and the tower grows, the camera rises, the swing speeds up. Miss and the order collapses — real physics, so it never falls the same way twice.</p>
+          <div class="chips"><span class="chip">Godot 4</span><span class="chip">Mobile</span><span class="chip">Rigid-body physics</span><span class="chip">3D art</span></div>
+        </div>
+      </div>
+    <a class="work rv" data-cat="game" href="https://www.behance.net/gallery/203240129/Rotting-Classroom-Final-Year-Project" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/rotting-classroom.webp" alt="Rotting Classroom gameplay artwork" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Rotting Classroom</h3><span class="cat cat-game">Game Dev</span></div>
+          <p>Wave-based FPS zombie game, built as my final year project at UTeM. Unreal Engine 5 with Blender assets — level design, enemies and gameplay programming.</p>
+          <div class="chips"><span class="chip">Unreal Engine 5</span><span class="chip">Blender</span><span class="chip">Game design</span><span class="chip">Final year project</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="game" href="https://www.behance.net/gallery/204902227/Hawker-Hustle" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/hawker-hustle.webp" alt="Hawker Hustle street food stall scene" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Hawker Hustle</h3><span class="cat cat-game">Game Dev</span></div>
+          <p>A 1v1 street-food stall competition set in a Malaysian hawker centre. All 3D assets and game design, built in Blender and Unreal Engine.</p>
+          <div class="chips"><span class="chip">Unreal Engine</span><span class="chip">Blender</span><span class="chip">3D assets</span><span class="chip">Game design</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="game" href="https://www.behance.net/gallery/204909991/Ustad-Sesat-Jalan" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/ustad-sesat-jalan.webp" alt="Ustad Sesat Jalan game scene" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Ustad Sesat Jalan</h3><span class="cat cat-game">Game Dev</span></div>
+          <p>A village elder against local supernatural entities — Malaysian folklore as a game setting. 3D assets and game design in Blender and Unreal Engine.</p>
+          <div class="chips"><span class="chip">Unreal Engine</span><span class="chip">Blender</span><span class="chip">3D assets</span><span class="chip">Game design</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="game" href="https://www.behance.net/gallery/219099181/Fruit-Ninja-VR" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/fruit-ninja-vr.webp" alt="Fruit Ninja VR localised scene" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Fruit Ninja VR</h3><span class="cat cat-game">Game Dev</span></div>
+          <p>A VR slicing game inspired by Fruit Ninja, localised throughout — local fruit, the Petaling Street arch, and a paddy field level.</p>
+          <div class="chips"><span class="chip">VR</span><span class="chip">Unreal Engine</span><span class="chip">Blender</span><span class="chip">Level design</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv wide" data-cat="3d" href="https://www.behance.net/gallery/233075713/Fluke-Prosim-8" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/fluke-prosim-8.webp" alt="3D render of the Fluke ProSim 8 patient simulator" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Fluke ProSim 8</h3><span class="cat cat-3d">3D</span></div>
+          <p>Commissioned product visualisation of the Fluke ProSim 8 patient simulator — a hard-surface model built to match the real medical device, down to the connector ports, keypad and screen.</p>
+          <div class="chips"><span class="chip">Blender</span><span class="chip">Hard-surface modelling</span><span class="chip">Product viz</span><span class="chip">Client work</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="3d" href="https://www.behance.net/gallery/201573803/Chibi-Batman-3D" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/chibi-batman.webp" alt="Chibi Batman 3D character render" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Chibi Batman 3D</h3><span class="cat cat-3d">3D</span></div>
+          <p>Stylised chibi character model, sculpted and shaded in Blender.</p>
+          <div class="chips"><span class="chip">Blender</span><span class="chip">Character modelling</span><span class="chip">Stylised</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="3d" href="https://www.behance.net/gallery/203289589/Face-Rigging" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/face-rigging.webp" alt="Face rigging setup in Blender" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Face Rigging</h3><span class="cat cat-3d">3D</span></div>
+          <p>Facial rig study in Blender — building controls for expression and lip movement on a character head.</p>
+          <div class="chips"><span class="chip">Blender</span><span class="chip">Rigging</span><span class="chip">Character</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="3d" href="https://www.behance.net/gallery/203407641/Ghost-Hunting" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/ghost-hunting.webp" alt="Ghost Hunting 3D environment" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Ghost Hunting</h3><span class="cat cat-3d">3D</span></div>
+          <p>Environment and prop modelling for a ghost-hunting scene, built in Blender.</p>
+          <div class="chips"><span class="chip">Blender</span><span class="chip">Environment art</span><span class="chip">Lighting</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="3d" href="https://www.behance.net/gallery/205067189/FTMK-VR-Lab" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/ftmk-vr-lab.webp" alt="3D model of the FTMK VR lab" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>FTMK VR Lab</h3><span class="cat cat-3d">3D</span></div>
+          <p>3D reconstruction of the VR lab at FTMK, UTeM — the room, its equipment and layout modelled in Blender.</p>
+          <div class="chips"><span class="chip">Blender</span><span class="chip">Environment</span><span class="chip">Interior</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="3d" href="https://www.behance.net/gallery/254060207/Class-Hub-3D" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/class-hub-3d.webp" alt="Class Hub interior architectural render" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Class Hub 3D</h3><span class="cat cat-3d">3D</span></div>
+          <p>Interior architectural visualisation of a classroom hub, modelled and rendered in SketchUp.</p>
+          <div class="chips"><span class="chip">SketchUp</span><span class="chip">Interior design</span><span class="chip">Architecture</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv" data-cat="3d" href="https://www.behance.net/gallery/254060793/College-3D" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/college-3d.webp" alt="College interior architectural render" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>College 3D</h3><span class="cat cat-3d">3D</span></div>
+          <p>Architectural visualisation of a college interior — space planning and materials in SketchUp.</p>
+          <div class="chips"><span class="chip">SketchUp</span><span class="chip">Interior design</span><span class="chip">Architecture</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
+    <a class="work rv wide" data-cat="hw" href="https://www.behance.net/gallery/253454243/Handheld-Console-Prototype" target="_blank" rel="noopener">
+        <div class="shot"><img src="img/handheld-console.webp" alt="3D-printed handheld game console held in one hand" loading="lazy" width="808" height="632"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Handheld Console Prototype</h3><span class="cat cat-hw">Hardware</span></div>
+          <p>A working handheld game console, built in about three months. I designed the enclosure in TinkerCAD and printed it on a BambuLab, then set up a Linux OS on the hardware and ran custom software on it. Hardware, enclosure and software were all mine.</p>
+          <div class="chips"><span class="chip">TinkerCAD</span><span class="chip">3D printing</span><span class="chip">Linux</span><span class="chip">Embedded</span></div>
+          <span class="foot">View on Behance <span class="arrow">→</span></span>
+        </div>
+      </a>
   </section>
+
+  <div class="btn-row" style="margin-top:22px">
+    <a class="btn btn-ghost magnet" href="https://www.behance.net/luqmanhakeem1891" target="_blank" rel="noopener">
+      Full 3D portfolio on Behance <span aria-hidden="true">↗</span>
+    </a>
+  </div>
 
   <!-- ============ ABOUT ============ -->
   <div class="section-head" id="about">
@@ -1286,6 +1388,44 @@ var confetti = (function(){
       setTimeout(open, 500);
     }
   });
+})();
+
+
+/* ------------------------------------------------------------------
+   9. Work gallery filter
+   ------------------------------------------------------------------ */
+(function gallery(){
+  var bar = document.querySelector(".filters");
+  var grid = document.getElementById("gallery");
+  if (!bar || !grid) return;
+
+  var buttons = Array.prototype.slice.call(bar.querySelectorAll(".filter"));
+  var cards   = Array.prototype.slice.call(grid.querySelectorAll(".work"));
+
+  function apply(which){
+    buttons.forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.filter === which));
+    });
+    cards.forEach(function(c){
+      var show = which === "all" || c.dataset.cat === which;
+      c.classList.toggle("hide", !show);
+      // a filtered-in card must not be stuck mid-reveal
+      if (show) c.classList.add("in");
+    });
+    if (history.replaceState){
+      history.replaceState(null, "", which === "all" ? location.pathname + "#work"
+                                                     : location.pathname + "#work-" + which);
+    }
+  }
+
+  bar.addEventListener("click", function(e){
+    var b = e.target.closest(".filter");
+    if (b) apply(b.dataset.filter);
+  });
+
+  // deep link: /#work-3d opens straight into that category
+  var m = /^#work-(code|game|3d|hw)$/.exec(location.hash);
+  if (m) apply(m[1]);
 })();
 
 })();

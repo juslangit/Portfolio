@@ -12,10 +12,25 @@ no `node_modules`. Open the file in a browser and it works.
 | Piece | How |
 |---|---|
 | Layout | Pastel bento grid, CSS Grid, 12 columns collapsing to 1 |
+| Work gallery | 20 projects in four categories (Coding · Game Dev · 3D · Hardware) with filter tabs and deep links (`#work-3d`) |
 | Hero 3D | Three.js r128 (cdnjs UMD) — a flat-shaded icosahedron that leans toward the cursor |
 | Cursor | Custom dot + lagging ring, disabled on touch and for reduced motion |
 | Reveal | `IntersectionObserver`, staggered, with count-up numbers |
 | Easter egg | *Kedai Runtuh* — a canvas mini stacker. Konami code, or the 🍜 in the footer |
+
+## Images
+
+`img/` holds every project image — 18 files, ~1.2&nbsp;MB total, committed to the repo
+rather than hotlinked so the page has no third-party image dependency.
+
+| Source | Files |
+|---|---|
+| Behance cover images | the 12 3D / game / hardware pieces |
+| Rendered headless from the project itself | `print-quote`, `peta-lot-tanah`, `tuition-lms` |
+| Existing project screenshots | `claude-chat`, `referee-for-fun`, `kedai-runtuh` |
+
+Two projects have no photograph (Pipeline, Siti) and use a typographic tile instead —
+see `.shot.tile` in the stylesheet. Never fake a screenshot for these.
 
 ## Design tokens
 
