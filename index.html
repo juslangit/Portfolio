@@ -496,7 +496,7 @@ p{margin:.7em 0}
     </div>
     <div class="card c-peach span-3 rv">
       <p class="eyebrow">Projects on this page</p>
-      <div class="stat" data-count="20">0</div>
+      <div class="stat" data-count="21">0</div>
       <p class="tiny muted" style="margin-top:8px">Web apps, developer tools, games, 3D work and one handheld console — built, not tutorialed.</p>
     </div>
     <div class="card c-lilac span-3 rv">
@@ -514,18 +514,26 @@ p{margin:.7em 0}
   <!-- ============ WORK ============ -->
   <div class="section-head" id="work">
     <h2>Work</h2>
-    <p>Twenty projects across code, games, 3D and hardware. Filter by what you came for.</p>
+    <p>Twenty-one projects across code, games, 3D and hardware. Filter by what you came for.</p>
   </div>
 
   <div class="filters" role="group" aria-label="Filter work by category">
-    <button class="filter" data-filter="all"  aria-pressed="true">All <span class="n">20</span></button>
-    <button class="filter" data-filter="code" aria-pressed="false">Coding <span class="n">6</span></button>
+    <button class="filter" data-filter="all"  aria-pressed="true">All <span class="n">21</span></button>
+    <button class="filter" data-filter="code" aria-pressed="false">Coding <span class="n">7</span></button>
     <button class="filter" data-filter="game" aria-pressed="false">Game Dev <span class="n">6</span></button>
     <button class="filter" data-filter="3d"   aria-pressed="false">3D <span class="n">7</span></button>
     <button class="filter" data-filter="hw"   aria-pressed="false">Hardware <span class="n">1</span></button>
   </div>
 
   <section class="gallery" id="gallery">
+    <div class="work rv wide" data-cat="code">
+        <div class="shot"><img src="img/auxetic-chess.jpg" alt="Chess board built from sixteen hinged tiles, part-folded so diamond gaps open between them" loading="lazy" width="1760" height="990"></div>
+        <div class="work-body">
+          <div class="work-head"><h3>Auxetic Chess</h3><span class="cat cat-code">Coding</span></div>
+          <p>Chess on a board that is a mechanism. Sixteen rigid tiles, hinged at their corners, bloom open to exactly twice their area and close into a solid 8&times;8 to play on. The fold is solved from the hinge constraint <em>d&nbsp;=&nbsp;a&#8730;2&#183;cos(45&deg;+&theta;)</em> rather than animated, so the tiles stay joined at every angle. The chess underneath is a full engine &mdash; its move generator matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5.</p>
+          <div class="chips"><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Alpha-beta search</span></div>
+        </div>
+      </div>
     <div class="work rv wide" data-cat="code">
         <div class="shot"><img src="img/peta-lot-tanah.jpg" alt="Satellite map of Klang with 64,770 land lots shaded red and green" loading="lazy" width="880" height="591"></div>
         <div class="work-body">
