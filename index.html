@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luqman Hakeem — AI Full Stack Developer</title>
+<meta name="description" content="Luqman Hakeem builds AI systems and the 3D worlds they run in. AI full stack developer based in Cyberjaya, Malaysia. Open to remote work.">
+<meta property="og:title" content="Luqman Hakeem — AI Full Stack Developer">
+<meta property="og:description" content="I build AI systems and the 3D worlds they run in.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Palette — soft pastel bento on warm paper
+   ============================================================ */
+:root{
+  --paper:#faf7f2;
+  --paper-2:#f3eee6;
+  --ink:#2b2622;
+  --ink-soft:#6b6259;
+  --ink-faint:#9b9186;
+  --line:rgba(43,38,34,.10);
+
+  --mint:#d6ece0;   --mint-ink:#2f7a5c;
+  --peach:#ffdfcb;  --peach-ink:#c25a24;
+  --lilac:#e4dbf7;  --lilac-ink:#6b4fb0;
+  --sky:#d6e6fa;    --sky-ink:#2f6bb0;
+  --butter:#ffeec9; --butter-ink:#a97b12;
+  --rose:#ffd9e1;   --rose-ink:#c0426a;
+
+  --r:26px;
+  --shadow:0 2px 4px rgba(43,38,34,.03), 0 8px 20px rgba(43,38,34,.05);
+  --shadow-lift:0 6px 12px rgba(43,38,34,.05), 0 22px 44px rgba(43,38,34,.10);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+/* warm blobs in the background */
+body::before,body::after{
+  content:""; position:fixed; border-radius:50%; filter:blur(90px);
+  opacity:.55; z-index:0; pointer-events:none;
+}
+body::before{width:44vw;height:44vw;background:var(--lilac);top:-14vw;right:-10vw}
+body::after{width:38vw;height:38vw;background:var(--mint);bottom:-14vw;left:-12vw}
+
+img{max-width:100%;display:block}
+a{color:inherit}
+
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0}
+
+/* ============================================================
+   Custom cursor
+   ============================================================ */
+.cursor-dot,.cursor-ring{
+  position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
+  border-radius:50%;mix-blend-mode:multiply;
+}
+.cursor-dot{width:7px;height:7px;background:var(--ink);margin:-3.5px 0 0 -3.5px}
+.cursor-ring{
+  width:38px;height:38px;margin:-19px 0 0 -19px;
+  border:1.5px solid rgba(43,38,34,.30);
+  transition:width .25s var(--ease),height .25s var(--ease),margin .25s var(--ease),
+             background-color .25s var(--ease),border-color .25s var(--ease);
+}
+.cursor-ring.hot{
+  width:64px;height:64px;margin:-32px 0 0 -32px;
+  background:rgba(165,142,224,.16);border-color:transparent;
+}
+@media (hover:none),(max-width:860px){.cursor-dot,.cursor-ring{display:none}}
+
+/* ============================================================
+   Nav
+   ============================================================ */
+.nav{
+  position:sticky;top:0;z-index:60;
+  backdrop-filter:saturate(140%) blur(12px);
+  background:rgba(250,247,242,.72);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s var(--ease);
+}
+.nav.stuck{border-bottom-color:var(--line)}
+.nav-in{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;text-decoration:none}
+.brand .mark{
+  width:30px;height:30px;border-radius:10px;flex:0 0 auto;
+  background:linear-gradient(135deg,var(--lilac),var(--mint));
+  border:1px solid var(--line);
+  display:grid;place-items:center;font-size:14px;
+  transition:transform .4s var(--ease);
+}
+.brand:hover .mark{transform:rotate(-12deg) scale(1.08)}
+.nav-links{margin-left:auto;display:flex;gap:6px;align-items:center}
+.nav-links a{
+  text-decoration:none;font-size:14px;font-weight:600;color:var(--ink-soft);
+  padding:8px 13px;border-radius:999px;transition:.22s var(--ease);
+}
+.nav-links a:hover{background:var(--paper-2);color:var(--ink)}
+.nav-cta{
+  background:var(--ink)!important;color:var(--paper)!important;
+}
+.nav-cta:hover{transform:translateY(-1px)}
+@media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+
+/* ============================================================
+   Bento grid
+   ============================================================ */
+.bento{
+  display:grid;grid-template-columns:repeat(12,1fr);gap:16px;
+  margin-block:16px;
+}
+.card{
+  position:relative;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:26px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease);
+  transform-style:preserve-3d;
+}
+.card.tilt:hover{box-shadow:var(--shadow-lift)}
+.c-mint{background:var(--mint)}
+.c-peach{background:var(--peach)}
+.c-lilac{background:var(--lilac)}
+.c-sky{background:var(--sky)}
+.c-butter{background:var(--butter)}
+.c-rose{background:var(--rose)}
+.c-ink{background:var(--ink);color:var(--paper);border-color:transparent}
+
+.span-12{grid-column:span 12}
+.span-8{grid-column:span 8}
+.span-7{grid-column:span 7}
+.span-6{grid-column:span 6}
+.span-5{grid-column:span 5}
+.span-4{grid-column:span 4}
+.span-3{grid-column:span 3}
+@media(max-width:980px){
+  .span-8,.span-7,.span-6,.span-5{grid-column:span 12}
+  .span-4,.span-3{grid-column:span 6}
+}
+@media(max-width:560px){
+  .bento{gap:12px}
+  .card{padding:20px;border-radius:22px}
+  .span-4,.span-3{grid-column:span 12}
+}
+
+/* ============================================================
+   Type
+   ============================================================ */
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-faint);margin:0 0 10px;
+}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.08;margin:0}
+h1{font-size:clamp(2.4rem,6.2vw,4.2rem);font-weight:800}
+h2{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800}
+h3{font-size:1.12rem;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+p{margin:.7em 0}
+.lede{font-size:clamp(1rem,1.9vw,1.18rem);color:var(--ink-soft);max-width:56ch}
+.muted{color:var(--ink-soft)}
+.tiny{font-size:13px;line-height:1.5}
+
+.section-head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:46px 0 4px}
+.section-head p{margin:0;color:var(--ink-soft);font-size:14px;max-width:46ch}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero{min-height:min(78vh,640px);display:flex;flex-direction:column;justify-content:center;gap:18px;padding:40px}
+@media(max-width:560px){.hero{padding:26px;min-height:0}}
+.hero h1 .grad{
+  background:linear-gradient(100deg,var(--lilac-ink),var(--sky-ink) 45%,var(--mint-ink));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--paper-2);border:1px solid var(--line);
+  border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;
+}
+.dot-live{width:8px;height:8px;border-radius:50%;background:#39b37a;box-shadow:0 0 0 3px rgba(57,179,122,.22)}
+
+#hero3d{
+  position:absolute;inset:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
+.hero > *{position:relative;z-index:1}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:13px 22px;border-radius:999px;text-decoration:none;
+  font-weight:700;font-size:15px;border:1px solid transparent;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),background-color .3s var(--ease);
+  will-change:transform;
+}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-ghost{background:transparent;border-color:rgba(43,38,34,.18);color:var(--ink)}
+.btn-ghost:hover{background:rgba(255,255,255,.6)}
+.btn:hover{box-shadow:0 10px 24px rgba(43,38,34,.16)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+
+/* ============================================================
+   Stat / list bits
+   ============================================================ */
+.stat{font-size:clamp(2rem,4.4vw,2.9rem);font-weight:800;letter-spacing:-.04em;line-height:1}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{
+  font-size:12.5px;font-weight:600;padding:6px 11px;border-radius:9px;
+  background:rgba(255,255,255,.6);border:1px solid var(--line);
+}
+.c-ink .chip{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.16)}
+
+/* ============================================================
+   Project cards
+   ============================================================ */
+.proj{
+  display:flex;flex-direction:column;gap:12px;text-decoration:none;color:inherit;
+  min-height:230px;
+}
+.proj-top{display:flex;align-items:flex-start;gap:12px}
+.proj-icon{
+  width:44px;height:44px;flex:0 0 auto;border-radius:14px;
+  display:grid;place-items:center;font-size:21px;
+  background:rgba(255,255,255,.65);border:1px solid var(--line);
+  transition:transform .45s var(--ease);
+}
+.proj:hover .proj-icon{transform:rotate(-8deg) scale(1.08)}
+.proj-meta{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.tag{
+  font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:4px 9px;border-radius:7px;background:rgba(255,255,255,.7);
+  border:1px solid var(--line);white-space:nowrap;
+}
+.tag.live{background:#d9f2e4;color:#20714f;border-color:transparent}
+.tag.wip{background:#ffe8cc;color:#a35c13;border-color:transparent}
+.tag.priv{background:rgba(43,38,34,.07);color:var(--ink-soft);border-color:transparent}
+.proj p{margin:0;color:var(--ink-soft);font-size:14.5px;line-height:1.55}
+.proj .foot{
+  margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;
+}
+.proj .arrow{transition:transform .35s var(--ease);display:inline-block}
+.proj:hover .arrow{transform:translateX(5px)}
+
+/* small game tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-top:6px}
+.tile{
+  background:rgba(255,255,255,.62);border:1px solid var(--line);border-radius:16px;
+  padding:15px 16px;transition:transform .35s var(--ease),background-color .35s var(--ease);
+}
+.tile:hover{transform:translateY(-3px);background:#fff}
+.tile h3{font-size:.97rem}
+.tile p{margin:5px 0 0;font-size:13px;color:var(--ink-soft);line-height:1.45}
+.tile .yr{font-size:11px;font-weight:700;color:var(--ink-faint);letter-spacing:.05em}
+
+/* timeline */
+.tl{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:16px}
+.tl li{display:flex;gap:14px}
+.tl .yr{
+  flex:0 0 62px;font-size:12px;font-weight:800;color:var(--ink-faint);
+  letter-spacing:.04em;padding-top:3px;
+}
+.tl h3{font-size:1rem}
+.tl p{margin:2px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+
+/* ============================================================
+   Scroll reveal
+   ============================================================ */
+.rv{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+
+/* count-up numbers keep their box */
+.stat[data-count]{font-variant-numeric:tabular-nums}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.foot-wrap{margin:56px 0 28px}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.link-chip{
+  display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  color:var(--paper);border-radius:999px;padding:11px 18px;font-weight:600;font-size:14.5px;
+  transition:transform .3s var(--ease),background-color .3s var(--ease);
+}
+.link-chip:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+.colophon{
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.14);
+  font-size:12.5px;color:rgba(250,247,242,.6);
+}
+.egg-hint{
+  background:none;border:none;color:inherit;font:inherit;cursor:pointer;
+  padding:0;opacity:.6;transition:opacity .3s var(--ease);
+}
+.egg-hint:hover{opacity:1}
+
+/* ============================================================
+   Easter egg — Kedai Runtuh mini
+   ============================================================ */
+.egg{
+  position:fixed;inset:0;z-index:200;display:none;
+  place-items:center;padding:20px;
+  background:rgba(43,38,34,.55);backdrop-filter:blur(6px);
+}
+.egg.on{display:grid}
+.egg-box{
+  background:var(--paper);border-radius:26px;padding:20px;
+  width:min(420px,100%);box-shadow:0 30px 80px rgba(0,0,0,.35);
+  border:1px solid var(--line);
+}
+.egg-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.egg-head h3{font-size:1.05rem}
+.egg-head .tiny{color:var(--ink-faint)}
+.egg-close{
+  margin-left:auto;background:var(--paper-2);border:1px solid var(--line);
+  width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;
+  display:grid;place-items:center;color:var(--ink-soft);
+}
+.egg-close:hover{background:#fff;color:var(--ink)}
+#eggCanvas{
+  width:100%;aspect-ratio:3/4;border-radius:18px;display:block;
+  background:linear-gradient(180deg,#e8f0fb,#fdf3e3);
+  border:1px solid var(--line);touch-action:manipulation;cursor:pointer;
+}
+.egg-foot{display:flex;justify-content:space-between;align-items:center;margin-top:11px;font-size:13px}
+.egg-score{font-weight:800;letter-spacing:-.02em}
+
+/* confetti layer */
+#confetti{position:fixed;inset:0;z-index:190;pointer-events:none;display:none}
+#confetti.on{display:block}
+
+/* skip link */
+.skip{
+  position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--paper);
+  padding:10px 16px;border-radius:0 0 12px 0;z-index:300;font-weight:700;
+}
+.skip:focus{left:0}
+:focus-visible{outline:2.5px solid var(--lilac-ink);outline-offset:3px;border-radius:6px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><span class="mark">🫧</span> Luqman Hakeem</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#craft">3D &amp; Games</a>
+      <a href="#about">About</a>
+      <a class="nav-cta" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main" class="wrap" role="main">
+  <span id="top"></span>
+
+  <!-- ============ HERO ============ -->
+  <section class="bento">
+    <div class="card span-12 hero rv">
+      <canvas id="hero3d" aria-hidden="true"></canvas>
+      <p class="eyebrow">Cyberjaya, Malaysia · open to remote</p>
+      <h1>I build <span class="grad">AI systems</span><br>and the 3D worlds<br>they run in.</h1>
+      <p class="lede">
+        AI full stack developer with years of visual craft behind it. I ship the whole
+        thing — the model calls, the database, the browser, and the geometry on screen.
+      </p>
+      <div class="hero-row">
+        <span class="pill"><span class="dot-live"></span> Available for remote roles</span>
+        <span class="pill">🐍 Python</span>
+        <span class="pill">⚡ Node &amp; JS</span>
+        <span class="pill">🧠 Claude API · RAG</span>
+        <span class="pill">🎮 Blender · Unreal · Godot</span>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary magnet" href="#work">See the work <span aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost magnet" href="#contact">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="bento">
+    <div class="card c-mint span-3 rv">
+      <p class="eyebrow">Cadastral lots mapped</p>
+      <div class="stat" data-count="64770">0</div>
+      <p class="tiny muted" style="margin-top:8px">Python ETL over PLANMalaysia + OpenStreetMap, rendered in one browser tab.</p>
+    </div>
+    <div class="card c-peach span-3 rv">
+      <p class="eyebrow">Shipped projects</p>
+      <div class="stat" data-count="9">0</div>
+      <p class="tiny muted" style="margin-top:8px">Web apps, developer tools, Blender add-ons and games — built, not tutorialed.</p>
+    </div>
+    <div class="card c-lilac span-3 rv">
+      <p class="eyebrow">Sports simulated</p>
+      <div class="stat" data-count="5">0</div>
+      <p class="tiny muted" style="margin-top:8px">Badminton, tennis, table tennis and both volleyballs — one physics spine, in Referee For Fun.</p>
+    </div>
+    <div class="card c-sky span-3 rv">
+      <p class="eyebrow">npm dependencies</p>
+      <div class="stat" data-count="0">0</div>
+      <p class="tiny muted" style="margin-top:8px">Claude Chat runs on Node's built-in modules alone. No framework, nothing to patch.</p>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <div class="section-head" id="work">
+    <h2>Selected work</h2>
+    <p>Tools I actually use, built end to end. Open repos where I can share them.</p>
+  </div>
+
+  <section class="bento">
+    <a class="card c-butter span-7 proj tilt rv" href="https://github.com/juslangit/print-quote" target="_blank" rel="noopener">
+      <div class="proj-top">
+        <span class="proj-icon">🖨️</span>
+        <div>
+          <h3>Print Quote</h3>
+          <p class="tiny muted" style="margin-top:2px">Instant 3D-printing price from an STL file</p>
+        </div>
+        <div class="proj-meta">
+          <span class="tag live">Public repo</span>
+          <span class="tag">Three.js</span>
+        </div>
+      </div>
+      <p>
+        Drag an STL into the browser and get a price. The page parses the triangle mesh
+        itself — no server, no upload — works out solid volume, shell and infill, converts
+        that to grams and hours, then prices the job against filament cost, machine rate
+        and margin. The STL parser is hand-written; Three.js only draws the result.
+      </p>
+      <div class="chips">
+        <span class="chip">Hand-written STL parser</span>
+        <span class="chip">Mesh volume maths</span>
+        <span class="chip">Vanilla JS</span>
+        <span class="chip">Zero backend</span>
+      </div>
+      <span class="foot">View repository <span class="arrow">→</span></span>
+    </a>
+
+    <a class="card c-sky span-5 proj tilt rv" href="https://github.com/juslangit/claude-chat" target="_blank" rel="noopener">
+      <div class="proj-top">
+        <span class="proj-icon">💬</span>
+        <div>
+          <h3>Claude Chat</h3>
+          <p class="tiny muted" style="margin-top:2px">Run an AI coding agent from your phone</p>
+        </div>
+        <div class="proj-meta"><span class="tag live">Public repo</span></div>
+      </div>
+      <p>
+        A WhatsApp-style web app that drives Claude Code running on my Mac at home. Each
+        chat on the phone is a real terminal session over a private Tailscale network.
+        Node with built-in modules only — no dependencies, no framework.
+      </p>
+      <div class="chips">
+        <span class="chip">Node.js</span>
+        <span class="chip">tmux</span>
+        <span class="chip">Tailscale</span>
+        <span class="chip">PWA</span>
+      </div>
+      <span class="foot">View repository <span class="arrow">→</span></span>
+    </a>
+
+    <div class="card c-mint span-5 proj tilt rv">
+      <div class="proj-top">
+        <span class="proj-icon">🗺️</span>
+        <div>
+          <h3>Peta Lot Tanah</h3>
+          <p class="tiny muted" style="margin-top:2px">64,770 land lots on one interactive map</p>
+        </div>
+        <div class="proj-meta"><span class="tag wip">In testing</span></div>
+      </div>
+      <p>
+        Every cadastral lot within 5&nbsp;km of a point in Klang, Selangor. A Python
+        pipeline pulls lots from PLANMalaysia iPLAN and buildings from OpenStreetMap,
+        joins them, and bakes a single data file. The map colours lots by built-vs-empty,
+        by size, and by JUPEM area code — and opens straight from disk, no server.
+      </p>
+      <div class="chips">
+        <span class="chip">Python ETL</span>
+        <span class="chip">Leaflet</span>
+        <span class="chip">GeoJSON</span>
+        <span class="chip">OpenStreetMap</span>
+      </div>
+      <span class="foot" style="color:var(--ink-faint)">Write-up coming soon</span>
+    </div>
+
+    <a class="card c-rose span-7 proj tilt rv" href="https://github.com/juslangit/pipeline" target="_blank" rel="noopener">
+      <div class="proj-top">
+        <span class="proj-icon">🔧</span>
+        <div>
+          <h3>Pipeline</h3>
+          <p class="tiny muted" style="margin-top:2px">Blender → Unreal batch exporter · open source</p>
+        </div>
+        <div class="proj-meta">
+          <span class="tag live">GPL-3.0</span>
+          <span class="tag">Blender add-on</span>
+        </div>
+      </div>
+      <p>
+        Every Blender-to-Unreal handoff repeats the same chores: apply transforms, rename
+        to <code>SM_</code>/<code>SK_</code>, drop the pivot to the floor, keep collision
+        meshes attached, export one object at a time. Pipeline does all of it in one click
+        — four export modes, FBX and glTF, plus a validation pass. Its test suite runs
+        Blender headless and re-imports the FBX to measure that the pivot, rotation and
+        unit scale actually survived the round trip.
+      </p>
+      <div class="chips">
+        <span class="chip">Python</span>
+        <span class="chip">Blender API (bpy)</span>
+        <span class="chip">25 headless tests</span>
+        <span class="chip">FBX round-trip checks</span>
+      </div>
+      <span class="foot">View repository <span class="arrow">→</span></span>
+    </a>
+  </section>
+
+  <!-- ============ 3D & GAMES ============ -->
+  <div class="section-head" id="craft">
+    <h2>3D &amp; games</h2>
+    <p>Where the visual instinct comes from. Modelling, level design and engine work since 2019.</p>
+  </div>
+
+  <section class="bento">
+    <div class="card c-lilac span-6 proj tilt rv">
+      <div class="proj-top">
+        <span class="proj-icon">🏸</span>
+        <div>
+          <h3>Referee For Fun</h3>
+          <p class="tiny muted" style="margin-top:2px">You are the umpire, not the athlete</p>
+        </div>
+        <div class="proj-meta"><span class="tag priv">Private repo</span><span class="tag">Godot</span></div>
+      </div>
+      <p>
+        A first-person game where the match is physically simulated in front of you and
+        the engine always knows the truth. Pick a team to favour, then bend every close
+        call — the only limit is how much suspicion the crowd will tolerate. Five sports
+        share one official and one reputation.
+      </p>
+      <div class="chips"><span class="chip">Godot 4</span><span class="chip">GDScript</span><span class="chip">Physics simulation</span><span class="chip">macOS + Windows builds</span></div>
+    </div>
+
+    <div class="card c-butter span-6 proj tilt rv">
+      <div class="proj-top">
+        <span class="proj-icon">🍜</span>
+        <div>
+          <h3>Kedai Runtuh</h3>
+          <p class="tiny muted" style="margin-top:2px">One-thumb mamak stacking game</p>
+        </div>
+        <div class="proj-meta"><span class="tag wip">Prototype</span><span class="tag">Godot</span></div>
+      </div>
+      <p>
+        Food swings from a hook above a tower. One tap drops it. Land it and the tower
+        grows, the camera rises, the swing speeds up. Miss and the whole order collapses —
+        with real physics, so it never falls the same way twice.
+      </p>
+      <div class="chips"><span class="chip">Godot 4</span><span class="chip">Mobile</span><span class="chip">Rigid-body physics</span><span class="chip">3D art</span></div>
+      <span class="foot">Playable right here — find the 🍜 <span class="arrow">↓</span></span>
+    </div>
+
+    <div class="card span-12 rv">
+      <p class="eyebrow">Earlier work — university &amp; competition projects</p>
+      <div class="tiles">
+        <div class="tile">
+          <span class="yr">2024</span>
+          <h3>Rotting Classroom</h3>
+          <p>Wave-based FPS zombie game. Final year project at UTeM, built in Unreal Engine 5 with Blender assets.</p>
+        </div>
+        <div class="tile">
+          <span class="yr">2023</span>
+          <h3>Madani Makan Mania</h3>
+          <p>Unreal Engine workshop project. I made every 3D asset in the game and designed all three levels.</p>
+        </div>
+        <div class="tile">
+          <span class="yr">2023</span>
+          <h3>Dimanakah Riri?</h3>
+          <p>Educational game for children, inspired by the Dewan Bahasa dan Pustaka book <em>Tolong Cari Ibuku</em>. Built for the FTMK × DBP competition.</p>
+        </div>
+        <div class="tile"><span class="yr">2023</span><h3>Toki Top</h3><p>Game project — 3D assets and gameplay programming.</p></div>
+        <div class="tile"><span class="yr">2023</span><h3>Master League</h3><p>Game project — 3D assets and gameplay programming.</p></div>
+        <div class="tile"><span class="yr">2023</span><h3>Autocat</h3><p>Game project — 3D assets and gameplay programming.</p></div>
+        <div class="tile"><span class="yr">2023</span><h3>Flagship Mountain</h3><p>Game project — level design and 3D environment art.</p></div>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-ghost magnet" href="https://www.behance.net/luqmanhakeem1891" target="_blank" rel="noopener">
+          Full 3D portfolio on Behance <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <div class="section-head" id="about">
+    <h2>About</h2>
+    <p>Short version: I made things look right for years, then learned to make them work.</p>
+  </div>
+
+  <section class="bento">
+    <div class="card span-7 rv">
+      <p class="eyebrow">The path</p>
+      <p class="lede" style="color:var(--ink)">
+        I trained as a games technology graduate and spent years in Blender and Unreal —
+        modelling, level design, the lot. Teaching it at a vocational college taught me
+        something else: the tooling around the art was always the bottleneck, and nobody
+        was fixing it.
+      </p>
+      <p class="muted">
+        So I started writing the tools. A Blender exporter that does the boring half of
+        every handoff. A pricing app that reads mesh geometry in the browser. A phone
+        client for an AI coding agent. Now I build AI systems end to end — retrieval,
+        embeddings, edge functions, and the interface people actually touch.
+      </p>
+      <p class="muted">
+        The combination is the point. Plenty of developers can wire up a model; far fewer
+        can also tell you why the geometry is wrong.
+      </p>
+      <ul class="tl">
+        <li>
+          <span class="yr">Now</span>
+          <div>
+            <h3>Executive · Todak Academy, Cyberjaya</h3>
+            <p>Vocational college teaching game development, esports management and animation.</p>
+          </div>
+        </li>
+        <li>
+          <span class="yr">2024</span>
+          <div>
+            <h3>BSc (Hons) Information Technology — Games Technology</h3>
+            <p>Universiti Teknikal Malaysia Melaka (UTeM), Faculty of Information &amp; Communication Technology.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card c-ink span-5 rv">
+      <p class="eyebrow" style="color:rgba(250,247,242,.55)">Toolkit</p>
+      <h3 style="font-size:1.3rem;margin-bottom:4px">What I work with</h3>
+      <p class="tiny" style="color:rgba(250,247,242,.72);margin-bottom:16px">
+        Listed honestly — daily drivers first.
+      </p>
+
+      <p class="tiny" style="color:rgba(250,247,242,.55);margin:0 0 6px;font-weight:700;letter-spacing:.1em">CODE</p>
+      <div class="chips" style="margin-top:0">
+        <span class="chip">Python</span><span class="chip">JavaScript</span><span class="chip">Node.js</span>
+        <span class="chip">HTML &amp; CSS</span><span class="chip">GDScript</span><span class="chip">SQL</span>
+      </div>
+
+      <p class="tiny" style="color:rgba(250,247,242,.55);margin:16px 0 6px;font-weight:700;letter-spacing:.1em">AI &amp; DATA</p>
+      <div class="chips" style="margin-top:0">
+        <span class="chip">Claude API</span><span class="chip">RAG</span><span class="chip">Vector search</span>
+        <span class="chip">Supabase</span><span class="chip">Postgres</span><span class="chip">Edge functions</span>
+      </div>
+
+      <p class="tiny" style="color:rgba(250,247,242,.55);margin:16px 0 6px;font-weight:700;letter-spacing:.1em">3D &amp; ENGINES</p>
+      <div class="chips" style="margin-top:0">
+        <span class="chip">Blender</span><span class="chip">Unreal Engine 5</span><span class="chip">Godot 4</span>
+        <span class="chip">Three.js</span><span class="chip">SketchUp</span>
+      </div>
+
+      <p class="tiny" style="color:rgba(250,247,242,.55);margin:16px 0 6px;font-weight:700;letter-spacing:.1em">DESIGN &amp; MAKE</p>
+      <div class="chips" style="margin-top:0">
+        <span class="chip">Illustrator</span><span class="chip">Photoshop</span><span class="chip">Aseprite</span>
+        <span class="chip">3D printing</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="bento foot-wrap" id="contact">
+    <div class="card c-ink span-12 rv" style="padding:44px">
+      <p class="eyebrow" style="color:rgba(250,247,242,.55)">Get in touch</p>
+      <h2 style="max-width:18ch">Looking for someone who ships both halves?</h2>
+      <p class="lede" style="color:rgba(250,247,242,.72);margin-top:12px">
+        I'm open to remote AI and full stack roles, and to freelance work.
+        Fastest way to reach me is email.
+      </p>
+      <div class="links">
+        <a class="link-chip magnet" href="mailto:luqmanh1891@gmail.com">✉️ luqmanh1891@gmail.com</a>
+        <a class="link-chip magnet" href="https://github.com/juslangit" target="_blank" rel="noopener">🐙 github.com/juslangit</a>
+        <a class="link-chip magnet" href="https://www.behance.net/luqmanhakeem1891" target="_blank" rel="noopener">🎨 Behance</a>
+        <!-- TODO: add LinkedIn once the profile URL is confirmed:
+        <a class="link-chip magnet" href="https://www.linkedin.com/in/YOUR-HANDLE" target="_blank" rel="noopener">💼 LinkedIn</a>
+        -->
+      </div>
+      <div class="colophon">
+        <span>© <span id="yr"></span> Luqman Hakeem · Cyberjaya, Malaysia</span>
+        <button class="egg-hint" id="eggBtn" title="Go on, tap it">Built by hand. No template. 🍜</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ EASTER EGG ============ -->
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="egg" id="egg" role="dialog" aria-modal="true" aria-labelledby="eggTitle">
+  <div class="egg-box">
+    <div class="egg-head">
+      <span style="font-size:22px">🍜</span>
+      <div>
+        <h3 id="eggTitle">Kedai Runtuh</h3>
+        <p class="tiny" style="margin:0">Tap to drop. Don't topple the order.</p>
+      </div>
+      <button class="egg-close" id="eggClose" aria-label="Close game">✕</button>
+    </div>
+    <canvas id="eggCanvas"></canvas>
+    <div class="egg-foot">
+      <span class="egg-score">Stacked: <span id="eggScore">0</span></span>
+      <span class="tiny muted" id="eggBest">Best: 0</span>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var fine   = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* ------------------------------------------------------------------
+   1. Custom cursor — a dot that tracks exactly, a ring that lags
+   ------------------------------------------------------------------ */
+if (fine && !reduce){
+  var dot  = document.querySelector(".cursor-dot");
+  var ring = document.querySelector(".cursor-ring");
+  var mx=innerWidth/2, my=innerHeight/2, rx=mx, ry=my, seen=false;
+  dot.style.opacity = ring.style.opacity = "0";
+
+  addEventListener("mousemove", function(e){
+    if (!seen){ seen = true; dot.style.opacity = ring.style.opacity = "1"; }
+    mx=e.clientX; my=e.clientY;
+    dot.style.transform = "translate("+mx+"px,"+my+"px)";
+  }, {passive:true});
+
+  (function loop(){
+    rx += (mx-rx)*0.16;
+    ry += (my-ry)*0.16;
+    ring.style.transform = "translate("+rx+"px,"+ry+"px)";
+    requestAnimationFrame(loop);
+  })();
+
+  var hot = "a, button, .card.tilt, .tile, input, [role='button']";
+  document.addEventListener("mouseover", function(e){
+    if (e.target.closest(hot)) ring.classList.add("hot");
+  });
+  document.addEventListener("mouseout", function(e){
+    if (e.target.closest(hot)) ring.classList.remove("hot");
+  });
+}
+
+/* ------------------------------------------------------------------
+   2. Magnetic buttons
+   ------------------------------------------------------------------ */
+if (fine && !reduce){
+  Array.prototype.forEach.call(document.querySelectorAll(".magnet"), function(el){
+    el.addEventListener("mousemove", function(e){
+      var r = el.getBoundingClientRect();
+      var dx = e.clientX - (r.left + r.width/2);
+      var dy = e.clientY - (r.top  + r.height/2);
+      el.style.transform = "translate("+(dx*0.22)+"px,"+(dy*0.3)+"px)";
+    });
+    el.addEventListener("mouseleave", function(){ el.style.transform = ""; });
+  });
+}
+
+/* ------------------------------------------------------------------
+   3. Card tilt — subtle, follows the pointer
+   ------------------------------------------------------------------ */
+if (fine && !reduce){
+  Array.prototype.forEach.call(document.querySelectorAll(".card.tilt"), function(el){
+    el.addEventListener("mousemove", function(e){
+      var r = el.getBoundingClientRect();
+      var px = (e.clientX - r.left)/r.width  - 0.5;
+      var py = (e.clientY - r.top )/r.height - 0.5;
+      el.style.transform =
+        "perspective(900px) rotateX("+(-py*4)+"deg) rotateY("+(px*5)+"deg) translateY(-5px)";
+    });
+    el.addEventListener("mouseleave", function(){ el.style.transform = ""; });
+  });
+}
+
+/* ------------------------------------------------------------------
+   4. Scroll reveal + number count-up
+   ------------------------------------------------------------------ */
+var revealed = new WeakSet();
+
+function countUp(el){
+  var target = parseFloat(el.dataset.count);
+  var suffix = el.dataset.suffix || "";
+  if (reduce || target === 0){ el.textContent = target.toLocaleString() + suffix; return; }
+  var t0 = null, dur = 1400;
+  function step(t){
+    if (t0 === null) t0 = t;
+    var p = Math.min((t - t0)/dur, 1);
+    var eased = 1 - Math.pow(1 - p, 4);           // easeOutQuart
+    el.textContent = Math.round(target*eased).toLocaleString() + (p===1 ? suffix : "");
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+if ("IntersectionObserver" in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (!en.isIntersecting || revealed.has(en.target)) return;
+      revealed.add(en.target);
+      var items = Array.prototype.slice.call(
+        en.target.parentNode.querySelectorAll(".rv")
+      );
+      en.target.style.transitionDelay = (Math.min(items.indexOf(en.target),5) * 70) + "ms";
+      en.target.classList.add("in");
+      Array.prototype.forEach.call(en.target.querySelectorAll("[data-count]"), countUp);
+      io.unobserve(en.target);
+    });
+  }, {rootMargin:"0px 0px -12% 0px", threshold:0.12});
+  Array.prototype.forEach.call(document.querySelectorAll(".rv"), function(el){ io.observe(el); });
+} else {
+  Array.prototype.forEach.call(document.querySelectorAll(".rv"), function(el){
+    el.classList.add("in");
+    Array.prototype.forEach.call(el.querySelectorAll("[data-count]"), countUp);
+  });
+}
+
+/* ------------------------------------------------------------------
+   5. Sticky nav shadow
+   ------------------------------------------------------------------ */
+var nav = document.getElementById("nav");
+addEventListener("scroll", function(){
+  nav.classList.toggle("stuck", scrollY > 12);
+}, {passive:true});
+
+/* ------------------------------------------------------------------
+   6. Hero 3D — a soft pastel solid that leans toward the cursor.
+      Degrades to nothing at all if three.js did not load.
+   ------------------------------------------------------------------ */
+(function hero3d(){
+  var cv = document.getElementById("hero3d");
+  if (!cv || !window.THREE || reduce) return;
+
+  var host = cv.parentNode;
+
+  // No WebGL (old machine, blocked driver, headless) -> silently skip the scene.
+  // Without this the constructor throws and takes the rest of the page's JS with it.
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
+  } catch (err){
+    cv.remove();
+    return;
+  }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  var scene  = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 0, 9);
+
+  var group = new THREE.Group();
+  scene.add(group);
+
+  // main solid — low-poly, flat-shaded, pastel lilac
+  var core = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.85, 1),
+    new THREE.MeshStandardMaterial({
+      color:0xb9a6e8, flatShading:true, roughness:0.55, metalness:0.08
+    })
+  );
+  group.add(core);
+
+  // wireframe shell around it
+  var shell = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(2.55, 1),
+    new THREE.MeshBasicMaterial({color:0x8fb9e8, wireframe:true, transparent:true, opacity:0.35})
+  );
+  group.add(shell);
+
+  // a few drifting pastel cubes
+  var bits = [];
+  var palette = [0x9fd9bd, 0xffbf95, 0xf7d774, 0xf5a3b8];
+  for (var i = 0; i < 7; i++){
+    var b = new THREE.Mesh(
+      new THREE.BoxGeometry(0.34, 0.34, 0.34),
+      new THREE.MeshStandardMaterial({
+        color: palette[i % palette.length], flatShading:true, roughness:0.5
+      })
+    );
+    var a = (i/7) * Math.PI * 2;
+    b.position.set(Math.cos(a)*3.5, Math.sin(a*1.7)*1.9, Math.sin(a)*2.2);
+    b.userData = {a:a, r:3.5, sp:0.3 + (i%3)*0.16};
+    bits.push(b);
+    group.add(b);
+  }
+
+  scene.add(new THREE.AmbientLight(0xfff6ea, 0.85));
+  var key = new THREE.DirectionalLight(0xffffff, 0.95);
+  key.position.set(4, 6, 5);
+  scene.add(key);
+  var fill = new THREE.DirectionalLight(0xa9c8ff, 0.5);
+  fill.position.set(-5, -2, 3);
+  scene.add(fill);
+
+  function resize(){
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    // push the shape to the right on wide screens, centre it when narrow
+    group.position.x = w > 860 ? 3.1 : 0;
+    group.position.y = w > 860 ? 0   : 0.4;
+    var s = w > 860 ? 1 : 0.62;
+    group.scale.set(s, s, s);
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  addEventListener("resize", resize, {passive:true});
+
+  var tx = 0, ty = 0, cx = 0, cy = 0, running = true;
+  addEventListener("mousemove", function(e){
+    tx = (e.clientX/innerWidth  - 0.5) * 0.7;
+    ty = (e.clientY/innerHeight - 0.5) * 0.5;
+  }, {passive:true});
+
+  // stop rendering once the hero is off screen
+  if ("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){ running = en[0].isIntersecting; })
+      .observe(host);
+  }
+
+  var t = 0;
+  (function tick(){
+    requestAnimationFrame(tick);
+    if (!running) return;
+    t += 0.006;
+    cx += (tx - cx) * 0.05;
+    cy += (ty - cy) * 0.05;
+
+    group.rotation.y = t + cx;
+    group.rotation.x = cy * 0.8;
+    core.rotation.y  = -t * 1.6;
+    shell.rotation.x = t * 0.7;
+    shell.rotation.z = -t * 0.4;
+
+    bits.forEach(function(b, i){
+      var ang = b.userData.a + t * b.userData.sp;
+      b.position.x = Math.cos(ang) * b.userData.r;
+      b.position.z = Math.sin(ang) * b.userData.r;
+      b.position.y = Math.sin(ang * 1.6 + i) * 1.7;
+      b.rotation.x = ang * 1.3;
+      b.rotation.y = ang * 0.9;
+    });
+
+    renderer.render(scene, camera);
+  })();
+})();
+
+/* ------------------------------------------------------------------
+   7. Confetti burst
+   ------------------------------------------------------------------ */
+var confetti = (function(){
+  var cv = document.getElementById("confetti");
+  var ctx = cv.getContext("2d");
+  var parts = [], raf = null;
+  var colors = ["#a58ee0","#7fc9a8","#ff9e6d","#f2c14e","#f07a9c","#6fa8e8"];
+
+  function fit(){
+    cv.width  = innerWidth  * Math.min(devicePixelRatio,2);
+    cv.height = innerHeight * Math.min(devicePixelRatio,2);
+    ctx.setTransform(Math.min(devicePixelRatio,2),0,0,Math.min(devicePixelRatio,2),0,0);
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+    var alive = false;
+    for (var i=0;i<parts.length;i++){
+      var p = parts[i];
+      if (p.life <= 0) continue;
+      alive = true;
+      p.life -= 1;
+      p.vy += 0.22;
+      p.vx *= 0.995;
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.life/28));
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.s/2, -p.s/4, p.s, p.s/2);
+      ctx.restore();
+    }
+    if (alive) raf = requestAnimationFrame(frame);
+    else { cv.classList.remove("on"); raf = null; }
+  }
+
+  return function burst(n){
+    if (reduce) return;
+    fit();
+    cv.classList.add("on");
+    var ox = innerWidth/2, oy = innerHeight*0.42;
+    for (var i=0;i<(n||110);i++){
+      var a = Math.random()*Math.PI*2, sp = 4 + Math.random()*11;
+      parts.push({
+        x:ox, y:oy,
+        vx:Math.cos(a)*sp, vy:Math.sin(a)*sp - 5,
+        s:5 + Math.random()*8, rot:Math.random()*6, vr:(Math.random()-0.5)*0.4,
+        life:70 + Math.random()*50,
+        c:colors[(Math.random()*colors.length)|0]
+      });
+    }
+    if (parts.length > 600) parts = parts.slice(-600);
+    if (!raf) raf = requestAnimationFrame(frame);
+  };
+})();
+
+/* ------------------------------------------------------------------
+   8. Easter egg — Kedai Runtuh, the mamak stacker
+   ------------------------------------------------------------------ */
+(function stacker(){
+  var W = 300, H = 400;                 // logical units; canvas scales to fit
+  var GROUND = H - 34;
+  var PIVOT  = {x: W/2, y: 40};
+  var ROPE   = 86;
+
+  var eggEl   = document.getElementById("egg");
+  var cv      = document.getElementById("eggCanvas");
+  var ctx     = cv.getContext("2d");
+  var scoreEl = document.getElementById("eggScore");
+  var bestEl  = document.getElementById("eggBest");
+
+  var FOODS = [
+    {e:"🍜", c:"#ffd9a8"}, {e:"🍗", c:"#ffc2a3"},
+    {e:"🥟", c:"#ffe7b5"}, {e:"🍤", c:"#ffd0d8"},
+    {e:"🥚", c:"#fff0c9"}, {e:"🍚", c:"#e8f0ff"},
+    {e:"🫓", c:"#d9f0e2"}
+  ];
+
+  var blocks, falling, swing, speed, score, camY, camTarget, over, started, raf = null;
+
+  function best(){
+    try { return parseInt(localStorage.getItem("kedai-best") || "0", 10) || 0; }
+    catch(e){ return 0; }
+  }
+  function setBest(v){
+    try { localStorage.setItem("kedai-best", String(v)); } catch(e){}
+  }
+
+  function reset(){
+    blocks = [{x: W/2, y: GROUND, w: 116, h: 18, plate: true}];
+    falling = null;
+    swing   = 0;
+    speed   = 0.034;
+    score   = 0;
+    camY = camTarget = 0;
+    over = false;
+    started = false;
+    scoreEl.textContent = "0";
+    bestEl.textContent  = "Best: " + best();
+    spawn();
+  }
+
+  function spawn(){
+    var f = FOODS[(Math.random()*FOODS.length)|0];
+    var top = blocks[blocks.length-1];
+    hanging = {w: Math.max(44, top.w - 4 - Math.random()*8), h: 22, e: f.e, c: f.c};
+  }
+  var hanging = null;
+
+  function hangPos(){
+    var a = Math.sin(swing) * 0.85;
+    return {x: PIVOT.x + Math.sin(a)*ROPE, y: PIVOT.y + Math.cos(a)*ROPE, a: a};
+  }
+
+  function drop(){
+    if (over){ reset(); return; }
+    if (falling || !hanging) return;
+    started = true;
+    var p0 = hangPos();
+    swing += speed;
+    var p1 = hangPos();
+    swing -= speed;
+    falling = {
+      x: p0.x, y: p0.y - camY, w: hanging.w, h: hanging.h,
+      e: hanging.e, c: hanging.c,
+      vx: (p1.x - p0.x) * 0.85, vy: 1
+    };
+    hanging = null;
+  }
+
+  function gameOver(){
+    over = true;
+    if (score > best()){ setBest(score); confetti(90); }
+    bestEl.textContent = "Best: " + best();
+  }
+
+  function step(){
+    if (!over && hanging) swing += speed;
+
+    if (falling){
+      falling.vy += 0.46;
+      falling.x  += falling.vx;
+      falling.y  += falling.vy;
+
+      var top = blocks[blocks.length-1];
+      var bottom = falling.y + falling.h/2;
+
+      if (bottom >= top.y - top.h/2 + 2 && falling.vy > 0){
+        var dx = Math.abs(falling.x - top.x);
+        var maxOff = (top.w + falling.w)/2 - 14;   // needs real overlap to hold
+        if (dx > maxOff){
+          falling.vy += 1.2;
+          falling.vx += (falling.x > top.x ? 2.2 : -2.2);
+          if (falling.y + camY > H + 60){ falling = null; gameOver(); }
+        } else {
+          falling.y = top.y - top.h/2 - falling.h/2;
+          blocks.push({x: falling.x, y: falling.y, w: falling.w, h: falling.h,
+                       e: falling.e, c: falling.c});
+          falling = null;
+          score++;
+          scoreEl.textContent = String(score);
+          speed = Math.min(0.034 + score*0.0026, 0.085);
+          var newTop = blocks[blocks.length-1];
+          camTarget = Math.max(0, H*0.60 - newTop.y);
+          spawn();
+        }
+      } else if (falling.y + camY > H + 60){
+        falling = null;
+        gameOver();
+      }
+    }
+    camY += (camTarget - camY) * 0.1;
+  }
+
+  function roundRect(x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y,   x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x,   y+h, r);
+    ctx.arcTo(x,   y+h, x,   y,   r);
+    ctx.arcTo(x,   y,   x+w, y,   r);
+    ctx.closePath();
+  }
+
+  function piece(p, yOff){
+    var x = p.x - p.w/2, y = p.y - p.h/2 + yOff;
+    ctx.fillStyle = "rgba(43,38,34,.10)";
+    roundRect(x, y+3, p.w, p.h, 8); ctx.fill();
+    ctx.fillStyle = p.c || "#ffd9a8";
+    roundRect(x, y, p.w, p.h, 8); ctx.fill();
+    ctx.strokeStyle = "rgba(43,38,34,.14)"; ctx.lineWidth = 1;
+    roundRect(x+.5, y+.5, p.w-1, p.h-1, 8); ctx.stroke();
+    if (p.e){
+      ctx.font = "14px system-ui, 'Apple Color Emoji', 'Segoe UI Emoji'";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(p.e, p.x, y + p.h/2 + 1);
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+
+    // table
+    ctx.fillStyle = "rgba(43,38,34,.07)";
+    ctx.fillRect(0, GROUND + camY + 9, W, H);
+
+    blocks.forEach(function(b){
+      if (b.plate){
+        var x = b.x - b.w/2, y = b.y - b.h/2 + camY;
+        ctx.fillStyle = "#cfc6ba";
+        roundRect(x, y, b.w, b.h, 9); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.5)";
+        roundRect(x+6, y+4, b.w-12, 4, 2); ctx.fill();
+      } else {
+        piece(b, camY);
+      }
+    });
+
+    if (hanging && !over){
+      var p = hangPos();
+      ctx.strokeStyle = "rgba(43,38,34,.35)"; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(PIVOT.x, PIVOT.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      ctx.fillStyle = "#8c8378";
+      ctx.beginPath(); ctx.arc(PIVOT.x, PIVOT.y, 4, 0, 7); ctx.fill();
+      piece({x:p.x, y:p.y + hanging.h/2, w:hanging.w, h:hanging.h, e:hanging.e, c:hanging.c}, 0);
+    }
+
+    if (falling) piece(falling, camY);
+
+    // score
+    ctx.fillStyle = "rgba(43,38,34,.55)";
+    ctx.font = "700 12px 'Plus Jakarta Sans', system-ui, sans-serif";
+    ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    ctx.fillText("Stacked " + score, 12, 20);
+
+    if (!started && !over){
+      ctx.textAlign = "center";
+      ctx.fillStyle = "rgba(43,38,34,.45)";
+      ctx.font = "600 12px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("tap / press space to drop", W/2, H - 12);
+    }
+
+    if (over){
+      ctx.fillStyle = "rgba(250,247,242,.88)";
+      ctx.fillRect(0, H/2 - 54, W, 108);
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#2b2622";
+      ctx.font = "800 19px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("Order runtuh!", W/2, H/2 - 16);
+      ctx.font = "600 13px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillStyle = "#6b6259";
+      ctx.fillText("You stacked " + score + (score === 1 ? " plate" : " plates"), W/2, H/2 + 6);
+      ctx.fillText("tap to try again", W/2, H/2 + 28);
+    }
+  }
+
+  function loop(){
+    step(); draw();
+    raf = requestAnimationFrame(loop);
+  }
+
+  function fit(){
+    var dpr = Math.min(devicePixelRatio, 2);
+    cv.width  = W * dpr;
+    cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  var lastFocus = null;
+  function open(){
+    lastFocus = document.activeElement;
+    eggEl.classList.add("on");
+    fit(); reset();
+    if (!raf) raf = requestAnimationFrame(loop);
+    document.getElementById("eggClose").focus();
+  }
+  function close(){
+    eggEl.classList.remove("on");
+    if (raf){ cancelAnimationFrame(raf); raf = null; }
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.getElementById("eggBtn").addEventListener("click", open);
+  document.getElementById("eggClose").addEventListener("click", close);
+  eggEl.addEventListener("click", function(e){ if (e.target === eggEl) close(); });
+  cv.addEventListener("pointerdown", function(e){ e.preventDefault(); drop(); });
+
+  addEventListener("keydown", function(e){
+    if (!eggEl.classList.contains("on")) return;
+    if (e.key === "Escape") close();
+    if (e.key === " " || e.code === "Space"){ e.preventDefault(); drop(); }
+  });
+
+  /* konami code — party, then the game */
+  var KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+  var pos = 0;
+  addEventListener("keydown", function(e){
+    var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    pos = (k === KONAMI[pos]) ? pos + 1 : (k === KONAMI[0] ? 1 : 0);
+    if (pos === KONAMI.length){
+      pos = 0;
+      confetti(160);
+      setTimeout(open, 500);
+    }
+  });
+})();
+
+})();
+</script>
+</body>
+</html>
