@@ -2,3 +2,6 @@
 .env
 .env.*
 node_modules/
+
+# Behance info cards — deliverables for upload, not part of the site
+behance-cards/
