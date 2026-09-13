@@ -527,11 +527,11 @@ p{margin:.7em 0}
 
   <section class="gallery" id="gallery">
     <div class="work rv wide" data-cat="code">
-        <div class="shot"><img src="img/auxetic-chess.jpg" alt="Chess board built from sixteen hinged tiles, part-folded so diamond gaps open between them" loading="lazy" width="1760" height="990"></div>
+        <div class="shot"><img src="img/auxetic-chess.jpg" alt="Chess board whose sixteen 2x2 blocks are caught mid-rotation, pieces swinging round with them" loading="lazy" width="1760" height="989"></div>
         <div class="work-body">
           <div class="work-head"><h3>Auxetic Chess</h3><span class="cat cat-code">Coding</span></div>
-          <p>Chess on a board that is a mechanism. Sixteen rigid tiles, hinged at their corners, bloom open to exactly twice their area and close into a solid 8&times;8 to play on. The fold is solved from the hinge constraint <em>d&nbsp;=&nbsp;a&#8730;2&#183;cos(45&deg;+&theta;)</em> rather than animated, so the tiles stay joined at every angle. After every move the whole table turns a quarter, and the click path is inverted through that rotation so the board stays playable side-on. The chess underneath is a full engine &mdash; its move generator matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5.</p>
-          <div class="chips"><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Alpha-beta search</span></div>
+          <p>A chess variant where the board is a mechanism. After every move all sixteen 2&times;2 blocks turn a quarter and carry the pieces standing on them &mdash; a1&rarr;a2&rarr;b2&rarr;b1, period four, and because it is a permutation of four squares it can never capture. The rule is deterministic, so the twist runs inside the engine&rsquo;s own <em>make</em>/<em>unmake</em> and the search plays the variant properly instead of playing normal chess into a scrambling board. It stands down on any turn that would expose your own king, which is what keeps the game from deadlocking. The engine underneath matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5. The board also folds: sixteen hinged tiles that bloom to exactly twice their area on <em>d&nbsp;=&nbsp;a&#8730;2&#183;cos(45&deg;+&theta;)</em>.</p>
+          <div class="chips"><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Variant inside the engine</span></div>
         </div>
       </div>
     <div class="work rv wide" data-cat="code">
