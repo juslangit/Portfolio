@@ -362,6 +362,93 @@ p{margin:.7em 0}
 .work.hide{display:none}
 
 /* ============================================================
+   Line Call — playable card at the top of the game work
+   ============================================================ */
+.lc-card{background:#fff}
+.lc-stage{
+  position:relative;aspect-ratio:16/9;max-height:430px;overflow:hidden;
+  border-bottom:1px solid var(--line);background:var(--paper-2);
+  cursor:crosshair;
+}
+.lc-stage canvas{width:100%;height:100%;display:block}
+.lc-card:focus-visible .lc-stage,
+.lc-stage:focus-visible{outline:2.5px solid var(--lilac-ink);outline-offset:-3px}
+
+.lc-hud{
+  position:absolute;top:12px;left:14px;right:14px;
+  display:flex;gap:10px;align-items:center;pointer-events:none;
+  font-size:12px;font-weight:700;letter-spacing:.04em;
+}
+.lc-pill{
+  background:rgba(255,255,255,.86);border:1px solid var(--line);
+  border-radius:999px;padding:5px 11px;color:var(--ink-soft);
+  font-variant-numeric:tabular-nums;
+}
+.lc-pill b{color:var(--ink)}
+.lc-pill.hot{background:var(--butter);border-color:transparent;color:var(--butter-ink)}
+
+/* the call clock — it is the whole pressure of the game */
+.lc-clock{
+  position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:rgba(43,38,34,.10);opacity:0;transition:opacity .2s var(--ease);
+}
+.lc-clock.on{opacity:1}
+.lc-clock i{
+  display:block;height:100%;width:100%;transform-origin:left center;
+  background:var(--mint-ink);
+}
+.lc-clock.warn i{background:var(--peach-ink)}
+
+.lc-cover{
+  position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+  background:rgba(250,247,242,.82);backdrop-filter:blur(3px);padding:20px;
+  transition:opacity .3s var(--ease);
+}
+.lc-cover.gone{opacity:0;pointer-events:none}
+.lc-cover h4{margin:0 0 6px;font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.lc-cover p{margin:0 0 14px;font-size:13.5px;color:var(--ink-soft);max-width:40ch}
+
+.lc-play{
+  font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+  background:var(--ink);color:var(--paper);border:none;
+  padding:11px 24px;border-radius:999px;
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+}
+.lc-play:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(43,38,34,.18)}
+
+.lc-calls{display:flex;gap:10px;margin-top:4px}
+.lc-btn{
+  flex:1;font:inherit;font-size:15px;font-weight:800;letter-spacing:.06em;
+  padding:14px 10px;border-radius:14px;cursor:pointer;
+  border:1px solid transparent;transition:.18s var(--ease);
+}
+.lc-btn:disabled{opacity:.4;cursor:default}
+.lc-btn .k{
+  display:block;font-size:10px;font-weight:600;letter-spacing:.1em;
+  opacity:.65;margin-top:3px;
+}
+.lc-in{background:var(--mint);color:var(--mint-ink)}
+.lc-out{background:var(--rose);color:var(--rose-ink)}
+.lc-btn:not(:disabled):hover{transform:translateY(-2px)}
+.lc-btn:not(:disabled):active{transform:translateY(0)}
+
+.lc-say{
+  margin:0;font-size:14px;font-weight:600;min-height:1.5em;
+  color:var(--ink-soft);font-variant-numeric:tabular-nums;
+}
+.lc-say b{color:var(--ink)}
+.lc-say.good b{color:var(--mint-ink)}
+.lc-say.bad b{color:var(--rose-ink)}
+
+@media(max-width:560px){
+  .lc-btn{font-size:14px;padding:13px 8px}
+  .lc-hud{font-size:11px;top:10px;left:10px;right:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  .lc-play:hover,.lc-btn:hover{transform:none}
+}
+
+/* ============================================================
    Scroll reveal
    ============================================================ */
 .rv{opacity:0;transform:translateY(22px) scale(.985);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -527,7 +614,7 @@ p{margin:.7em 0}
         <div class="shot"><img src="img/auxetic-chess.jpg" alt="Chess board whose sixteen 2x2 blocks are caught mid-rotation, pieces swinging round with them" loading="lazy" width="1760" height="989"></div>
         <div class="work-body">
           <div class="work-head"><h3>Auxetic Chess</h3><span class="cat cat-code">Coding</span></div>
-          <p>A chess variant where the board is a mechanism. After every move all sixteen 2&times;2 blocks turn a quarter and carry the pieces round with them &mdash; a1&rarr;a2&rarr;b2&rarr;b1, and because it is a permutation of four squares it can never capture. Pawns are the exception: they hold their square while the pieces cycle around them, so a pawn only ever moves forward. The rule is deterministic, so the twist runs inside the engine&rsquo;s own <em>make</em>/<em>unmake</em> and the search plays the variant properly instead of playing normal chess into a scrambling board. It stands down on any turn that would expose your own king, which is what keeps the game from deadlocking rather than drawing on move three. The engine underneath matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5.</p>
+          <p>A chess variant where the board is a mechanism. After every move all sixteen 2&times;2 blocks turn a quarter and carry the pieces round with them &mdash; a1&rarr;a2&rarr;b2&rarr;b1, and because it is a permutation of four squares it can never capture. Pawns are the exception: they hold their square while the pieces cycle around them, so a pawn only ever moves forward. The rule is deterministic, so the twist runs inside the engine&rsquo;s own <em>make</em>/<em>unmake</em> and the search plays the variant properly instead of playing normal chess into a scrambling board. It stands down on any turn that would expose your own king, which is what keeps the game from deadlocking rather than drawing on move three. The engine underneath matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5. Play it against that engine at four strengths, or two-up at one keyboard.</p>
           <div class="chips"><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Variant inside the engine</span></div>
         </div>
       </div>
@@ -584,6 +671,38 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Siti — voice assistant</h3><span class="cat cat-code">Coding</span></div>
           <p>A hands-free AI assistant for the drive to work. Open a page on the phone, tap once, and it listens, answers aloud and listens again. It knows my project notes, can save new facts to a vector store, and searches the web.</p>
           <div class="chips"><span class="chip">Claude API</span><span class="chip">Supabase edge functions</span><span class="chip">pgvector</span><span class="chip">Speech I/O</span></div>
+        </div>
+      </div>
+    <div class="work rv wide lc-card" data-cat="game">
+        <div class="lc-stage" id="lcStage" tabindex="0" role="application"
+             aria-label="Line Call — judge whether the shuttle landed in or out">
+          <canvas id="lcCanvas"></canvas>
+          <div class="lc-hud">
+            <span class="lc-pill">Called <b id="lcMade">0</b></span>
+            <span class="lc-pill">Right <b id="lcRight">0</b></span>
+            <span class="lc-pill" id="lcStreakPill">Streak <b id="lcStreak">0</b></span>
+          </div>
+          <div class="lc-clock" id="lcClock"><i></i></div>
+          <div class="lc-cover" id="lcCover">
+            <div>
+              <h4>Line Call</h4>
+              <p>The shuttle lands. You have a second and a half to decide.
+                 No call counts against you — same as the real thing.</p>
+              <button class="lc-play" id="lcPlay" type="button">Take the chair</button>
+            </div>
+          </div>
+        </div>
+        <div class="work-body">
+          <div class="work-head"><h3>Line Call</h3><span class="cat cat-game">Playable</span></div>
+          <p>A one-rule slice of <b>Referee For Fun</b>: the engine knows exactly where the
+             shuttle touched down, to the millimetre, and you don't. In the full game you can
+             bend the call in a team's favour and see how long the crowd tolerates it. Here,
+             just get it right.</p>
+          <div class="lc-calls">
+            <button class="lc-btn lc-in" id="lcIn" type="button" disabled>IN<span class="k">← or I</span></button>
+            <button class="lc-btn lc-out" id="lcOut" type="button" disabled>OUT<span class="k">→ or O</span></button>
+          </div>
+          <p class="lc-say" id="lcSay" role="status" aria-live="polite"></p>
         </div>
       </div>
     <div class="work rv wide" data-cat="game">
@@ -1437,6 +1556,290 @@ var confetti = (function(){
   // deep link: /#work-3d opens straight into that category
   var m = /^#work-(code|game|3d|hw)$/.exec(location.hash);
   if (m) apply(m[1]);
+})();
+
+
+/* ------------------------------------------------------------------
+   10. Line Call — the playable card at the top of the game work.
+       One rule from Referee For Fun: the engine knows exactly where the
+       shuttle landed; the player has 1.6s to decide. Keys are bound to the
+       card, never to the document, so the page still scrolls normally.
+   ------------------------------------------------------------------ */
+(function lineCall(){
+  var card = document.querySelector(".lc-card");
+  if (!card) return;
+
+  var stage  = document.getElementById("lcStage");
+  var cv     = document.getElementById("lcCanvas");
+  var ctx    = cv.getContext("2d");
+  var cover  = document.getElementById("lcCover");
+  var clock  = document.getElementById("lcClock");
+  var clockI = clock.firstElementChild;
+  var btnIn  = document.getElementById("lcIn");
+  var btnOut = document.getElementById("lcOut");
+  var say    = document.getElementById("lcSay");
+  var elMade = document.getElementById("lcMade");
+  var elRight= document.getElementById("lcRight");
+  var elStrk = document.getElementById("lcStreak");
+  var pillStrk = document.getElementById("lcStreakPill");
+
+  var CALL_MS = 1600;
+  var MM_SPAN = 2600;        // millimetres spanned by one unit of court depth
+  var T_LINE  = 0.60;        // where the baseline sits in that depth
+
+  var W = 0, H = 0, horizon = 0;
+  var state = "idle";        // idle | fly | judge | reveal
+  var rally = null, raf = null, visible = true, waiting = false;
+  var made = 0, right = 0, streak = 0, best = 0;
+
+  try { best = parseInt(localStorage.getItem("linecall-best") || "0", 10) || 0; } catch(e){}
+
+  /* ---- court projection ---------------------------------------- */
+  function yAt(t){ return horizon + (H - horizon) * Math.pow(Math.max(t, 0), 1.25); }
+  function halfAt(t){ return W * 0.10 + (W * 0.62 - W * 0.10) * Math.max(t, 0); }
+  function xAt(u, t){ return W / 2 + u * halfAt(t); }
+
+  function fit(){
+    var r = stage.getBoundingClientRect();
+    if (!r.width) return;
+    var dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; horizon = H * 0.16;
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
+
+  /* ---- drawing -------------------------------------------------- */
+  function draw(){
+    if (!W) return;
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.fillStyle = "#efe9df";                       // back wall
+    ctx.fillRect(0, 0, W, horizon);
+
+    var g = ctx.createLinearGradient(0, horizon, 0, H);
+    g.addColorStop(0, "#bfdccd");
+    g.addColorStop(1, "#dcefe3");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(xAt(-1, 0), yAt(0));
+    ctx.lineTo(xAt(1, 0), yAt(0));
+    ctx.lineTo(xAt(1, 1), yAt(1));
+    ctx.lineTo(xAt(-1, 1), yAt(1));
+    ctx.closePath(); ctx.fill();
+
+    ctx.strokeStyle = "rgba(255,255,255,.55)";       // tramlines for depth cues
+    ctx.lineWidth = 2;
+    [-0.72, 0.72].forEach(function(u){
+      ctx.beginPath();
+      ctx.moveTo(xAt(u, 0), yAt(0));
+      ctx.lineTo(xAt(u, 1), yAt(1));
+      ctx.stroke();
+    });
+
+    ctx.strokeStyle = "rgba(255,255,255,.34)";       // service line, depth only
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(xAt(-0.72, 0.22), yAt(0.22));
+    ctx.lineTo(xAt(0.72, 0.22), yAt(0.22));
+    ctx.stroke();
+
+    // the baseline being judged
+    var hot = rally && state === "reveal";
+    ctx.strokeStyle = hot ? "#ffffff" : "rgba(255,255,255,.92)";
+    ctx.lineWidth = hot ? 7 : 5;
+    ctx.beginPath();
+    ctx.moveTo(xAt(-1, T_LINE), yAt(T_LINE));
+    ctx.lineTo(xAt(1, T_LINE), yAt(T_LINE));
+    ctx.stroke();
+
+    if (!rally) return;
+
+    var t = rally.t, u = rally.u, lift = rally.lift;
+    var sx = xAt(u, t), sy = yAt(t);
+
+    ctx.fillStyle = "rgba(43,38,34," + (0.20 - Math.min(lift / (H * 0.34), 1) * 0.13).toFixed(3) + ")";
+    ctx.beginPath();
+    ctx.ellipse(sx, sy, 13 - lift / 60, 5 - lift / 150, 0, 0, 7);
+    ctx.fill();
+
+    var by = sy - lift;                              // shuttle itself
+    ctx.fillStyle = "#ffffff";
+    ctx.strokeStyle = "rgba(43,38,34,.34)";
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(sx, by - 9);
+    ctx.lineTo(sx - 7.5, by + 7);
+    ctx.lineTo(sx + 7.5, by + 7);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#2b2622";
+    ctx.beginPath(); ctx.arc(sx, by - 9, 4.2, 0, 7); ctx.fill();
+
+    // the verdict marker goes on last - it is the thing the player is looking for,
+    // and the shuttle itself was covering it
+    if (state === "reveal"){
+      ctx.strokeStyle = rally.out ? "#c0426a" : "#2f7a5c";
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(sx, sy); ctx.lineTo(sx, yAt(T_LINE));
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = rally.out ? "#c0426a" : "#2f7a5c";
+      ctx.beginPath(); ctx.arc(sx, sy, 5.5, 0, 7); ctx.fill();
+      ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(sx, sy, 5.5, 0, 7); ctx.stroke();
+    }
+  }
+
+  /* ---- a rally --------------------------------------------------- */
+  function serve(){
+    var spread = Math.max(26, 190 - streak * 12);    // tighter as you get good
+    var mm = Math.round(Math.pow(Math.random(), 1.8) * spread) * (Math.random() < 0.5 ? -1 : 1);
+    var u  = (Math.random() * 2 - 1) * 0.52;
+
+    rally = {
+      mm: mm,
+      out: mm > 0,                                   // on the line is in
+      u: u, uFrom: u + (Math.random() * 0.5 - 0.25),
+      tTo: T_LINE + mm / MM_SPAN,
+      t: -0.15, lift: 0, p: 0
+    };
+
+    say.textContent = ""; say.className = "lc-say";
+    setButtons(false);
+
+    if (reduce){
+      rally.t = rally.tTo; rally.lift = 0;
+      draw(); beginJudging();
+    } else {
+      state = "fly"; rally.start = 0;
+      loop();
+    }
+  }
+
+  function beginJudging(){
+    state = "judge";
+    setButtons(true);
+    rally.deadline = performance.now() + CALL_MS;
+    clock.classList.add("on");
+    clock.classList.remove("warn");
+    loop();
+  }
+
+  function setButtons(on){
+    btnIn.disabled = !on;
+    btnOut.disabled = !on;
+  }
+
+  function loop(){
+    raf = requestAnimationFrame(function(now){
+      raf = null;
+
+      if (state === "fly"){
+        if (!rally.start) rally.start = now;
+        var p = Math.min((now - rally.start) / 900, 1);
+        rally.p = p;
+        rally.t = -0.15 + (rally.tTo + 0.15) * p;
+        rally.u = rally.uFrom + (rally.u - rally.uFrom) * p;
+        rally.lift = Math.sin(p * Math.PI) * H * 0.30;
+        draw();
+        if (p >= 1){ rally.lift = 0; draw(); beginJudging(); return; }
+        loop();
+
+      } else if (state === "judge"){
+        var left = rally.deadline - now;
+        var frac = Math.max(left / CALL_MS, 0);
+        clockI.style.transform = "scaleX(" + frac + ")";
+        clock.classList.toggle("warn", frac < 0.34);
+        if (left <= 0){ resolve(null); return; }
+        loop();
+      }
+    });
+  }
+
+  function resolve(call){
+    if (state !== "judge") return;
+    state = "reveal";
+    setButtons(false);
+    clock.classList.remove("on");
+    if (raf){ cancelAnimationFrame(raf); raf = null; }
+
+    var truth = rally.out ? "OUT" : "IN";
+    var dist  = Math.abs(rally.mm);
+    var edge  = dist === 0 ? "dead on the line" :
+                dist + " mm " + (rally.out ? "past" : "inside") + " it";
+
+    made++;
+    if (call === null){
+      streak = 0;
+      say.className = "lc-say bad";
+      say.innerHTML = "<b>No call.</b> It was " + truth + ", " + edge +
+                      " — and in Referee For Fun a silent umpire is still a wrong one.";
+    } else if (call === truth){
+      right++; streak++;
+      if (streak > best){
+        best = streak;
+        try { localStorage.setItem("linecall-best", String(best)); } catch(e){}
+      }
+      say.className = "lc-say good";
+      say.innerHTML = "<b>" + truth + ".</b> Correct — " + edge + "." +
+                      (streak >= 3 ? " Streak of " + streak + "." : "");
+    } else {
+      streak = 0;
+      say.className = "lc-say bad";
+      say.innerHTML = "<b>" + truth + ".</b> You called " + call + " — " + edge + ".";
+    }
+
+    elMade.textContent = made;
+    elRight.textContent = right;
+    elStrk.textContent = streak;
+    pillStrk.classList.toggle("hot", streak >= 3);
+    pillStrk.firstChild.textContent = best && streak < best ? "Best " + best + " · Streak " : "Streak ";
+    draw();
+
+    scheduleNext();
+  }
+
+  // Between rallies the game waits politely: if the card is off-screen it holds
+  // rather than serving into an empty room, and picks up when you scroll back.
+  function scheduleNext(){
+    setTimeout(function(){
+      if (state !== "reveal") return;
+      if (visible) serve();
+      else waiting = true;
+    }, 1500);
+  }
+
+  /* ---- wiring ---------------------------------------------------- */
+  document.getElementById("lcPlay").addEventListener("click", function(){
+    cover.classList.add("gone");
+    stage.focus({preventScroll: true});
+    serve();
+  });
+  btnIn.addEventListener("click", function(){ resolve("IN"); });
+  btnOut.addEventListener("click", function(){ resolve("OUT"); });
+
+  // bound to the card, not the document - the rest of the page keeps its keys
+  card.addEventListener("keydown", function(e){
+    if (state !== "judge") return;
+    var k = e.key.toLowerCase();
+    if (k === "arrowleft" || k === "i"){ e.preventDefault(); resolve("IN"); }
+    else if (k === "arrowright" || k === "o"){ e.preventDefault(); resolve("OUT"); }
+  });
+
+  if ("ResizeObserver" in window) new ResizeObserver(fit).observe(stage);
+  else addEventListener("resize", fit, {passive: true});
+
+  if ("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){
+      visible = en[0].isIntersecting;
+      if (visible && waiting){ waiting = false; serve(); }
+    }, {threshold: 0.15}).observe(stage);
+  }
+
+  fit();
 })();
 
 })();
