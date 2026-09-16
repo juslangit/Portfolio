@@ -610,12 +610,12 @@ p{margin:.7em 0}
   </div>
 
   <section class="gallery" id="gallery">
-    <a class="work rv wide" data-cat="code" href="https://github.com/juslangit/auxetic-chess" target="_blank" rel="noopener">
+    <a class="work rv wide" data-cat="code" href="https://juslangit.github.io/auxetic-chess/" target="_blank" rel="noopener">
         <div class="shot"><img src="img/auxetic-chess.jpg" alt="Chess board whose sixteen 2x2 blocks are caught mid-rotation, pieces swinging round with them" loading="lazy" width="1760" height="989"></div>
         <div class="work-body">
           <div class="work-head"><h3>Auxetic Chess</h3><span class="cat cat-code">Coding</span></div>
           <p>A chess variant where the board is a mechanism. After every move all sixteen 2&times;2 blocks turn a quarter and carry the pieces round with them &mdash; a1&rarr;a2&rarr;b2&rarr;b1, and because it is a permutation of four squares it can never capture. Everything is carried, pawns included &mdash; a pawn on a4 turns to b4 &mdash; but a pawn&rsquo;s own moves stay forward only, never sideways or backwards, wherever the board puts it. The rule is deterministic, so the twist runs inside the engine&rsquo;s own <em>make</em>/<em>unmake</em> and the search plays the variant properly instead of playing normal chess into a scrambling board. It stands down on any turn that would expose your own king, which is what keeps the game from deadlocking rather than drawing on move three. Each side also gets three stops: press one and the board holds still for your move and the reply. A stop is part of the move itself, so the engine plans with them too, pricing an unused stop at a pawn. The engine underneath matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5. Play it against that engine at four strengths, each with its own leaderboard of wins kept in the browser &mdash; a game where Undo was used is not ranked &mdash; or two-up at one keyboard.</p>
-          <div class="chips"><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Variant inside the engine</span></div>
+          <div class="chips"><span class="chip">Play it in the browser</span><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Variant inside the engine</span></div>
         </div>
       </a>
     <div class="work rv wide" data-cat="code">
