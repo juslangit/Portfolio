@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gudang Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #2B2622; --muted: #6B6259; --line: #E7E1D8;
+  --accent: #2F6BB0; --accent-soft: #D6E6FA; --flag: #FFEEC9; --flag-ink: #A97B12; --done: #2F7A5C;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #2B2622; --muted: #6B6259; --line: #E7E1D8;
+  --accent: #2F6BB0; --accent-soft: #D6E6FA; --done: #2F7A5C; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #2B2622; --muted: #6B6259; --line: #E7E1D8;
+  --accent: #2F6BB0; --accent-soft: #D6E6FA; --done: #2F7A5C; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Gudang</b><span>Project record · built 2026-09-17</span></p>
+  <h1>Gudang</h1>
+  <p class="thesis">Gudang ("warehouse") is the <strong>receiving bay every 3D asset passes through on its way into a game</strong>. Drop in a Sketchfab download, a Meshy generation or a <code>.blend</code>; it is inspected by headless Blender, judged per target engine in plain language, versioned against its siblings, and exported engine-ready for Godot and Unreal. When nothing in the bay fits, it builds the asset instead — that is <code>kilang</code>, folded in on 2026-09-17.</p>
+  <div class="stats"><div class="stat"><b>1</b><span>source files</span></div><div class="stat"><b>643</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>planning</td></tr>
+<tr><td>Current phase</td><td>M0 — idea written 2026-09-17, storage limits verified, nothing built</td></tr>
+<tr><td>Deadline / target</td><td>~1 month at 10+ h/week (M1–M6)</td></tr>
+<tr><td>Repo</td><td>not yet · local: <code>~/Desktop/project/3d/gudang</code></td></tr>
+<tr><td>URL / deployment</td><td>not yet</td></tr>
+<tr><td>Main stack</td><td>Headless Blender 4.x (<code>bpy</code>), Supabase (Postgres + auth + RLS + edge functions + cron), Cloudflare R2, GitHub Actions as the job worker, plain JS/HTML front end</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Two jobs, both real.</p>
+<p><strong>It does actual work.</strong> Every asset in Luqman's games arrives from Sketchfab or Meshy and none of it arrives usable — wrong scale, too many triangles, bad UVs, and five undifferentiated attempts at the same character. direct-hit, codebot and kedai-runtuh all need assets now, so gudang has a job in its first week.</p>
+<p><strong>It fills the hole in the portfolio.</strong> His 24 portfolio cards contain no backend, no accounts, no scheduled work, no deployment pipeline and no AI system with measured quality — the chips read <em>Zero backend</em> as if it were a feature. He chose this project specifically to show range he does not yet have, on free tiers only, as a month-long flagship.</p>
+<h3 id="overview-what-counts-as-done">What counts as "done"</h3>
+<ul>
+<li><span class="box">to do</span> The inspector runs over all 76 of his existing model files and reports on each</li>
+<li><span class="box">to do</span> Its verdicts are measured against a labelled corpus, with a published accuracy number</li>
+<li><span class="box">to do</span> Assets upload through a live URL, behind accounts, with per-user isolation</li>
+<li><span class="box">to do</span> Inspection runs as a background job, not in the request</li>
+<li><span class="box">to do</span> Five Meshy attempts at one character display as one asset with five versions</li>
+<li><span class="box">to do</span> An asset exported by gudang is used in a real game of his</li>
+<li><span class="box">to do</span> Tests run on every push; the record is published</li>
+</ul>
+<h3 id="overview-what-is-not-in-scope">What is NOT in scope</h3>
+<ul>
+<li>Semantic search over a large library — his library is 76 files (D-001)</li>
+<li>Characters, rigging and animation authoring</li>
+<li>Any paid service. Free tiers only, by his explicit choice</li>
+<li>Editing meshes by hand in a browser</li>
+</ul>
+<h3 id="overview-map-of-files-in-this-folder">Map of files in this folder</h3>
+<ul>
+<li><code>01-idea.md</code> — the problem, the reframe away from a librarian, alternatives</li>
+<li><code>02-planning.md</code> — scope, phases, stack, requirements, risks</li>
+<li><code>03-milestones.md</code> — M1–M8 and progress</li>
+<li><code>04-methods.md</code> — how to work on this, patterns, commands</li>
+<li><code>05-relations.md</code> — how it relates to pipeline, retopology, kilang and the games</li>
+<li><code>06-decisions.md</code> — decision log (D-001 … D-005)</li>
+<li><code>07-references.md</code> — links and documentation</li>
+<li><code>log/</code> — per-session notes</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 9 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<p>Every 3D asset that enters one of Luqman's games arrives from somewhere else — a Sketchfab download, a Meshy generation, occasionally a hand-built <code>.blend</code> — and none of it arrives usable. Three specific costs, confirmed by him on 2026-09-17:</p>
+<ol>
+<li><strong>"Is this download usable?"</strong> A Sketchfab model looks right in the preview and turns out to be 400k triangles, at the wrong scale, or badly unwrapped — and he only finds out after it is already in the engine.</li>
+<li><strong>"Which version is the good one?"</strong> Generated assets arrive as attempts. The evidence is on his own disk: <code>referee-for-fun/assets/meshy/</code> holds <code>official</code>, <code>official_new</code>, <code>athlete_meshy</code>, <code>player_red</code> and <code>player_blue</code> — five runs at the same character, six files each, with nothing recording which one he kept or why. Also <code>simple_character</code>, <code>simple_low_poly_character</code> and <code>random_guy</code>: three near-identical people.</li>
+<li><strong>"Now make it engine-ready."</strong> Naming, scale, pivots, collision and export settings are the same repetitive steps every time, and they differ between Godot and Unreal.</li>
+</ol>
+<h3 id="idea-what-this-is-not">What this is NOT</h3>
+<p>An asset <strong>librarian</strong>. That was the first version of this idea and it was wrong. A survey of his machine on 2026-09-17 found <strong>76 model files totalling 373 MB</strong>, almost all of it inside <code>referee-for-fun</code>, and only 2 <code>.blend</code> files anywhere. He confirmed that is essentially the whole library. Seventy-six files do not need semantic search — he can look at them. Search is a feature of this system, not its reason to exist. See D-001.</p>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<p><strong>Gudang ("warehouse") is the receiving bay every asset passes through on its way into a game.</strong> Drop a file in; it comes out judged, versioned and engine-ready.</p>
+<ol>
+<li><strong>Inspect</strong> — headless Blender opens the file and measures it: triangle count, real-world scale, n-gons, non-manifold edges, flipped normals, UV coverage and overlap, texture resolution, material count, rig and animation presence.</li>
+<li><strong>Judge</strong> — those measurements become a verdict per target engine (<em>good for Godot · needs work for Unreal · not usable</em>), each reason written in plain language with the fix, not as a raw number dump.</li>
+<li><strong>Version</strong> — five attempts at one character become one asset with five versions, rendered side by side, one marked as the keeper with a note saying why.</li>
+<li><strong>Prepare</strong> — fix what is mechanically fixable and export engine-ready for Godot and Unreal with the right scale, naming, pivot and collision. Reuses the <code>pipeline</code> and <code>retopology</code> add-ons he already built.</li>
+<li><strong>Generate</strong> — when nothing in the bay fits, build it in Blender from reference. This is <code>kilang</code>, folded in on 2026-09-17 (D-005) as phase 2.</li>
+</ol>
+<h3 id="idea-why-this-project-exists">Why this project exists</h3>
+<p>Two jobs at once, and both are real:</p>
+<ul>
+<li><strong>It does actual work.</strong> direct-hit, codebot and kedai-runtuh all need assets now. Gudang has a job from its first week, which is the thing every other project in the portfolio lacks — most of them have never been used by a human.</li>
+<li><strong>It fills the hole in the portfolio.</strong> Luqman's 24 portfolio cards contain no backend, no accounts, no scheduled work, no deployment pipeline and no AI system with measured quality. The chips literally read <em>Zero backend</em>. Gudang needs all of those honestly, rather than bolting them on for show.</li>
+</ul>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick it</th></tr></thead><tbody>
+<tr><td>Luqman</td><td>Assets that import cleanly the first time</td><td>It knows his engines, his add-ons and his standards</td></tr>
+<tr><td>Game devs using Sketchfab / Meshy</td><td>Knowing a download is usable before wiring it in</td><td>Nobody checks this for you today</td></tr>
+<tr><td>Interviewers reading the repo</td><td>Proof of a real system with measured quality</td><td>An eval suite on an objective problem, in a domain few AI developers understand</td></tr>
+</tbody></table></div>
+<p>Audience beyond himself is deliberately undecided — decided once it works.</p>
+<h3 id="idea-value-advantage">Value / advantage</h3>
+<ul>
+<li><strong>Objective evals.</strong> Unlike "is this search result relevant?", a mesh either has non-manifold edges or it does not. A labelled corpus of assets with known defects gives a precision/recall number the inspector can be measured against and improved on. This is the strongest interview artifact in the whole plan.</li>
+<li><strong>Free to run</strong> on Supabase + Cloudflare R2 + GitHub Actions free tiers (D-002, D-003, D-004).</li>
+<li><strong>Built on his own expertise.</strong> He can defend every rule in the inspector from experience rather than from reading, which is the failure mode of the alternative ideas considered.</li>
+<li>Turns <code>pipeline</code>, <code>retopology</code> and <code>kilang</code> from four separate scripts into one system.</li>
+</ul>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td>Headless Blender can measure all of the listed properties reliably</td><td>Run the inspector over all 76 existing files</td><td>untested</td></tr>
+<tr><td>The verdicts agree with Luqman's own judgement</td><td>He grades 20 assets blind; compare</td><td>untested</td></tr>
+<tr><td>Blender runs acceptably on a GitHub Actions runner</td><td>Time a cold job end to end</td><td>untested</td></tr>
+<tr><td>A free LLM tier is enough for the explanations</td><td>Measure calls per asset against the rate limit</td><td>untested</td></tr>
+<tr><td>373 MB of real assets is enough to make the system worth using</td><td>Use it for direct-hit's next asset</td><td>untested</td></tr>
+</tbody></table></div>
+<h3 id="idea-alternatives-considered">Alternatives considered</h3>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Asset librarian (semantic search over the library)</td><td>Multimodal retrieval, strong AI signal</td><td>The library is 76 files — solves a problem he does not have</td><td>rejected 2026-09-17, D-001</td></tr>
+<tr><td>Game backend for the 7 existing games</td><td>Lights up dead portfolio cards</td><td>Needs players who do not exist; mostly generic bootcamp work</td><td>rejected as the flagship; the blocked parts are a weekend, see D-003</td></tr>
+<tr><td>Agent memory as a service (Sky AI Brain productised)</td><td>Purest AI-engineer signal</td><td>Lightest on the backend range he explicitly wants</td><td>parked</td></tr>
+<tr><td>Model Doctor (inspection only, no backend)</td><td>Fastest to ship</td><td>Does not fill the portfolio gap he named</td><td>absorbed — it is step 1 of this</td></tr>
+</tbody></table></div>
+<h3 id="idea-side-ideas-parking-lot">Side ideas (parking lot)</h3>
+<ul>
+<li>A Blender panel that talks to the same backend, for people who live in Blender.</li>
+<li>Publish the inspector's rules as a standalone open-source library.</li>
+<li>Let the eval corpus be community-contributed once there is an audience.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 6 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><h3 id="planning-scope">Scope</h3>
+<h4 id="planning-must-have-mvp-m1-m6">Must have (MVP — M1–M6)</h4>
+<ul>
+<li><span class="box">to do</span> Inspector: headless Blender measures triangles, scale, n-gons, non-manifold edges, flipped normals, UV coverage and overlap, texture sizes, material count, rig and animation presence</li>
+<li><span class="box">to do</span> Verdict per target engine (Godot / Unreal), each reason in plain language with the fix</li>
+<li><span class="box">to do</span> A labelled eval corpus and a published accuracy number for those verdicts</li>
+<li><span class="box">to do</span> Upload through a live URL, behind accounts, with per-user isolation</li>
+<li><span class="box">to do</span> Inspection as a queued background job with visible state</li>
+<li><span class="box">to do</span> Versions: sibling attempts grouped as one asset, rendered side by side, one marked the keeper</li>
+<li><span class="box">to do</span> Engine-ready export for Godot and Unreal</li>
+<li><span class="box">to do</span> Tests on every push; project record published</li>
+</ul>
+<h4 id="planning-nice-to-have-v2">Nice to have (v2)</h4>
+<ul>
+<li><span class="box">to do</span> kilang: build the asset in Blender when nothing fits (M7)</li>
+<li><span class="box">to do</span> A Blender panel talking to the same backend</li>
+<li><span class="box">to do</span> The inspector's rules released as a standalone library</li>
+<li><span class="box">to do</span> Search — only if the library ever outgrows eyeballing it</li>
+</ul>
+<h4 id="planning-won-t-build">Won't build</h4>
+<ul>
+<li>Semantic/image search as the headline feature (D-001)</li>
+<li>Rigging, animation authoring, characters</li>
+<li>Mesh editing in the browser</li>
+<li>Anything on a paid tier</li>
+</ul>
+<h3 id="planning-phases">Phases</h3>
+<div class="table"><table><thead><tr><th>Phase</th><th>Goal</th><th>Output</th><th>Estimate</th></tr></thead><tbody>
+<tr><td>1</td><td>Know if a file is good</td><td>Inspector + verdicts, running locally on the 76 real files</td><td>week 1</td></tr>
+<tr><td>2</td><td>Prove the verdicts are right</td><td>Labelled corpus, measured precision/recall</td><td>week 2</td></tr>
+<tr><td>3</td><td>Make it a system</td><td>Supabase schema, R2, auth, job queue, Actions worker</td><td>week 3</td></tr>
+<tr><td>4</td><td>Make it usable</td><td>Web app, versions side by side, engine-ready export</td><td>week 4</td></tr>
+<tr><td>5</td><td>Generation (kilang)</td><td>Build from reference when nothing fits</td><td>later</td></tr>
+</tbody></table></div>
+<h3 id="planning-stack-tooling">Stack &amp; tooling</h3>
+<div class="table"><table><thead><tr><th>Layer</th><th>Choice</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Inspection</td><td>Blender 4.x headless via <code>bpy</code></td><td>The only thing that can truly open all these formats; he already knows it</td></tr>
+<tr><td>Worker</td><td>GitHub Actions on a schedule</td><td>Free compute, and it doubles as the Supabase keep-alive (D-004)</td></tr>
+<tr><td>Database / auth</td><td>Supabase Postgres + RLS, <code>gudang</code> schema</td><td>Free tier; one project shared with two games (D-003)</td></tr>
+<tr><td>File storage</td><td>Cloudflare R2</td><td>10 GB and no egress charges, vs Supabase's 1 GB (D-002)</td></tr>
+<tr><td>Explanations / tagging</td><td>A free LLM tier (Gemini or Groq), rate-limit aware</td><td>He has no paid API key and ruled out paying</td></tr>
+<tr><td>Embeddings</td><td>gte-small on Supabase</td><td>Already proven in Sky AI Brain; costs nothing</td></tr>
+<tr><td>Front end</td><td>Plain HTML/CSS/JS, no build step</td><td>Matches every other project he can read end to end</td></tr>
+<tr><td>Reuse</td><td><code>pipeline</code>, <code>retopology</code></td><td>His own add-ons do the export and cleanup work</td></tr>
+</tbody></table></div>
+<h3 id="planning-requirements">Requirements</h3>
+<h4 id="planning-functional">Functional</h4>
+<ul>
+<li>Every inspection result traces to the exact file and Blender version that produced it</li>
+<li>A verdict never shows a bare number without saying what it means and what to do</li>
+<li>One user cannot see another user's assets — enforced in the database, not the UI</li>
+<li>A job that fails leaves a readable reason, not a silent stuck row</li>
+</ul>
+<h4 id="planning-non-functional">Non-functional</h4>
+<ul>
+<li>Runs entirely on free tiers; any change that requires payment is a decision entry</li>
+<li>The queue is honest: queued, running, done and failed are all visible states</li>
+<li>Works on a phone-width screen</li>
+<li>The whole thing survives the Supabase project being paused and resumed</li>
+</ul>
+<h3 id="planning-risks">Risks</h3>
+<div class="table"><table><thead><tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr></thead><tbody>
+<tr><td>Blender cold start on Actions is too slow to be usable</td><td>high</td><td>medium</td><td>Measure in M1; cache the install; batch jobs per run</td></tr>
+<tr><td>Free LLM rate limits throttle the explanations</td><td>medium</td><td>medium</td><td>Explanations are templated first, LLM only for the summary; cache per asset</td></tr>
+<tr><td>Supabase pause breaks the live demo link</td><td>high</td><td>medium</td><td>The worker's schedule keeps it awake (D-004); verify it actually does</td></tr>
+<tr><td>373 MB is too little real data to make it worth using</td><td>medium</td><td>medium</td><td>Use it for direct-hit's next asset before building more features</td></tr>
+<tr><td>The verdicts disagree with Luqman's judgement</td><td>high</td><td>medium</td><td>M2 exists precisely to measure this before more is built on top</td></tr>
+<tr><td>It drifts into a tool he cannot explain</td><td>high</td><td>low</td><td>Build it in his vocabulary, one step at a time, checking understanding</td></tr>
+</tbody></table></div>
+<h3 id="planning-resources-needed">Resources needed</h3>
+<ul>
+<li>A Cloudflare account for R2</li>
+<li>A Supabase project (also unblocks auxetic-chess and bluff-show)</li>
+<li>A free LLM API key (Gemini AI Studio or Groq)</li>
+<li>20 assets he is willing to grade by hand, for the eval corpus</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 10 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><blockquote>Status: <code>not started</code> · <code>in progress</code> · <code>done</code> · <code>stalled</code> · <code>cancelled</code> Use full dates (2026-09-17), never "next week".</blockquote>
+<details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
+<div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M0</td><td>Idea, decisions, verified limits</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td>Reframed away from a librarian (D-001)</td></tr>
+<tr><td>M1</td><td>The inspector</td><td>—</td><td></td><td>not started</td><td>Must run over all 76 existing files</td></tr>
+<tr><td>M2</td><td>Verdicts, measured</td><td>—</td><td></td><td>not started</td><td>The most important milestone in the project</td></tr>
+<tr><td>M3</td><td>The backend</td><td>—</td><td></td><td>not started</td><td>Supabase schema, R2, auth, RLS</td></tr>
+<tr><td>M4</td><td>The worker</td><td>—</td><td></td><td>not started</td><td>Actions runner + keep-alive</td></tr>
+<tr><td>M5</td><td>The web app</td><td>—</td><td></td><td>not started</td><td>Upload, queue states, versions side by side</td></tr>
+<tr><td>M6</td><td>Engine-ready export</td><td>—</td><td></td><td>not started</td><td>Godot + Unreal, via pipeline/retopology</td></tr>
+<tr><td>M7</td><td>kilang — generation</td><td>—</td><td></td><td>not started</td><td>Phase 2, deferred (D-005)</td></tr>
+<tr><td>M8</td><td>Used on a real game</td><td>—</td><td></td><td>not started</td><td>The only milestone that proves the premise</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m1-the-inspector"><summary><span>M1 — The inspector</span></summary><div>
+<p><strong>Goal:</strong> A script that opens any model file in headless Blender and reports what it finds, with no judgement attached yet. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> Reports triangles, real-world scale, n-gons, non-manifold edges, flipped normals, UV coverage and overlap, texture sizes, material count, rig/animation</li>
+<li><span class="box">to do</span> Runs over all 76 existing files without crashing, and says why when it cannot read one</li>
+<li><span class="box">to do</span> Output is JSON, with the Blender version recorded alongside</li>
+<li><span class="box">to do</span> Cold-start time on a GitHub Actions runner is measured and written down</li>
+</ul>
+<p><strong>Dependencies:</strong> Blender 4.x locally <strong>Blockers:</strong> none</p>
+</div></details>
+<details class="fold" id="milestones-m2-verdicts-measured"><summary><span>M2 — Verdicts, measured</span></summary><div>
+<p><strong>Goal:</strong> Turn measurements into a plain-language verdict per engine, and prove the verdicts are right rather than assuming it. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> Rules produce <em>good / needs work / not usable</em> for Godot and for Unreal</li>
+<li><span class="box">to do</span> Every reason names the fix, not just the number</li>
+<li><span class="box">to do</span> A labelled corpus: 20+ assets Luqman has graded by hand</li>
+<li><span class="box">to do</span> Precision and recall measured against that corpus, and the number published in the record — including if it is bad</li>
+<li><span class="box">to do</span> Disagreements between the tool and Luqman are listed, not hidden</li>
+</ul>
+<p><strong>Dependencies:</strong> M1; 20 graded assets from Luqman <strong>Blockers:</strong> needs his time to grade</p>
+</div></details>
+<details class="fold" id="milestones-m3-the-backend"><summary><span>M3 — The backend</span></summary><div>
+<p><strong>Goal:</strong> Assets, versions, inspections and jobs live in Postgres; files live in R2; users have accounts and cannot see each other's work. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> Schema <code>gudang</code> with assets, versions, inspections, jobs</li>
+<li><span class="box">to do</span> Row-level security tested by actually trying to read another user's row</li>
+<li><span class="box">to do</span> Files upload to R2 and come back down</li>
+<li><span class="box">to do</span> Migrations are files in the repo, not clicks in a dashboard</li>
+</ul>
+<p><strong>Dependencies:</strong> Supabase project, Cloudflare account <strong>Blockers:</strong> none</p>
+</div></details>
+<details class="fold" id="milestones-m4-the-worker"><summary><span>M4 — The worker</span></summary><div>
+<p><strong>Goal:</strong> Inspection happens in the background, in the cloud, on free compute. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> An Actions workflow claims pending jobs, runs M1/M2, writes results back</li>
+<li><span class="box">to do</span> A failed job records a readable reason and does not stay stuck</li>
+<li><span class="box">to do</span> The same schedule demonstrably keeps the Supabase project awake for two weeks</li>
+</ul>
+<p><strong>Dependencies:</strong> M1, M2, M3 <strong>Blockers:</strong> none</p>
+</div></details>
+<details class="fold" id="milestones-m5-the-web-app"><summary><span>M5 — The web app</span></summary><div>
+<p><strong>Goal:</strong> The thing Luqman actually opens. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> Drop a file, watch it go queued → running → done</li>
+<li><span class="box">to do</span> Verdict readable at a glance, detail on demand</li>
+<li><span class="box">to do</span> Five Meshy attempts show as one asset with five versions, rendered side by side</li>
+<li><span class="box">to do</span> One version can be marked the keeper, with a note saying why</li>
+<li><span class="box">to do</span> Works at phone width</li>
+</ul>
+<p><strong>Dependencies:</strong> M3, M4 <strong>Blockers:</strong> none</p>
+</div></details>
+<details class="fold" id="milestones-m6-engine-ready-export"><summary><span>M6 — Engine-ready export</span></summary><div>
+<p><strong>Goal:</strong> The asset leaves the bay ready to use. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> Export for Godot and for Unreal with correct scale, naming, pivot, collision</li>
+<li><span class="box">to do</span> Reuses <code>pipeline</code> and <code>retopology</code> rather than reimplementing them</li>
+<li><span class="box">to do</span> A round trip is verified by importing the result into a real project</li>
+</ul>
+<p><strong>Dependencies:</strong> M5 <strong>Blockers:</strong> none</p>
+</div></details>
+<details class="fold" id="milestones-m7-kilang-generation"><summary><span>M7 — kilang, generation</span></summary><div>
+<p><strong>Goal:</strong> When nothing fits, build it. Deferred to phase 2 (D-005).</p>
+</div></details>
+<details class="fold" id="milestones-m8-used-on-a-real-game"><summary><span>M8 — Used on a real game</span></summary><div>
+<p><strong>Goal:</strong> An asset that went through gudang is in direct-hit, codebot or kedai-runtuh. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> At least one shipped asset traceable through the bay</li>
+<li><span class="box">to do</span> Luqman says whether it actually saved him time, and that answer is recorded either way</li>
+</ul>
+</div></details>
+<details class="fold" id="milestones-completion-history"><summary><span>Completion history</span></summary><div>
+<div class="table"><table><thead><tr><th>Date</th><th>Milestone</th><th>Lesson</th></tr></thead><tbody>
+<tr><td>2026-09-17</td><td>M0</td><td>Surveying the disk before writing the idea killed the wrong version of it. 76 files, not a library.</td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 6 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><blockquote>Anyone (Claude included) who reads this file should be able to start working without asking.</blockquote>
+<details class="fold" id="methods-setup-from-scratch"><summary><span>Setup from scratch</span></summary><div>
+<pre><code># step by step</code></pre>
+</div></details>
+<details class="fold" id="methods-daily-commands"><summary><span>Daily commands</span></summary><div>
+<div class="table"><table><thead><tr><th>Purpose</th><th>Command</th></tr></thead><tbody>
+<tr><td>Run dev</td><td></td></tr>
+<tr><td>Build</td><td></td></tr>
+<tr><td>Test</td><td></td></tr>
+<tr><td>Lint / format</td><td></td></tr>
+<tr><td>Deploy</td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-folder-structure"><summary><span>Folder structure</span></summary><div>
+<pre><code></code></pre>
+</div></details>
+<details class="fold" id="methods-conventions"><summary><span>Conventions</span></summary><div>
+<h4 id="methods-naming">Naming</h4>
+<h4 id="methods-git">Git</h4>
+<ul>
+<li>Branch: </li>
+<li>Commit: </li>
+<li>PR: </li>
+</ul>
+<h4 id="methods-code">Code</h4>
+</div></details>
+<details class="fold" id="methods-patterns-in-use"><summary><span>Patterns in use</span></summary><div>
+<h4 id="methods-pattern-name">&lt;pattern name&gt;</h4>
+<p><strong>When to use:</strong> <strong>How:</strong></p>
+<pre><code></code></pre>
+</div></details>
+<details class="fold" id="methods-gotchas-traps"><summary><span>Gotchas / traps</span></summary><div>
+<div class="table"><table><thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 6 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><h3 id="relations-projects-it-absorbs">Projects it absorbs</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Relationship</th></tr></thead><tbody>
+<tr><td>kilang</td><td>Folded in 2026-09-17 (D-005) as M7, the generator. Never had code; its notes are kept and marked archived-into-gudang</td></tr>
+</tbody></table></div>
+<h3 id="relations-projects-it-reuses">Projects it reuses</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Relationship</th></tr></thead><tbody>
+<tr><td>pipeline</td><td>His Blender→Unreal export add-on. Gudang calls it for Unreal export rather than reimplementing it</td></tr>
+<tr><td>retopology</td><td>His cleanup add-on. Gudang calls it for the fixable problems the inspector finds</td></tr>
+<tr><td>print-quote</td><td>Precedent, not a dependency — its hand-written STL parser and Three.js viewer are the closest thing he has already built to this</td></tr>
+</tbody></table></div>
+<h3 id="relations-projects-it-serves">Projects it serves</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Relationship</th></tr></thead><tbody>
+<tr><td>direct-hit</td><td>Five Sketchfab hulls already in use; the next asset should go through gudang (M8)</td></tr>
+<tr><td>codebot</td><td>Needs assets, in active development</td></tr>
+<tr><td>kedai-runtuh</td><td>Needs assets; art pass in progress</td></tr>
+<tr><td>referee-for-fun</td><td>The source of all 76 existing files, and of the five-attempts-at-one-character problem</td></tr>
+</tbody></table></div>
+<h3 id="relations-projects-it-unblocks-as-a-side-effect">Projects it unblocks as a side effect</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Relationship</th></tr></thead><tbody>
+<tr><td>auxetic-chess</td><td>Its online leaderboard is written and waiting on a Supabase project. D-003 creates one, shared by schema</td></tr>
+<tr><td>bluff-show</td><td>Its TV room mode is waiting on the same Supabase project</td></tr>
+</tbody></table></div>
+<h3 id="relations-external-services">External services</h3>
+<div class="table"><table><thead><tr><th>Service</th><th>Role</th><th>Plan</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Supabase</td><td>Database, auth, RLS, edge functions, cron</td><td>free</td><td>500 MB DB, 1 GB files, <strong>2 projects</strong>, pauses after 1 week idle</td></tr>
+<tr><td>Cloudflare R2</td><td>Original model files and textures</td><td>free</td><td>10 GB, 1M writes, 10M reads, no egress charge</td></tr>
+<tr><td>GitHub Actions</td><td>The Blender worker, and the keep-alive</td><td>free (public repo)</td><td>Cold-start cost not yet measured</td></tr>
+<tr><td>Gemini AI Studio or Groq</td><td>Plain-language explanations</td><td>free tier</td><td>Rate-limited; explanations templated first, LLM for the summary</td></tr>
+<tr><td>Blender</td><td>The inspector itself</td><td>free</td><td>4.x, headless via <code>bpy</code></td></tr>
+</tbody></table></div>
+<h3 id="relations-people">People</h3>
+<p>Luqman alone. No audience chosen yet — deliberately deferred until it works.</p></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 5 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><blockquote>One decision = one entry. Never delete old entries — mark them <code>Superseded by D-00X</code>. The point of this file: six months from now you'll ask "why did I do it this way?" — the answer is here.</blockquote>
+<details class="fold" id="decisions-d-001-a-receiving-bay-not-an-asset-librarian"><summary><span>D-001 — A receiving bay, not an asset librarian</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> The project was proposed as an "asset librarian" — plain-language and image search over Luqman's 3D library, using local CLIP embeddings. Before writing it down, his machine was surveyed: <strong>76 model files, 373 MB</strong>, almost all inside <code>referee-for-fun/assets/</code>, and only 2 <code>.blend</code> files in total. He confirmed that is essentially the whole library. Asked what actually costs him time, he chose three things — judging whether a download is usable, telling generated attempts apart, and making an asset engine-ready — and none of them is finding a file.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>A — Librarian: semantic + image search over the library</td><td>Multimodal retrieval is a strong AI-engineering signal</td><td>76 files do not need search; solves a problem he does not have</td></tr>
+<tr><td>B — Receiving bay: inspect, judge, version, prepare</td><td>Matches all three pains he named; has real work to do immediately</td><td>Search becomes a minor feature rather than the headline</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> B. Gudang is the gate every asset passes through on the way in.</li>
+<li><strong>Reason:</strong> A beautiful solution to a problem he does not have is worth nothing, and a month is too long to spend finding that out. The three pains he picked are all the same pain — judging and preparing an incoming asset — and that is a gate, not a warehouse.</li>
+<li><strong>Consequences / trade-offs:</strong> Gives up the CLIP/multimodal-retrieval story. Gains something better for interviews: an <strong>objective</strong> eval target, because a mesh either has non-manifold edges or it does not, whereas "is this search result relevant?" is a judgement call.</li>
+<li><strong>Reversible?</strong> easily — search can be added later if the library ever grows.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-002-original-files-in-cloudflare-r2-metadata-in-"><summary><span>D-002 — Original files in Cloudflare R2, metadata in Supabase</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> The project must run on free tiers only, by Luqman's explicit choice. Verified 2026-09-17: Supabase free gives 500 MB database, <strong>1 GB file storage</strong> and 5 GB egress; Cloudflare R2 free gives <strong>10 GB storage, 1M writes, 10M reads and no egress charges at all</strong>.</li>
+<li><strong>Decision:</strong> Original model files and their textures live in R2. Supabase holds rows, thumbnails, inspection results and embeddings.</li>
+<li><strong>Reason:</strong> His existing 373 MB would consume a third of Supabase's file storage before the project has a single user, and egress on downloads would eat the 5 GB allowance. R2's free egress makes serving files back a non-issue.</li>
+<li><strong>Consequences / trade-offs:</strong> Two storage systems to keep consistent instead of one, and R2 credentials to manage. Accepted — the alternative runs out of room almost immediately.</li>
+<li><strong>Reversible?</strong> with difficulty — moving stored files later means a migration.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-003-one-supabase-project-one-schema-per-app"><summary><span>D-003 — One Supabase project, one schema per app</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Supabase's free plan allows <strong>2 active projects</strong>. Three things need a backend: gudang, auxetic-chess (its leaderboard is written and waiting on a Supabase project) and bluff-show (its TV room mode is waiting on the same thing). Three into two does not go.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>A — One project per app, pay when out of slots</td><td>Clean isolation</td><td>Costs money, which he ruled out</td></tr>
+<tr><td>B — One project, a Postgres schema per app</td><td>Fits the free plan; one thing to keep alive</td><td>A single blast radius; row-level security has to be right</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> B. One Supabase project with <code>gudang</code>, <code>auxetic_chess</code> and <code>bluff_show</code> schemas.</li>
+<li><strong>Reason:</strong> It fits the constraint he set, it is a legitimate multi-tenant design rather than a workaround, and it unblocks two stalled games as a side effect.</li>
+<li><strong>Consequences / trade-offs:</strong> Row-level security carries real weight now, which is exactly the range the project is meant to demonstrate. One paused or broken project takes down three apps.</li>
+<li><strong>Reversible?</strong> easily — a schema can be moved to its own project later.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-004-headless-blender-runs-on-github-actions-not-"><summary><span>D-004 — Headless Blender runs on GitHub Actions, not on a server</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Inspection means opening the file in Blender and measuring it, which is heavy, slow and impossible inside a Supabase edge function. A server that can run Blender costs money. Supabase free projects also <strong>auto-pause after one week with no API requests</strong>, so something has to keep the project awake regardless.</li>
+<li><strong>Decision:</strong> A job table in Postgres, and a GitHub Actions workflow that wakes on a schedule, claims pending jobs, runs Blender headless and writes results back. The same schedule keeps the Supabase project from pausing.</li>
+<li><strong>Reason:</strong> Public-repo Actions runners are free, Blender installs on them, and it turns two problems — no compute budget and the inactivity pause — into one mechanism. It is also a genuine background-work story rather than a contrived one.</li>
+<li><strong>Consequences / trade-offs:</strong> Latency is minutes, not seconds, so the UI must be built around "queued → running → done" from the start. Cold-start cost of installing Blender needs caching and has not been measured yet.</li>
+<li><strong>Reversible?</strong> easily — the worker is a script; where it runs can change.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-005-kilang-is-folded-into-gudang-as-phase-2"><summary><span>D-005 — kilang is folded into gudang as phase 2</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> <code>kilang</code> was opened 2026-09-13 as a separate project: an agent that builds a game-ready prop in Blender from a request. It reached planning only — no code was written and its code folder was never created. Gudang covers the same ground from the other end: kilang makes assets, gudang judges and prepares them, and both target Godot and Unreal through the same add-ons.</li>
+<li><strong>Decision:</strong> kilang becomes gudang's generator — what happens when nothing in the bay fits — and is marked archived-into-gudang.</li>
+<li><strong>Reason:</strong> Luqman's own archive note on <code>claude-terminal</code> says it plainly: <em>two projects aimed at the same need is one too many.</em> Running both would split a month of work across two half-finished systems.</li>
+<li><strong>Consequences / trade-offs:</strong> Generation is deferred behind inspection, so the prop-building idea waits. Accepted — judging assets is the pain he actually named.</li>
+<li><strong>Reversible?</strong> easily — kilang's notes are kept, not deleted.</li>
+</ul>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 5 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-project-links">Project links</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>URL</th></tr></thead><tbody>
+<tr><td>Repo</td><td></td></tr>
+<tr><td>Production</td><td></td></tr>
+<tr><td>Staging</td><td></td></tr>
+<tr><td>Dashboard / analytics</td><td></td></tr>
+<tr><td>Design (Figma etc.)</td><td></td></tr>
+<tr><td>Board / issue tracker</td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-external-documentation">External documentation</h3>
+<div class="table"><table><thead><tr><th>Topic</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-credentials">Credentials</h3>
+<blockquote>⚠️ <strong>Never write key values here.</strong> Env var names only. The real values are stored in <code>~/.claude/.env</code> (chmod 600).</blockquote>
+<div class="table"><table><thead><tr><th>Env var name</th><th>Used for</th><th>Where to get it</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-references-inspiration">References &amp; inspiration</h3>
+<h3 id="references-reading-notes">Reading notes</h3></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-17"><summary><span>2026-09-17</span></summary><div><h3 id="log-2026-09-17-what-happened">What happened</h3>
+<p>Luqman asked for a system worth adding to his portfolio. Reading the knowledge base first showed the actual gap: 24 portfolio cards, 14 of them games or 3D art, the code projects advertising <em>Zero backend</em> as a feature, and the only AI chips attached to <code>siti</code>, which is paused. Nothing with accounts, scheduled work, deployment or measured AI quality.</p>
+<p>He answered four scoping questions: the system's job is to <strong>show range he does not have</strong>, users to be picked later, <strong>free tiers only</strong>, and a <strong>month-plus flagship</strong>.</p>
+<p>Three candidates were put to him — a game backend for his seven existing games, an asset pipeline service, and Sky AI Brain as a product. He asked for a recommendation and took the asset pipeline, on the grounds that it is the only one with a guaranteed real user on day one and the only one he can defend from experience rather than from reading.</p>
+<h3 id="log-2026-09-17-the-reframe">The reframe</h3>
+<p>Before writing <code>01-idea.md</code>, his disk was surveyed: <strong>76 model files, 373 MB</strong>, almost all inside <code>referee-for-fun/assets/</code>, only 2 <code>.blend</code> files in total. He confirmed that is essentially the whole library.</p>
+<p>That killed the "asset librarian" version of the idea outright — 76 files do not need semantic search. Asked what actually costs him time, he picked three things: judging whether a download is usable, telling generated attempts apart, and making an asset engine-ready. None of them is finding a file.</p>
+<p>So gudang became a <strong>receiving bay</strong> rather than a warehouse to search: inspect, judge, version, prepare, and eventually generate. Recorded as D-001.</p>
+<p>The evidence for the versioning pain was sitting in his own folders — <code>official</code>, <code>official_new</code>, <code>athlete_meshy</code>, <code>player_red</code>, <code>player_blue</code>, five Meshy runs at one character with nothing recording which he kept.</p>
+<h3 id="log-2026-09-17-constraints-verified-not-assumed">Constraints verified, not assumed</h3>
+<ul>
+<li>Supabase free: 500 MB database, 1 GB file storage, 5 GB egress, <strong>2 active projects</strong>, auto-pause after one week idle</li>
+<li>Cloudflare R2 free: 10 GB, 1M writes, 10M reads, <strong>no egress charge</strong></li>
+</ul>
+<p>Two decisions fell out. Originals go to R2, metadata to Supabase (D-002) — 373 MB would eat a third of Supabase's file allowance before the first user. And the 2-project limit collides with auxetic-chess and bluff-show, both of which are already waiting on a Supabase project, so: <strong>one project, one schema per app</strong> (D-003). That unblocks two stalled games as a side effect.</p>
+<p>Blender cannot run in an edge function and a server costs money, so the worker is a GitHub Actions workflow on a schedule — which also keeps the Supabase project from pausing (D-004). Two problems, one mechanism.</p>
+<h3 id="log-2026-09-17-kilang-folded-in">kilang folded in</h3>
+<p><code>kilang</code> (opened 2026-09-13, planning only, no code, code folder never created) covers the same ground from the generation end. Luqman agreed to fold it in as M7. His own archive note on <code>claude-terminal</code> was the argument: <em>two projects aimed at the same need is one too many.</em></p>
+<h3 id="log-2026-09-17-written">Written</h3>
+<p><code>00-overview.md</code>, <code>01-idea.md</code>, <code>02-planning.md</code>, <code>03-milestones.md</code> (M0–M8), <code>05-relations.md</code>, <code>06-decisions.md</code> (D-001…D-005).</p>
+<h3 id="log-2026-09-17-next">Next</h3>
+<p>M1, the inspector — a headless Blender script that measures all 76 existing files and says nothing about whether they are good yet. Judgement is M2, and M2 is the milestone that decides whether the project is worth the month, because it is where the verdicts get measured against Luqman's own grading rather than assumed correct.</p>
+<p>Not on the portfolio yet: nothing to show, and every claim there has to trace to an artifact.</p></div></details></div>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>
