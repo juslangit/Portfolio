@@ -121,13 +121,13 @@ details.fold > div { padding: 2px 0 18px 22px; }
 </head>
 <body>
 <div class="layout">
-  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li></ul></nav>
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
   <main>
 <header class="cover" id="top">
-  <p class="eyebrow"><b>Gudang</b><span>Project record · built 2026-09-17</span></p>
+  <p class="eyebrow"><b>Gudang</b><span>Project record · built 2026-09-17 from main</span></p>
   <h1>Gudang</h1>
   <p class="thesis">Gudang ("warehouse") is the <strong>receiving bay every 3D asset passes through on its way into a game</strong>. Drop in a Sketchfab download, a Meshy generation or a <code>.blend</code>; it is inspected by headless Blender, judged per target engine in plain language, versioned against its siblings, and exported engine-ready for Godot and Unreal. When nothing in the bay fits, it builds the asset instead — that is <code>kilang</code>, folded in on 2026-09-17.</p>
-  <div class="stats"><div class="stat"><b>1</b><span>source files</span></div><div class="stat"><b>643</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  <div class="stats"><div class="stat"><b>1</b><span>commits</span></div><div class="stat"><b>1</b><span>days of work</span></div><div class="stat"><b>3</b><span>source files</span></div><div class="stat"><b>1,218</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
   
 </header>
 <section class="chapter notes" id="overview">
@@ -135,10 +135,10 @@ details.fold > div { padding: 2px 0 18px 22px; }
   <h2>Overview</h2>
   <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
 <div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
-<tr><td>Status</td><td>planning</td></tr>
-<tr><td>Current phase</td><td>M0 — idea written 2026-09-17, storage limits verified, nothing built</td></tr>
+<tr><td>Status</td><td>building</td></tr>
+<tr><td>Current phase</td><td>M1 done 2026-09-17 — the inspector reads 75/75 real files. Next is M2, the verdicts</td></tr>
 <tr><td>Deadline / target</td><td>~1 month at 10+ h/week (M1–M6)</td></tr>
-<tr><td>Repo</td><td>not yet · local: <code>~/Desktop/project/3d/gudang</code></td></tr>
+<tr><td>Repo</td><td>local only, not on GitHub yet · <code>~/Desktop/project/3d/gudang</code></td></tr>
 <tr><td>URL / deployment</td><td>not yet</td></tr>
 <tr><td>Main stack</td><td>Headless Blender 4.x (<code>bpy</code>), Supabase (Postgres + auth + RLS + edge functions + cron), Cloudflare R2, GitHub Actions as the job worker, plain JS/HTML front end</td></tr>
 </tbody></table></div>
@@ -148,7 +148,7 @@ details.fold > div { padding: 2px 0 18px 22px; }
 <p><strong>It fills the hole in the portfolio.</strong> His 24 portfolio cards contain no backend, no accounts, no scheduled work, no deployment pipeline and no AI system with measured quality — the chips read <em>Zero backend</em> as if it were a feature. He chose this project specifically to show range he does not yet have, on free tiers only, as a month-long flagship.</p>
 <h3 id="overview-what-counts-as-done">What counts as "done"</h3>
 <ul>
-<li><span class="box">to do</span> The inspector runs over all 76 of his existing model files and reports on each</li>
+<li><span class="box done">done</span> The inspector runs over all of his existing model files and reports on each — 75/75, 2026-09-17</li>
 <li><span class="box">to do</span> Its verdicts are measured against a labelled corpus, with a published accuracy number</li>
 <li><span class="box">to do</span> Assets upload through a live URL, behind accounts, with per-user isolation</li>
 <li><span class="box">to do</span> Inspection runs as a background job, not in the request</li>
@@ -325,7 +325,7 @@ details.fold > div { padding: 2px 0 18px 22px; }
 <details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
 <div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
 <tr><td>M0</td><td>Idea, decisions, verified limits</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td>Reframed away from a librarian (D-001)</td></tr>
-<tr><td>M1</td><td>The inspector</td><td>—</td><td></td><td>not started</td><td>Must run over all 76 existing files</td></tr>
+<tr><td>M1</td><td>The inspector</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td>Read 75/75 real files in 73s on Blender 5.2.1 LTS. Actions cold-start still unmeasured — moved to M4</td></tr>
 <tr><td>M2</td><td>Verdicts, measured</td><td>—</td><td></td><td>not started</td><td>The most important milestone in the project</td></tr>
 <tr><td>M3</td><td>The backend</td><td>—</td><td></td><td>not started</td><td>Supabase schema, R2, auth, RLS</td></tr>
 <tr><td>M4</td><td>The worker</td><td>—</td><td></td><td>not started</td><td>Actions runner + keep-alive</td></tr>
@@ -338,11 +338,17 @@ details.fold > div { padding: 2px 0 18px 22px; }
 <details class="fold" id="milestones-m1-the-inspector"><summary><span>M1 — The inspector</span></summary><div>
 <p><strong>Goal:</strong> A script that opens any model file in headless Blender and reports what it finds, with no judgement attached yet. <strong>Done criteria:</strong></p>
 <ul>
-<li><span class="box">to do</span> Reports triangles, real-world scale, n-gons, non-manifold edges, flipped normals, UV coverage and overlap, texture sizes, material count, rig/animation</li>
-<li><span class="box">to do</span> Runs over all 76 existing files without crashing, and says why when it cannot read one</li>
-<li><span class="box">to do</span> Output is JSON, with the Blender version recorded alongside</li>
-<li><span class="box">to do</span> Cold-start time on a GitHub Actions runner is measured and written down</li>
+<li><span class="box done">done</span> Reports triangles, real-world scale, n-gons, non-manifold edges, flipped normals, UV coverage and overlap, texture sizes, material count, rig/animation</li>
+<li><span class="box done">done</span> Runs over all existing files without crashing — 75/75 read, 73s, ~1s each. The "says why it could not read one" path exists but was never exercised, because nothing failed. Untested in practice, not proven</li>
+<li><span class="box done">done</span> Output is JSON, with the Blender version recorded alongside</li>
+<li><span class="box">to do</span> Cold-start time on a GitHub Actions runner — <strong>moved to M4</strong>, where the runner actually exists. Local cost is 0.98s per file on Blender 5.2.1 LTS</li>
 </ul>
+<p><strong>Two measurements had to be corrected before they could be trusted:</strong></p>
+<ol>
+<li>Blender treats an open border as non-manifold. A single-sided game asset is <em>meant</em> to be open, so the first run called a perfectly good chair broken in 812 places. Boundary edges and true non-manifold edges (three or more faces, or a wire edge) are now counted separately.</li>
+<li>"Recalculate outside" has no meaning on an open mesh, so inside-out faces are reported only on closed ones — <code>null</code>, which is not the same as zero. Open meshes get a winding-consistency check instead, which is well defined either way.</li>
+</ol>
+<p>This is the reason M2 exists: numbers that look authoritative can be wrong, and the only way to know is to check them against reality.</p>
 <p><strong>Dependencies:</strong> Blender 4.x locally <strong>Blockers:</strong> none</p>
 </div></details>
 <details class="fold" id="milestones-m2-verdicts-measured"><summary><span>M2 — Verdicts, measured</span></summary><div>
@@ -610,7 +616,32 @@ details.fold > div { padding: 2px 0 18px 22px; }
 <p><code>00-overview.md</code>, <code>01-idea.md</code>, <code>02-planning.md</code>, <code>03-milestones.md</code> (M0–M8), <code>05-relations.md</code>, <code>06-decisions.md</code> (D-001…D-005).</p>
 <h3 id="log-2026-09-17-next">Next</h3>
 <p>M1, the inspector — a headless Blender script that measures all 76 existing files and says nothing about whether they are good yet. Judgement is M2, and M2 is the milestone that decides whether the project is worth the month, because it is where the verdicts get measured against Luqman's own grading rather than assumed correct.</p>
-<p>Not on the portfolio yet: nothing to show, and every claim there has to trace to an artifact.</p></div></details></div>
+<p>Not on the portfolio yet: nothing to show, and every claim there has to trace to an artifact.</p>
+<h3 id="log-2026-09-17-built">Built</h3>
+<p><code>src/inspect_blend.py</code> runs inside headless Blender and writes down what is in one model file as JSON. <code>src/inspect.py</code> is the outside half: it finds Blender, gives each file its own process with a time limit, and collects the reports. Repo initialised at <code>~/Desktop/project/3d/gudang</code> with a <code>.gitignore</code> covering <code>.env</code>, and a README.</p>
+<p>Measuring is kept strictly apart from judging. Whether 180,000 triangles is too many depends on the engine and on what the asset is for; that is M2's job, and keeping it in a different file means the rules can be changed without re-opening a single model.</p>
+<h3 id="log-2026-09-17-two-numbers-that-were-wrong">Two numbers that were wrong</h3>
+<p>The first run on a plastic chair reported <strong>812 non-manifold edges and 512 flipped faces out of 1,048 triangles</strong>. Both were artefacts, caught only because the numbers were implausible for a chair:</p>
+<ol>
+<li><code>edge.is_manifold</code> is False for an open border, and a single-sided game asset — a chair shell, a curtain, a signboard — is <em>meant</em> to be open. Boundary edges and true non-manifold edges are now counted separately.</li>
+<li><code>recalc_face_normals</code> has no meaning on an open mesh, because there is no "outside" to be flipped away from. Inside-out faces are now reported only on closed meshes, as <code>null</code> otherwise — which is not the same as zero. Open meshes get a winding-consistency check, which is well defined either way.</li>
+</ol>
+<p>The lesson is the argument for M2 in miniature: a measurement that looks authoritative can be nonsense, and assuming otherwise would have poisoned every verdict built on top.</p>
+<h3 id="log-2026-09-17-what-it-found-in-75-real-files">What it found in 75 real files</h3>
+<p>Read 75/75 in 73 seconds, about a second each, on Blender 5.2.1 LTS.</p>
+<ul>
+<li><strong>Scale is a Sketchfab problem, not a Meshy problem.</strong> 16 of 32 Sketchfab downloads are at an implausible scale; <strong>0 of 33 Meshy files are.</strong> A WW2 fighter plane 1,757 m long, a submarine at 1,476 m, a plastic chair 76 m tall sitting 250 m from its own origin. That is a rule M2 can act on immediately.</li>
+<li><strong>The version problem is worse than described.</strong> Six files share <code>player_blue</code>'s exact triangle count, six more share <code>player_red</code>'s, five share <code>official</code>'s, five share <code>athlete_meshy</code>'s, four share <code>official_new</code>'s.</li>
+<li><strong>A finding for referee-for-fun:</strong> <code>athlete_average</code>, <code>athlete_stocky</code>, <code>athlete_tall</code>, <code>athlete_wiry</code> and <code>spectator</code> all have an identical 2,816 triangles, so the four "body types" are very probably one mesh at different scales. Strong evidence, not proof — confirming it means comparing vertex positions, which gudang cannot do yet.</li>
+<li>74 of 75 models are open, only 1 watertight; 35 carry an armature; 157 textures, 12 of them not power-of-two; 3 models have no UVs at all.</li>
+</ul>
+<h3 id="log-2026-09-17-next-2">Next</h3>
+<p>M2 — turn these measurements into a verdict per engine, and measure the verdicts against Luqman's own grading of 20 assets rather than assuming they are right.</p></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>8d7f135</code></td><td class="nowrap">2026-09-17</td><td>add the inspector: measure what is inside a model file</td></tr></tbody></table></div></div></details>
 </section></main>
 </div>
 <!--mermaid-->
