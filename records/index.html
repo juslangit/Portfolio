@@ -5,15 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project Records</title>
 <style>
+  /* The portfolio's own palette, so the records read as part of it rather than
+     as a separate site: warm paper, soft ink, and its blue for anything live.
+     Light whatever the operating system prefers, because the portfolio has no
+     dark mode to match. */
   :root {
-    --ink: #f2efe9; --dim: #a8a29a; --line: #2e2b27;
-    --back: #141210; --card: #1c1a17; --accent: #e8a33d;
-  }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --ink: #1b1916; --dim: #6b655c; --line: #e2ddd4;
-      --back: #faf7f2; --card: #ffffff; --accent: #b4721a;
-    }
+    --ink: #2B2622; --dim: #6B6259; --line: #E7E1D8;
+    --back: #FAF7F2; --card: #FFFFFF; --accent: #2F6BB0;
+    color-scheme: light;
   }
   * { box-sizing: border-box; }
   body {
@@ -28,10 +27,11 @@
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
   a.card {
     display: block; text-decoration: none; color: inherit; background: var(--card);
-    border: 1px solid var(--line); border-radius: 16px; padding: 24px 24px 20px;
+    border: 1px solid var(--line); border-radius: 26px; padding: 24px 24px 20px;
     transition: transform .15s ease, border-color .15s ease;
   }
-  a.card:hover { transform: translateY(-3px); border-color: var(--accent); }
+  a.card:hover { transform: translateY(-3px); border-color: var(--accent);
+                  box-shadow: 0 6px 12px rgba(43,38,34,.05), 0 22px 44px rgba(43,38,34,.10); }
   .name { font-size: 23px; font-weight: 650; letter-spacing: -0.01em; margin: 0 0 6px; }
   .meta { color: var(--dim); font-size: 13.5px; text-transform: uppercase;
            letter-spacing: .08em; margin-bottom: 12px; }

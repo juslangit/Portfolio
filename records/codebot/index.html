@@ -8,15 +8,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap">
 <style>
-:root { --ground: #F4F6FA; --surface: #FFFFFF; --ink: #10141F; --muted: #59617A; --line: #DCE2ED;
-  --accent: #0F7A85; --accent-soft: #DDF3F5; --flag: #FFB040; --flag-ink: #2A1B05; --done: #16795F;
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #2B2622; --muted: #6B6259; --line: #E7E1D8;
+  --accent: #2F6BB0; --accent-soft: #D6E6FA; --flag: #FFEEC9; --flag-ink: #A97B12; --done: #2F7A5C;
   --display: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --body: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   --heading-case: none; color-scheme: light; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #0E1220; --surface: #161C2A; --ink: #E8F0FF; --muted: #96A6C2; --line: #2C3654;
-  --accent: #40D6E0; --accent-soft: #14343A; --done: #68DE8A; color-scheme: dark; } }
-:root[data-theme="dark"] { --ground: #0E1220; --surface: #161C2A; --ink: #E8F0FF; --muted: #96A6C2; --line: #2C3654;
-  --accent: #40D6E0; --accent-soft: #14343A; --done: #68DE8A; color-scheme: dark; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="light"]) { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #2B2622; --muted: #6B6259; --line: #E7E1D8;
+  --accent: #2F6BB0; --accent-soft: #D6E6FA; --done: #2F7A5C; color-scheme: light; } }
+:root[data-theme="dark"] { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #2B2622; --muted: #6B6259; --line: #E7E1D8;
+  --accent: #2F6BB0; --accent-soft: #D6E6FA; --done: #2F7A5C; color-scheme: light; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
@@ -126,7 +126,7 @@ details.fold > div { padding: 2px 0 18px 22px; }
   <p class="eyebrow"><b>Codebot</b><span>Project record · built 2026-09-17 from main</span></p>
   <h1>Codebot</h1>
   <p class="thesis">A Roblox game where you learn Luau by writing it. Your code is the controller: there is no joystick, you write <code>move()</code> and a robot walks one tile. Rooms are ordered so each introduces exactly one new idea, and other players solve the same room beside you with their robots visible. It exists because 4.38 million visits to a single-player lesson reader prove the demand and prove nobody stays.</p>
-  <div class="stats"><div class="stat"><b>339</b><span>Checks</span></div><div class="stat"><b>8</b><span>Rooms</span></div><div class="stat"><b>4113</b><span>Lines of Luau</span></div><div class="stat"><b>1495</b><span>Lines of interpreter</span></div><div class="stat"><b>8</b><span>Decisions</span></div><div class="stat"><b>13</b><span>Commits</span></div></div>
+  <div class="stats"><div class="stat"><b>339</b><span>Checks</span></div><div class="stat"><b>8</b><span>Rooms</span></div><div class="stat"><b>4113</b><span>Lines of Luau</span></div><div class="stat"><b>1495</b><span>Lines of interpreter</span></div><div class="stat"><b>8</b><span>Decisions</span></div><div class="stat"><b>15</b><span>Commits</span></div></div>
   
 </header>
 <section class="chapter notes" id="overview">
@@ -920,7 +920,7 @@ curl -s &quot;https://games.roblox.com/v1/games?universeIds=&lt;UNIVERSE_ID&gt;&
 <section class="chapter" id="history">
   <p class="kicker">git log on main, newest first</p>
   <h2>Git history</h2>
-  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>09ac77c</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>146cf94</code></td><td class="nowrap">2026-09-17</td><td>save progress, and make the server check a solve before it counts</td></tr><tr class=""><td><code>133d823</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>cd0f4ac</code></td><td class="nowrap">2026-09-17</td><td>build the room the grid stands in</td></tr><tr class=""><td><code>2884f29</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>5c18e5c</code></td><td class="nowrap">2026-09-17</td><td>stop Roblox&#x27;s own UI covering the game</td></tr><tr class=""><td><code>b9329d8</code></td><td class="nowrap">2026-09-17</td><td>add the project record and publish it</td></tr><tr class=""><td><code>d786db1</code></td><td class="nowrap">2026-09-17</td><td>write code by tapping, so it can be played on a phone</td></tr><tr class=""><td><code>f1546c0</code></td><td class="nowrap">2026-09-17</td><td>build the room, the robot and the panel in Studio</td></tr><tr class=""><td><code>c779567</code></td><td class="nowrap">2026-09-17</td><td>add the stepping interpreter</td></tr><tr class=""><td><code>935f346</code></td><td class="nowrap">2026-09-17</td><td>add the parser and a tree viewer</td></tr><tr class=""><td><code>40ec8b5</code></td><td class="nowrap">2026-09-17</td><td>add a tool for viewing how code is tokenized</td></tr><tr class=""><td><code>c27fd01</code></td><td class="nowrap">2026-09-17</td><td>add project scaffold and the interpreter tokenizer</td></tr></tbody></table></div></div></details>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>8f87542</code></td><td class="nowrap">2026-09-17</td><td>keep the project record local instead of deploying it</td></tr><tr class=""><td><code>2acd529</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>09ac77c</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>146cf94</code></td><td class="nowrap">2026-09-17</td><td>save progress, and make the server check a solve before it counts</td></tr><tr class=""><td><code>133d823</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>cd0f4ac</code></td><td class="nowrap">2026-09-17</td><td>build the room the grid stands in</td></tr><tr class=""><td><code>2884f29</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>5c18e5c</code></td><td class="nowrap">2026-09-17</td><td>stop Roblox&#x27;s own UI covering the game</td></tr><tr class=""><td><code>b9329d8</code></td><td class="nowrap">2026-09-17</td><td>add the project record and publish it</td></tr><tr class=""><td><code>d786db1</code></td><td class="nowrap">2026-09-17</td><td>write code by tapping, so it can be played on a phone</td></tr><tr class=""><td><code>f1546c0</code></td><td class="nowrap">2026-09-17</td><td>build the room, the robot and the panel in Studio</td></tr><tr class=""><td><code>c779567</code></td><td class="nowrap">2026-09-17</td><td>add the stepping interpreter</td></tr><tr class=""><td><code>935f346</code></td><td class="nowrap">2026-09-17</td><td>add the parser and a tree viewer</td></tr><tr class=""><td><code>40ec8b5</code></td><td class="nowrap">2026-09-17</td><td>add a tool for viewing how code is tokenized</td></tr><tr class=""><td><code>c27fd01</code></td><td class="nowrap">2026-09-17</td><td>add project scaffold and the interpreter tokenizer</td></tr></tbody></table></div></div></details>
 </section></main>
 </div>
 <!--mermaid-->
