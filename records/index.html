@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Records</title>
+<style>
+  :root {
+    --ink: #f2efe9; --dim: #a8a29a; --line: #2e2b27;
+    --back: #141210; --card: #1c1a17; --accent: #e8a33d;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ink: #1b1916; --dim: #6b655c; --line: #e2ddd4;
+      --back: #faf7f2; --card: #ffffff; --accent: #b4721a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--back); color: var(--ink);
+    font: 17px/1.6 ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+    padding: 0 16px 80px;
+  }
+  header { max-width: 1040px; margin: 0 auto; padding: 72px 0 40px; }
+  h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.1; margin: 0 0 14px; letter-spacing: -0.02em; }
+  header p { color: var(--dim); max-width: 60ch; margin: 0; font-size: 18px; }
+  main { max-width: 1040px; margin: 0 auto; display: grid; gap: 18px;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  a.card {
+    display: block; text-decoration: none; color: inherit; background: var(--card);
+    border: 1px solid var(--line); border-radius: 16px; padding: 24px 24px 20px;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  a.card:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .name { font-size: 23px; font-weight: 650; letter-spacing: -0.01em; margin: 0 0 6px; }
+  .meta { color: var(--dim); font-size: 13.5px; text-transform: uppercase;
+           letter-spacing: .08em; margin-bottom: 12px; }
+  .meta span { white-space: nowrap; }
+  .dot { color: var(--accent); font-weight: 400; }
+  .blurb { color: var(--dim); font-size: 15.5px; margin: 0; }
+  footer { max-width: 1040px; margin: 56px auto 0; color: var(--dim); font-size: 14px;
+            border-top: 1px solid var(--line); padding-top: 20px; }
+  footer code { background: var(--card); padding: 2px 7px; border-radius: 6px; }
+  /* The records sit inside the portfolio, so there is always a way back up. */
+  .up { margin: 0 0 14px; font-size: 14px; }
+  .up a { color: var(--dim); text-decoration: none; font-weight: 600; }
+  .up a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <p class="up"><a href="../index.html">&larr; Luqman Hakeem</a></p>
+  <h1>Project Records</h1>
+  <p>The full technical record of each project — the idea, the planning, every decision,
+     the methods, the screenshots and the session logs — generated from the notes and
+     rebuilt whenever the project changes.</p>
+</header>
+<main>
+  <a class="card" href="auxetic-chess/index.html">
+    <p class="name">Auxetic Chess</p>
+    <p class="meta"><span>game <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-16</span></p>
+    <p class="blurb">Normal chess with one twist: after every move, all sixteen 2×2 blocks of the board turn a quarter and carry the pieces standing on them, so the position keeps getting scrambled — a4 becomes b4, one cell round the block, pawns…</p>
+  </a>
+  <a class="card" href="bluff-show/index.html">
+    <p class="name">Bluff Show</p>
+    <p class="meta"><span>game <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-14</span></p>
+    <p class="blurb">A Fibbage-style bluffing trivia party game in the browser for 3–10 players, styled as a 70s TV quiz show. Each round shows a strange-but-true fact with a blank; everyone writes a fake answer, the fakes are mixed with the truth,…</p>
+  </a>
+  <a class="card" href="claude-chat/index.html">
+    <p class="name">Claude Chat</p>
+    <p class="meta"><span>ai <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-11</span></p>
+    <p class="blurb">A WhatsApp-style web app on Luqman&#x27;s iPhone for using Claude Code on his home Mac. Each chat on the phone is a real Claude Code session on the Mac, and each is also a visible Terminal window there. Tapping &quot;+&quot; on the phone opens…</p>
+  </a>
+  <a class="card" href="codebot/index.html">
+    <p class="name">Codebot</p>
+    <p class="meta"><span>game <b class="dot">·</b> planning</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">A Roblox game where you learn Luau by writing it. Your code is the controller: there is no joystick, you write move() and a robot walks one tile. Rooms are ordered so each introduces exactly one new idea, and other players solve…</p>
+  </a>
+  <a class="card" href="direct-hit/index.html">
+    <p class="name">Direct Hit</p>
+    <p class="meta"><span>game <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">Battleships, fought from the bridge of a battleship. There is no chart on a screen: you stand on the Littorio with your own fleet in formation around you, lay that fleet out on a lit plotting table, call a target on the same…</p>
+  </a>
+  <a class="card" href="kedai-runtuh/index.html">
+    <p class="name">Kedai Runtuh</p>
+    <p class="meta"><span>game <b class="dot">·</b> building</span> <span><b class="dot">·</b> updated 2026-09-15</span></p>
+    <p class="blurb">Kedai Runtuh is a one-thumb casual mobile game about stacking a mamak order as high as possible before it collapses. Food hangs from a swinging hook above the tower; one tap drops it. Land it on top and the tower grows, the…</p>
+  </a>
+  <a class="card" href="out-loud/index.html">
+    <p class="name">Out Loud</p>
+    <p class="meta"><span>web <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">Out Loud is a Japanese class that runs in a browser tab and refuses to move on until you have said the phrase out loud. The teacher speaks first, using a Japanese voice already installed in macOS; the microphone then opens,…</p>
+  </a>
+  <a class="card" href="peta-lot-tanah/index.html">
+    <p class="name">Peta Lot Tanah</p>
+    <p class="meta"><span>web <b class="dot">·</b> live</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">Peta Lot Tanah is an offline map of every cadastral land lot within 5 km of a point in Klang, Selangor — 64,770 of them — that opens straight from index.html with no server and no internet connection. Each lot is shaded by…</p>
+  </a>
+  <a class="card" href="pipeline/index.html">
+    <p class="name">Pipeline</p>
+    <p class="meta"><span>3d <b class="dot">·</b> live</span> <span><b class="dot">·</b> updated 2026-09-05</span></p>
+    <p class="blurb">Pipeline is a Blender add-on that batch-exports a scene to Unreal Engine with the naming, unit scale, pivots and collision meshes Unreal expects. It is the first digital product built to be sold online, chosen because it is pure…</p>
+  </a>
+  <a class="card" href="portfolio/index.html">
+    <p class="name">Portfolio</p>
+    <p class="meta"><span>web <b class="dot">·</b> live</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">Luqman&#x27;s personal portfolio site: a single self-contained index.html that positions him as an AI full stack developer with 3D and game craft as the differentiator. It exists to win remote/international AI engineering roles, and…</p>
+  </a>
+  <a class="card" href="posture/index.html">
+    <p class="name">Posture</p>
+    <p class="meta"><span>web <b class="dot">·</b> planning</span> <span><b class="dot">·</b> updated 2026-09-15</span></p>
+    <p class="blurb">A scaled-down copy of a managed security provider&#x27;s two portals — a client portal showing a firm&#x27;s devices and security posture, and an internal ops portal — built in Retool on PostgreSQL with JavaScript transformers and REST…</p>
+  </a>
+  <a class="card" href="print-quote/index.html">
+    <p class="name">Print Quote</p>
+    <p class="meta"><span>3d <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-10</span></p>
+    <p class="blurb">A web page where a customer drags an STL file in and gets an instant printing price. The browser reads the triangle mesh itself, works out solid volume, shell and infill, converts that to grams and hours, and prices the job…</p>
+  </a>
+  <a class="card" href="referee-for-fun/index.html">
+    <p class="name">Referee For Fun</p>
+    <p class="meta"><span>game <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">A 3D first-person game where you are the referee, not the athlete. You sit in the umpire&#x27;s chair, the match is physically simulated in front of you, and the game always knows the truth about every rally. You do not have to tell…</p>
+  </a>
+  <a class="card" href="retopology/index.html">
+    <p class="name">Retopology</p>
+    <p class="meta"><span>3d <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-17</span></p>
+    <p class="blurb">Retopo Kit is a Blender add-on that takes a sculpt to a game-ready asset in one press. Blender&#x27;s own Object ▸ Quadriflow Remesh gives you quads and then stops — no UVs, no baked normal map, no LODs, one object at a time, and it…</p>
+  </a>
+  <a class="card" href="scribble-relay/index.html">
+    <p class="name">Scribble Relay</p>
+    <p class="meta"><span>game <b class="dot">·</b> testing</span> <span><b class="dot">·</b> updated 2026-09-13</span></p>
+    <p class="blurb">A pass-the-device drawing party game for 3–12 players, played in the browser on one phone, tablet or laptop. One player writes a secret phrase, the next draws it, the next guesses the drawing, and so on. At the end the whole…</p>
+  </a>
+  <a class="card" href="siti/index.html">
+    <p class="name">Siti</p>
+    <p class="meta"><span>ai <b class="dot">·</b> paused</span> <span><b class="dot">·</b> updated 2026-09-13</span></p>
+    <p class="blurb">Siti is Luqman&#x27;s personal AI assistant, spoken to rather than typed at. She is named Siti and talks like someone who knows him, not like a formal assistant — the JARVIS idea, in his own words, without the butler act. It is meant…</p>
+  </a>
+  <a class="card" href="tuition-lms/index.html">
+    <p class="name">Tuition LMS</p>
+    <p class="meta"><span>web <b class="dot">·</b> building</span> <span><b class="dot">·</b> updated 2026-09-10</span></p>
+    <p class="blurb">A web-based learning platform for a tuition centre: students browse and enrol in courses, open materials (PDFs, videos, quizzes) and track their progress, while parents see attendance, marks and fees, and the centre administrator…</p>
+  </a>
+</main>
+<footer>
+  17 records · built 2026-09-17 · run <code>docs-site publish</code> to update
+</footer>
+</body>
+</html>

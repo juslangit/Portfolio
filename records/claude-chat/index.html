@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Claude Chat Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Claude Chat</b><span>Project record · built 2026-09-17 from main</span></p>
+  <h1>Claude Chat</h1>
+  <p class="thesis">A WhatsApp-style web app on Luqman's iPhone for using Claude Code on his home Mac. Each chat on the phone is a real Claude Code session on the Mac, and each is also a visible Terminal window there. Tapping "+" on the phone opens a new Terminal window with Claude Code ready, in <code>~/Desktop/project/</code>. It exists so he can leave the Mac at home and work from his phone.</p>
+  <div class="stats"><div class="stat"><b>75</b><span>commits</span></div><div class="stat"><b>8</b><span>days of work</span></div><div class="stat"><b>8</b><span>source files</span></div><div class="stat"><b>5,254</b><span>lines of code</span></div><div class="stat"><b>29</b><span>decisions recorded</span></div><div class="stat"><b>5</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>testing — works on the Mac (14/14 end-to-end checks) and over the tailnet; not yet opened on the iPhone</td></tr>
+<tr><td>Current phase</td><td>2 — open on the iPhone and Add to Home Screen</td></tr>
+<tr><td>Deadline / target</td><td>—</td></tr>
+<tr><td>Repo</td><td><code>~/Desktop/project/ai/claude-chat</code> → <strong><a href="https://github.com/juslangit/claude-chat">https://github.com/juslangit/claude-chat</a></strong> (private, default branch <code>main</code>)</td></tr>
+<tr><td>URL / deployment</td><td><strong><a href="https://luqman-mac.tail8806f8.ts.net">https://luqman-mac.tail8806f8.ts.net</a></strong> (tailnet only, via <code>tailscale serve</code>) → <code>http://127.0.0.1:4477</code></td></tr>
+<tr><td>Main stack</td><td>Node 26 (built-ins only), plain HTML/CSS/JS, tmux 3.7, Tailscale userspace</td></tr>
+</tbody></table></div>
+<h3 id="overview-where-things-live">Where things live</h3>
+<div class="table"><table><thead><tr><th>Piece</th><th>Location</th></tr></thead><tbody>
+<tr><td>Code</td><td><code>~/Desktop/project/ai/claude-chat/</code></td></tr>
+<tr><td>Server login item</td><td><code>~/Library/LaunchAgents/com.juslangit.claude-chat.plist</code></td></tr>
+<tr><td>Tailscale login item</td><td><code>~/Library/LaunchAgents/com.juslangit.tailscaled.plist</code>, state in <code>~/Library/Application Support/tailscale-user/</code></td></tr>
+<tr><td><code>cchat</code> command</td><td><code>~/.local/bin/cchat</code> → <code>bin/cchat</code></td></tr>
+<tr><td>Chat list / hook secret / log</td><td><code>~/Desktop/project/ai/claude-chat/data/</code> (git-ignored)</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Claude Code only runs on the Mac at home, so work stops whenever Luqman leaves the house.</p>
+<h3 id="overview-what-counts-as-done">What counts as "done"</h3>
+<p>From the iPhone, away from home: start a chat, get a project built in <code>~/Desktop/project/</code>, approve its commands, and find the same session waiting in a Terminal window on the Mac later.</p>
+<h3 id="overview-what-is-not-in-scope">What is NOT in scope</h3>
+<p>Public internet access and hosting in the cloud — it runs on your own devices over Tailscale. Other people <em>can</em> install it on their own computers since 2026-09-11 (PR #27, D-027/D-028); there are still no accounts or shared servers.</p>
+<h3 id="overview-map-of-files-in-this-folder">Map of files in this folder</h3>
+<ul>
+<li><code>01-idea.md</code> — the original idea, alternatives considered</li>
+<li><code>02-planning.md</code> — scope, phases, requirements, stack</li>
+<li><code>03-milestones.md</code> — milestones &amp; progress</li>
+<li><code>04-methods.md</code> — how to work on this, patterns, commands</li>
+<li><code>05-relations.md</code> — relationships between components/people/systems</li>
+<li><code>06-decisions.md</code> — decision log (why A over B)</li>
+<li><code>07-references.md</code> — links, documentation, references</li>
+<li><code>log/</code> — daily / per-session notes</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 7 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<p>Claude Code only runs on the Mac at home. When Luqman is out — at Todak Academy, travelling — he cannot start or continue work with Claude on any of his projects. He wants to leave the Mac at home and do everything from his iPhone.</p>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<p>A WhatsApp-style web app on the iPhone. Each chat on the phone is one real Claude Code session running on the Mac, and each of those sessions is also a visible Terminal window on the Mac, so the same conversation can be continued at the desk or on the phone. Tapping "+" on the phone opens a new Terminal window on the Mac with Claude Code ready, starting in <code>~/Desktop/project/</code>, so anything built lands in the project folder. When Claude wants to run a command, the phone shows Approve / Deny buttons.</p>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick us</th></tr></thead><tbody>
+<tr><td>Luqman (only user)</td><td>Drive Claude Code on the home Mac from the phone</td><td>Personal tool — not a product</td></tr>
+</tbody></table></div>
+<h3 id="idea-value-advantage">Value / advantage</h3>
+<ul>
+<li>Work on any project from anywhere, with the Mac doing the actual work</li>
+<li>Same session visible at the desk and on the phone — nothing to hand over</li>
+</ul>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td>A Claude Code TUI in tmux can be driven by pasted input and read back from its transcript</td><td>Probe on 2026-09-10: multi-line paste → Claude replied "pong", reply appeared in the <code>.jsonl</code> transcript</td><td>confirmed</td></tr>
+<tr><td>The Mac stays reachable while he is out</td><td>Mac already set to never sleep; Tailscale login item restarts on boot</td><td>untested from outside home</td></tr>
+</tbody></table></div>
+<h3 id="idea-alternatives-considered">Alternatives considered</h3>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Claude Code's built-in Remote Control (<code>claude remote-control</code> + Claude iPhone app)</td><td>Official, no hosting, ~15 min to set up, can spawn sessions from the phone</td><td>Sessions run in the background — no Terminal window per chat on the Mac; Claude's own UI, not ours</td><td>rejected by Luqman on 2026-09-10 in favour of the custom app with visible terminals</td></tr>
+<tr><td>Custom web app over Tailscale</td><td>Our own chat UI, one visible Terminal per chat, approvals on the phone</td><td>Real project to build and maintain; must be private because it can run commands on the Mac</td><td>chosen</td></tr>
+</tbody></table></div>
+<h3 id="idea-side-ideas-parking-lot">Side ideas (parking lot)</h3>
+<ul>
+<li>Push notifications when Claude finishes or needs approval (needs the web app added to the iPhone home screen)</li>
+<li>Voice input, the way Sky does it</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 18 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><h3 id="planning-scope">Scope</h3>
+<h4 id="planning-must-have-mvp">Must have (MVP)</h4>
+<ul>
+<li><span class="box done">done</span> Chat list on the phone — one row per Claude Code session, WhatsApp style</li>
+<li><span class="box done">done</span> "+" on the phone starts a new Claude Code session in a visible Terminal window on the Mac, in <code>~/Desktop/project/</code></li>
+<li><span class="box done">done</span> Send messages from the phone; see Claude's replies and the tools it used</li>
+<li><span class="box done">done</span> Approve / Deny on the phone when Claude asks permission — since 2026-09-10 chats run in bypassPermissions (D-006), so this only shows for the rare thing Claude Code still asks about</li>
+<li><span class="box done">done</span> The same session can be typed into at the Mac too; both sides stay in sync</li>
+<li><span class="box done">done</span> Screen view on the phone showing the Mac's Terminal exactly, with keys (1–4, arrows, Enter, Esc, Tab) for menus the chat view can't show</li>
+<li><span class="box done">done</span> Stop button (Esc), rename, end chat, resume a stopped chat</li>
+<li><span class="box done">done</span> <code>cchat</code> command on the Mac to start a session that also appears on the phone</li>
+<li><span class="box done">done</span> Starts by itself at login; reachable from outside home over Tailscale</li>
+<li><span class="box">to do</span> Tested from the iPhone away from home</li>
+</ul>
+<h4 id="planning-nice-to-have-v2">Nice to have (v2)</h4>
+<ul>
+<li><span class="box">to do</span> Push notifications when Claude finishes or needs approval (needs the page added to the home screen)</li>
+<li><span class="box">to do</span> Voice input</li>
+<li><span class="box">to do</span> Send photos / screenshots to Claude from the phone</li>
+<li><span class="box">to do</span> Answer Claude's multiple-choice questions with buttons instead of the screen view</li>
+</ul>
+<h4 id="planning-won-t-build">Won't build</h4>
+<ul>
+<li>Access from the public internet — only devices on Luqman's Tailscale network</li>
+<li>Accounts or shared servers — each person runs it on their own computers (other people can install it since 2026-09-11, D-027)</li>
+</ul>
+<h3 id="planning-phases">Phases</h3>
+<div class="table"><table><thead><tr><th>Phase</th><th>Goal</th><th>Output</th><th>Estimate</th></tr></thead><tbody>
+<tr><td>1</td><td>Working app on the Mac</td><td>server, phone UI, hooks, installer; 14/14 end-to-end checks</td><td>done 2026-09-10</td></tr>
+<tr><td>2</td><td>Reach it from the iPhone</td><td>Tailscale signed in on Mac + iPhone, <a href="https://luqman-mac.tail8806f8.ts.net">https://luqman-mac.tail8806f8.ts.net</a></td><td>served 2026-09-10; first iPhone open pending</td></tr>
+<tr><td>3</td><td>Daily use, then v2 features</td><td>notifications etc. as real use shows the need</td><td>—</td></tr>
+</tbody></table></div>
+<h3 id="planning-stack-tooling">Stack &amp; tooling</h3>
+<div class="table"><table><thead><tr><th>Layer</th><th>Choice</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Frontend</td><td>Plain HTML/CSS/JS, no framework</td><td>Small enough to read end to end; nothing to build or update</td></tr>
+<tr><td>Backend</td><td>Node 26 <code>server.mjs</code>, no npm packages</td><td>Only built-in modules — nothing to install or go out of date</td></tr>
+<tr><td>Sessions</td><td>tmux 3.7 (own server, <code>-L claude-chat</code>) running the normal <code>claude</code> TUI</td><td>Lets the same session be a Terminal window and be typed into from the phone</td></tr>
+<tr><td>Live updates</td><td>Server-Sent Events</td><td>One-way push is all the phone needs; works in iPhone Safari with no library</td></tr>
+<tr><td>Database</td><td><code>data/chats.json</code> + Claude Code's own transcript files</td><td>The transcript already records everything</td></tr>
+<tr><td>Hosting</td><td>The Mac itself, LaunchAgent <code>com.juslangit.claude-chat</code></td><td>The work has to happen on the Mac anyway</td></tr>
+<tr><td>Network / auth</td><td>Tailscale (userspace mode, LaunchAgent <code>com.juslangit.tailscaled</code>)</td><td>Only Luqman's signed-in devices can reach it; no password to manage</td></tr>
+</tbody></table></div>
+<h3 id="planning-requirements">Requirements</h3>
+<h4 id="planning-functional">Functional</h4>
+<ul>
+<li>A message sent from the phone must never be silently lost — the sender verifies it reached Claude's input box and was submitted, and retries if not</li>
+<li>An unanswered approval must never block the Mac — the Terminal's own prompt stays usable the whole time</li>
+</ul>
+<h4 id="planning-non-functional">Non-functional</h4>
+<ul>
+<li>Security: server listens on 127.0.0.1 only; reachable solely through Tailscale; the hook endpoint needs a random secret in <code>data/secret</code> (chmod 600)</li>
+<li>Runs on the Claude Max subscription — phone chats count toward the same weekly limit</li>
+</ul>
+<h3 id="planning-risks">Risks</h3>
+<div class="table"><table><thead><tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr></thead><tbody>
+<tr><td>Mac loses power or restarts while Luqman is away</td><td>high</td><td>low</td><td>Mac set to never sleep; both LaunchAgents start at login — but this needs automatic login after a power cut</td></tr>
+<tr><td>Claude Code changes its TUI layout (input box detection) or transcript format</td><td>medium</td><td>medium</td><td>Detection is in two small functions, <code>inputBox()</code> and <code>toMessages()</code>; the screen view still works as a fallback</td></tr>
+<tr><td>Phone lost</td><td>high</td><td>low</td><td>Tailscale: remove the device from the admin console</td></tr>
+</tbody></table></div>
+<h3 id="planning-resources-needed">Resources needed</h3>
+<ul>
+<li>Tailscale account (free personal plan) — no API key; sign-in only</li>
+</ul>
+<h3 id="planning-v2-build-order-luqman-picked-all-eight-on-2026-09-1">v2 build order (Luqman picked all eight on 2026-09-10)</h3>
+<p>Built one at a time, each tried on the phone before the next. Order is smallest-and-most-useful first.</p>
+<ol>
+<li><span class="box done">done</span> Start chats in a project (done 2026-09-10) — New chat lists projects like WhatsApp contacts; the chat starts in that folder</li>
+<li><span class="box done">done</span> Pin chats to the top of the list (done 2026-09-10, PR #9) — swipe a chat right, or Chat info → Pin chat</li>
+<li><span class="box done">done</span> Search inside a chat (done 2026-09-10, PR #9) — Chat info → Search</li>
+<li><span class="box done">done</span> Swipe a message to reply (done 2026-09-10, PR #9) — quotes it in your next message</li>
+<li><span class="box done">done</span> Send photos / screenshots to Claude (done 2026-09-10, PR #9) — + in the typing bar</li>
+<li><span class="box done">done</span> Buttons for Claude's multiple-choice questions (done 2026-09-10, PR #6, D-015) — Luqman asked for it after having to go to the PC to answer</li>
+<li><span class="box">to do</span> Voice notes (speech → text on the Mac)</li>
+<li><span class="box done">done</span> Push notifications when Claude finishes or needs you (done 2026-09-10, PR #9, D-018) — ⋯ → Notifications, Home Screen app only</li>
+</ol>
+<h3 id="planning-voice-friendlier-app-luqman-picked-on-2026-09-10">Voice + friendlier app (Luqman picked on 2026-09-10)</h3>
+<p>Asked for "more user friendly, more features, and voice chat". Picked, from options:</p>
+<ul>
+<li><span class="box done">done</span> Voice notes — hold 🎤, talk, let go to send; live words while talking; slide left to cancel</li>
+<li><span class="box done">done</span> Call mode — WhatsApp-style call screen: you talk → Claude works → reply spoken → listens again</li>
+<li><span class="box done">done</span> Replies spoken with the iPhone's own voice (free, on the phone, like Sky) — not ElevenLabs</li>
+<li><span class="box done">done</span> See what Claude is doing — live progress notes + latest step while it works</li>
+<li><span class="box done">done</span> Plain-English steps ("Edited style.css", "Ran: show git state") with the raw command underneath</li>
+<li><span class="box done">done</span> Quick-reply buttons ("Yes, go ahead", "Explain simpler", …)</li>
+<li><span class="box done">done</span> Reply sound — a pop when Claude answers, while the app is open</li>
+</ul>
+<p>All built 2026-09-10, waiting to be tried on the iPhone. This replaces item 7 (voice notes) of the v2 list above; the rest of that list stays queued.</p>
+<h3 id="planning-several-computers-luqman-picked-on-2026-09-10">Several computers (Luqman picked on 2026-09-10)</h3>
+<ul>
+<li><span class="box done">done</span> One Chats list for every computer; New chat picks the computer (D-011)</li>
+<li><span class="box done">done</span> Missing projects on GitHub as private repos (sky, peta-lot-tanah; portfolio is empty)</li>
+<li><span class="box done">done</span> Chats fetch the newest version from GitHub when they start (D-012)</li>
+<li><span class="box done">done</span> Syncthing on this Mac sharing ~/.claude/knowledge (D-012)</li>
+<li><span class="box done">done</span> One-line setup scripts for another Mac and a Windows PC (D-013)</li>
+<li><span class="box">to do</span> Run the setup on the other Mac</li>
+<li><span class="box done">done</span> Run the setup on the Windows PC (DESKTOP-K2M7L30, 2026-09-10)</li>
+</ul>
+<h3 id="planning-commands-from-the-phone-luqman-asked-on-2026-09-11-">Commands from the phone (Luqman asked on 2026-09-11 — PR #10)</h3>
+<ul>
+<li><span class="box done">done</span> A ⌘ button in a chat's top bar opening a Commands section, so commands are tapped, not typed</li>
+<li><span class="box done">done</span> The answer comes back as a card in the chat (D-019); menus open the screen view instead</li>
+<li><span class="box done">done</span> Favourites as rows, search for the rest, and "send anything" for what isn't listed</li>
+<li><span class="box done">done</span> The ones that can lose work confirm first</li>
+<li><span class="box done">done</span> Commands he writes himself are listed automatically (<code>~/.claude/commands</code>, or the chat's project)</li>
+</ul>
+<h3 id="planning-the-look-rebuilt-from-a-reference-luqman-asked-on-2">The look, rebuilt from a reference (Luqman asked on 2026-09-11 — PR #11, D-020)</h3>
+<ul>
+<li><span class="box done">done</span> Dark amber glass everywhere: warm light behind, translucent cards, pill chips, orange accents</li>
+<li><span class="box done">done</span> A Home screen: greeting, a box that starts a chat with what you type, today's card, what's running</li>
+<li><span class="box done">done</span> A floating tab bar: Home · Chats · Computers · Settings (the ⋯ menu and computers sheet are gone)</li>
+<li><span class="box done">done</span> A light theme in warm cream for daytime</li>
+<li><span class="box done">done</span> Every feature kept and still tested — 121 checks pass against the new look</li>
+<li><span class="box done">done</span> The colours follow the palette he saved: black, maroon, orange, coral, teal (PR #12, D-020)</li>
+</ul>
+<h3 id="planning-keeping-the-list-short-luqman-asked-on-2026-09-11-p">Keeping the list short (Luqman asked on 2026-09-11 — PR #13, D-021)</h3>
+<ul>
+<li><span class="box done">done</span> Archive a chat: swipe left, or Chat info → Archive. Kept on the computer, so it holds on any phone</li>
+<li><span class="box done">done</span> An "Archived" row at the top of the list holds them, with a count</li>
+<li><span class="box done">done</span> Archived chats stay out of Home, out of the unread count and out of notifications</li>
+<li><span class="box done">done</span> "End chat" renamed "Delete chat", with a confirmation that says what actually goes</li>
+<li><span class="box done">done</span> Settings → "Delete stopped chats" clears every chat whose Claude has stopped, after asking</li>
+</ul>
+<h3 id="planning-the-three-he-picked-from-the-improvement-list-2026-">The three he picked from the improvement list (2026-09-11 — PRs #14, #15, #16)</h3>
+<ul>
+<li><span class="box done">done</span> The checks live in <code>dev/checks/</code> with one command to run them (<code>node dev/checks/run.mjs</code>) — 181 checks</li>
+<li><span class="box done">done</span> Claude can send a render, screenshot or file back to the phone (<code>cchat send</code>, or just naming it) — D-022</li>
+<li><span class="box done">done</span> A chat shows how full Claude's memory is past 50%, and one tap compacts it — D-023</li>
+</ul>
+<h3 id="planning-offered-on-2026-09-11-not-picked-yet">Offered on 2026-09-11, not picked yet</h3>
+<ul>
+<li><span class="box">to do</span> Messages that wait for an offline computer (one grey tick, sent when it's back)</li>
+<li><span class="box">to do</span> A "what changed today" view per project, with Undo</li>
+<li><span class="box">to do</span> A "forget this computer" button (removing one from Syncthing is manual)</li>
+<li><span class="box">to do</span> Battery and back-online warnings for the Mac</li>
+<li><span class="box">to do</span> Housekeeping: Mac plugged in, automatic macOS updates off, Tailscale key expiry disabled</li>
+<li><span class="box">to do</span> Still waiting to be tried on the iPhone: notifications, and the setup on the second Mac</li>
+</ul>
+<h3 id="planning-ideas-offered-not-picked-yet-2026-09-10-luqman-chos">Ideas offered, not picked yet (2026-09-10 — Luqman chose to use it for a while first)</h3>
+<ul>
+<li><span class="box done">done</span> Status can't get stuck: also read the Terminal footer to see when Claude has finished — built 2026-09-10, PR #8 (D-017)</li>
+<li><span class="box done">done</span> Windows tools on PATH for Claude on the PC — built 2026-09-10, PR #8 (added by the server when it starts a chat in WSL)</li>
+<li><span class="box done">done</span> Buttons for Claude's multiple-choice questions (also stops the stuck "Asked you a question" mark) — built 2026-09-10</li>
+<li><span class="box done">done</span> Still queued from the v2 list: pin chats, search in a chat, swipe to reply, photos, push notifications — all built 2026-09-10 (D-018 for notifications)</li>
+</ul>
+<h3 id="planning-fixes-from-the-code-review-luqman-picked-all-2026-0">Fixes from the code review (Luqman picked all, 2026-09-10 — PR #8)</h3>
+<ul>
+<li><span class="box done">done</span> The phone reconnects by itself after its computer restarts, and notices a computer that went silent</li>
+<li><span class="box done">done</span> Messages that arrive while a chat is loading are kept</li>
+<li><span class="box done">done</span> <code>chats.json</code> saved via a spare file; an unreadable one is set aside, never overwritten</li>
+<li><span class="box done">done</span> A call gives up on a dead microphone after three tries and says so</li>
+<li><span class="box done">done</span> Tailscale found even when it starts after the server (the page check no longer loosens)</li>
+<li><span class="box done">done</span> Requests must be addressed to this computer or a tailnet name — DNS rebinding (D-016)</li>
+<li><span class="box done">done</span> Five wrong pairing codes cancel the code</li>
+<li><span class="box done">done</span> Windows Terminal titles leave out &amp; | &lt; &gt; ^ " % !</li>
+<li><span class="box done">done</span> Setup scripts handle project names with spaces</li>
+<li><span class="box done">done</span> <code>server.log</code> trimmed past 5 MB; stopped chats' transcripts not polled</li>
+<li><span class="box done">done</span> "Offline since 19:43" for a computer the phone can't reach — on the list, in the chat, in Computers</li>
+</ul>
+<h3 id="planning-the-gap-and-his-two-claude-accounts-luqman-asked-on">The gap, and his two Claude accounts (Luqman asked on 2026-09-11 — PR #17, D-024/D-025)</h3>
+<ul>
+<li><span class="box done">done</span> No more black band under the app, and the greeting out from under the Dynamic Island</li>
+<li><span class="box done">done</span> Settings shows the Claude account in use, and whether it is Pro or Max</li>
+<li><span class="box done">done</span> Switch accounts in a tap; new chats use it, running chats keep theirs, Chat info says which</li>
+<li><span class="box done">done</span> Add the second account from the phone — link, sign in, paste the code — no trip to the computer</li>
+<li><span class="box">to do</span> Add the Max account's token on the Mac (the PC is signed in to it; the Mac is on Pro)</li>
+</ul>
+<h3 id="planning-other-people-can-install-it-luqman-said-do-it-on-20">Other people can install it (Luqman said "do it" on 2026-09-11 — PR #27, D-027/D-028)</h3>
+<ul>
+<li><span class="box done">done</span> README says Mac <strong>and</strong> Windows, with a side-by-side table (PR #27, first commit)</li>
+<li><span class="box done">done</span> A first computer straight from GitHub — <code>mac.sh</code> / <code>windows.ps1</code> without a main Mac to join</li>
+<li><span class="box done">done</span> Chats follow the computer's permission mode (<code>acceptEdits</code> when unset); Sky AI Brain only where <code>mem</code> is</li>
+<li><span class="box done">done</span> No "Luqman" in what Claude reads; Chat info says PC on a PC</li>
+<li><span class="box done">done</span> Install guide in the README, from installing Claude Code; updating and removing</li>
+<li><span class="box done">done</span> <code>dev/checks/setup.mjs</code> — 38 checks, the Mac and Linux scripts run in a sandbox</li>
+<li><span class="box done">done</span> Made the repo public — Luqman confirmed, 2026-09-11; raw setup files and an anonymous <code>git ls-remote</code> checked</li>
+<li><span class="box">to do</span> Try <code>windows.ps1</code> first-computer mode on a real PC, and a first install on a fresh Mac account</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 5 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><blockquote>Status: <code>not started</code> · <code>in progress</code> · <code>done</code> · <code>stalled</code> · <code>cancelled</code> Use full dates (2026-09-10), never "next week".</blockquote>
+<details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
+<div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M1</td><td>Working app on the Mac</td><td>2026-09-10</td><td>2026-09-10</td><td>done</td><td>14/14 end-to-end checks</td></tr>
+<tr><td>M2</td><td>Reachable from the iPhone</td><td>2026-09-10</td><td></td><td>in progress</td><td>served at <a href="https://luqman-mac.tail8806f8.ts.net">https://luqman-mac.tail8806f8.ts.net</a>; waiting on first open from the iPhone</td></tr>
+<tr><td>M3</td><td>First real use away from home</td><td>—</td><td></td><td>not started</td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m1-working-app-on-the-mac"><summary><span>M1 — Working app on the Mac</span></summary><div>
+<p><strong>Goal:</strong> Everything the phone needs works against the server on the Mac. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> "+" starts Claude Code in a visible Terminal window in <code>~/Desktop/project/</code></li>
+<li><span class="box done">done</span> Messages from the phone reach Claude, replies come back live</li>
+<li><span class="box done">done</span> Approve / Deny on the phone controls commands</li>
+<li><span class="box done">done</span> Screen view + keys for menus</li>
+<li><span class="box done">done</span> Stopped chats resume with their memory intact</li>
+<li><span class="box done">done</span> Server starts at login</li>
+</ul>
+</div></details>
+<details class="fold" id="milestones-m2-reachable-from-the-iphone"><summary><span>M2 — Reachable from the iPhone</span></summary><div>
+<p><strong>Goal:</strong> Open the app on the iPhone over Tailscale and add it to the home screen. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> Mac signed in to Tailscale (2026-09-10, node <code>luqman-mac</code>, tailnet <code>tail8806f8.ts.net</code>)</li>
+<li><span class="box done">done</span> iPhone has the Tailscale app, same account (node <code>iphone183</code>)</li>
+<li><span class="box done">done</span> Serve enabled on the tailnet; <code>tailscale serve --bg 4477</code> → <a href="https://luqman-mac.tail8806f8.ts.net">https://luqman-mac.tail8806f8.ts.net</a>, Let's Encrypt cert, checked over the tailnet</li>
+<li><span class="box">to do</span> Page opens on the iPhone; Add to Home Screen</li>
+</ul>
+</div></details>
+<details class="fold" id="milestones-m3-first-real-use-away-from-home"><summary><span>M3 — First real use away from home</span></summary><div>
+<p><strong>Goal:</strong> Build something real from the phone with the Mac at home. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> A chat started from outside the house builds something in <code>~/Desktop/project/</code></li>
+<li><span class="box">to do</span> Note what's missing in daily use → v2 list in <code>02-planning.md</code></li>
+</ul>
+</div></details>
+<details class="fold" id="milestones-completion-history"><summary><span>Completion history</span></summary><div>
+<div class="table"><table><thead><tr><th>Date</th><th>Milestone</th><th>Lesson</th></tr></thead><tbody>
+<tr><td>2026-09-10</td><td>M1</td><td>Probe each mechanism before building on it — the dropped-first-paste bug only showed up because it was tested for real</td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 7 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><blockquote>Anyone (Claude included) who reads this file should be able to start working without asking.</blockquote>
+<details class="fold" id="methods-setup-from-scratch"><summary><span>Setup from scratch</span></summary><div>
+<pre><code>brew install tmux tailscale
+# Tailscale in userspace mode as a login item — see D-004 and ~/Library/LaunchAgents/com.juslangit.tailscaled.plist
+TS() { /opt/homebrew/opt/tailscale/bin/tailscale --socket=&quot;$HOME/Library/Application Support/tailscale-user/tailscaled.sock&quot; &quot;$@&quot;; }
+TS up --hostname=luqman-mac     # prints a sign-in link; Luqman signs in once
+cd ~/Desktop/project/ai/claude-chat &amp;&amp; ./install.sh</code></pre>
+<p><code>~/Desktop/project</code> must have been trusted in Claude Code once (done 2026-09-10), or every new chat stops at the "Do you trust this folder?" prompt.</p>
+</div></details>
+<details class="fold" id="methods-daily-commands"><summary><span>Daily commands</span></summary><div>
+<div class="table"><table><thead><tr><th>Purpose</th><th>Command</th></tr></thead><tbody>
+<tr><td>Restart server after a code change</td><td><code>launchctl kickstart -k gui/$(id -u)/com.juslangit.claude-chat</code></td></tr>
+<tr><td>Server log</td><td><code>tail -f ~/Desktop/project/ai/claude-chat/data/server.log</code></td></tr>
+<tr><td>List chat sessions</td><td><code>tmux -L claude-chat ls</code></td></tr>
+<tr><td>Look at a chat's screen</td><td><code>tmux -L claude-chat capture-pane -p -t cc-xxxxxxxx</code></td></tr>
+<tr><td>Start a phone-visible chat at the Mac</td><td><code>cchat [name]</code></td></tr>
+<tr><td>Tailscale status / address</td><td><code>TS status</code>, <code>TS serve status</code></td></tr>
+<tr><td>Test</td><td>end-to-end script drove the API as the phone does — create, send during startup, deny, allow, screen, kill + resume (14 checks)</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-when-luqman-says-connect-it-back"><summary><span>When Luqman says "connect it back"</span></summary><div>
+<p>He means the iPhone can't reach claude-chat. Check in this order, fix what's broken, then confirm <code>iphone183</code> is no longer <code>offline</code> in <code>TS status</code>. (Steps tested 2026-09-10 while healthy.)</p>
+<ol>
+<li><strong>Server</strong> — <code>launchctl list | grep claude-chat</code> shows a PID, and <code>curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4477/</code> gives <code>200</code>. If not: <code>launchctl kickstart -k gui/$(id -u)/com.juslangit.claude-chat</code>, then read <code>data/server.log</code>.</li>
+<li><strong>Tailscale on the Mac</strong> — <code>launchctl list | grep tailscaled</code> shows a PID and <code>TS status</code> lists <code>luqman-mac</code>. If stopped: <code>launchctl kickstart -k gui/$(id -u)/com.juslangit.tailscaled</code>. If it says logged out: <code>TS up --hostname=luqman-mac</code> prints a link Luqman must open and sign in to.</li>
+<li><strong>Serve</strong> — <code>TS serve status</code> shows <code>https://luqman-mac.tail8806f8.ts.net</code> → <code>http://127.0.0.1:4477</code>. If empty: <code>TS serve --bg 4477</code>.</li>
+<li><strong>The iPhone</strong> — if <code>iphone183</code> shows <code>offline</code> while 1–3 are fine, the fix is on the phone: open the Tailscale app and switch it on. Nothing on the Mac can do this.</li>
+</ol>
+<p>Two traps found 2026-09-14:</p>
+<ul>
+<li><strong>Don't test with <code>curl https://luqman-mac.tail8806f8.ts.net</code> from the Mac.</strong> tailscaled runs with <code>--tun=userspace-networking</code>, so the Mac can't reach its own tailnet name or IP. It fails even when everything is healthy. Use <code>TS ping iphone183</code> instead; a <code>pong</code> means the path is up.</li>
+<li><strong>Mac on the iPhone's Personal Hotspot</strong> (default gateway <code>172.20.10.1</code>): the phone reaches the Mac only through the DERP relay (<code>via DERP(sin)</code>, about 1 s), never directly. It works, just slower. Moving the Mac between networks drops open connections, so the phone app needs closing and reopening.</li>
+</ul>
+<p>Not fixable from the Mac's side: Mac switched off (battery), Mac at the login screen after a restart (FileVault), home internet down — those need someone physically at the Mac. And the request itself can't come through claude-chat while claude-chat is the thing that's broken: it arrives from the Mac's Terminal or another channel (e.g. Claude Code Remote Control, if set up).</p>
+</div></details>
+<details class="fold" id="methods-folder-structure"><summary><span>Folder structure</span></summary><div>
+<pre><code>claude-chat/
+├── server.mjs      the whole backend (Node built-ins only)
+├── hook.mjs        Claude Code hook → server, carries approvals back
+├── tmux.conf       settings for the dedicated tmux server (-L claude-chat)
+├── bin/cchat       start a chat from the Mac Terminal
+├── install.sh      LaunchAgent + cchat link + tailscale serve
+├── public/         phone UI: index.html, style.css, app.js, manifest.json, icon.png
+└── data/           runtime, git-ignored: chats.json, secret, hooks.json, terminal/*.command, server.log</code></pre>
+</div></details>
+<details class="fold" id="methods-conventions"><summary><span>Conventions</span></summary><div>
+<h4 id="methods-git">Git</h4>
+<ul>
+<li>Branch: <code>&lt;type&gt;/&lt;short-description&gt;</code>; never commit straight to <code>main</code></li>
+<li>Commit: imperative mood, lowercase</li>
+</ul>
+<h4 id="methods-code">Code</h4>
+<ul>
+<li>No npm packages and no framework (D-005). If something seems to need one, raise it first.</li>
+<li>Plain-English comments aimed at Luqman, explaining <em>why</em>.</li>
+</ul>
+</div></details>
+<details class="fold" id="methods-patterns-in-use"><summary><span>Patterns in use</span></summary><div>
+<h4 id="methods-sending-a-message-into-the-tui-reliably">Sending a message into the TUI reliably</h4>
+<p><strong>When to use:</strong> any time text goes into a chat from outside. <strong>How:</strong> <code>tmux load-buffer</code> + <code>paste-buffer -p</code> (bracketed paste, so newlines don't submit), then check the text appears in the input box (the lines between the last two <code>────</code> rules, starting with <code>❯</code>), then Enter, then check the box emptied. Retry each step. See <code>sendText()</code>.</p>
+<h4 id="methods-knowing-which-chat-a-hook-event-belongs-to">Knowing which chat a hook event belongs to</h4>
+<p>Each tmux session is started with <code>-e CLAUDE_CHAT_ID=&lt;id&gt;</code>; <code>claude</code> passes its environment to hook commands, so <code>hook.mjs</code> reads it and tells the server.</p>
+<h4 id="methods-following-a-chat-through-clear-and-resume">Following a chat through /clear and resume</h4>
+<p>The <code>SessionStart</code> hook carries <code>transcript_path</code>; if it differs from the stored one the server switches files (resume: reset the phone's history; clear: add a divider).</p>
+</div></details>
+<details class="fold" id="methods-gotchas-traps"><summary><span>Gotchas / traps</span></summary><div>
+<div class="table"><table><thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Message silently vanished</td><td>Pasted while Claude Code was still starting (its SessionStart hooks were running)</td><td>Verify-and-retry in <code>sendText()</code></td></tr>
+<tr><td>Approval test never triggered</td><td>Claude Code runs "harmless" commands like <code>uname</code> without asking, even in acceptEdits</td><td>Test with a command that really needs approval, e.g. <code>node -e ...</code></td></tr>
+<tr><td>Trust prompt answered "No"</td><td>Default option in the trust dialog is <strong>No, exit</strong></td><td>Press Down then Enter, or trust the folder once by hand</td></tr>
+<tr><td><code>chat</code> command did something else</td><td><code>/usr/sbin/chat</code> exists on macOS</td><td>Our command is <code>cchat</code></td></tr>
+<tr><td>Headless Chrome screenshot hangs</td><td><code>--virtual-time-budget</code> never finishes because <code>/events</code> stays open</td><td>Use <code>--timeout=5000</code> and kill after 30 s</td></tr>
+<tr><td>Headless Chrome at 390 px wide cuts off the right side</td><td>Chrome's headless window has a minimum width</td><td>Screenshot at ≥500 px, or check on the real phone</td></tr>
+<tr><td>Hook fetch would die after 5 min</td><td>Node's <code>fetch</code> has a 300 s headers timeout</td><td><code>hook.mjs</code> uses <code>http.request</code></td></tr>
+<tr><td><code>tailscale serve</code> just waits</td><td>Serve is off by default on a new tailnet</td><td>Luqman approves the link it prints (done once, 2026-09-10)</td></tr>
+<tr><td>Can't <code>curl https://luqman-mac.tail8806f8.ts.net</code> from the Mac itself</td><td>Userspace mode doesn't route the Mac's own traffic into the tailnet or set up MagicDNS</td><td>Test through <code>tailscale nc &lt;host&gt; 443</code> with Node's <code>tls.connect({ socket })</code> — goes the same way as the phone</td></tr>
+<tr><td>The phone shows only "N steps" during a long turn, none of Claude's in-between notes</td><td>Claude Code doesn't write the text Claude says between tool calls into the transcript <code>.jsonl</code> — only thinking and tool_use blocks (checked 2026-09-10: 74 tool_use, 0 text in a long turn). Final replies do appear</td><td>Not fixed yet. Would need the notes from somewhere other than the transcript, e.g. the tmux screen</td></tr>
+<tr><td>A chat started in a project folder asks "Do you trust this folder?"</td><td>It doesn't: trusting <code>~/Desktop/project</code> once covers every folder inside it (checked 2026-09-10 with <code>portfolio</code>)</td><td>—</td></tr>
+<tr><td>Hooks fail on the Windows PC ("cjs/loader"), chats stay "starting…"</td><td>The user folder has a space ("TODAK ACADEMY") and <code>new URL(import.meta.url).pathname</code> keeps it as <code>%20</code></td><td>Use <code>fileURLToPath</code> for any path from <code>import.meta.url</code>; test paths with spaces</td></tr>
+<tr><td>A chat ignores every key from the phone</td><td>Its tmux pane is in scroll/view mode (mouse scroll in the Terminal window, or tmux showing an error)</td><td>Server runs <code>send-keys -X cancel</code> first (<code>leaveScrollMode</code>); check with <code>tmux display -p '#{pane_in_mode}'</code></td></tr>
+<tr><td>Opening a chat never cleared its unread count</td><td>The page compared a chat's <code>id</code> with <code>state.current</code>, which is a key (<code>&lt;computer&gt;/&lt;id&gt;</code>)</td><td>Compare <code>c.key</code> with <code>state.current</code>; ids are only for the server's URLs</td></tr>
+<tr><td>A command card (<code>/usage</code>) shows headings but no bars or numbers</td><td><code>newOnScreen</code>'s logo filter matched any line starting with a block character, and Claude Code draws meters that way</td><td><code>METER_LINE</code> is spared; <code>metersFrom()</code> turns each into <code>{label, percent, note}</code> for the phone to draw</td></tr>
+<tr><td>A check compares page text and letters go missing</td><td>Inside a JS template literal in a check, <code>\s</code> collapses to <code>s</code>, so <code>.replace(/\s+/g, " ")</code> becomes <code>/s+/g</code> and eats every "s"</td><td>Write <code>\\s</code> in check files; the suites already do</td></tr>
+<tr><td>A command card holds the wrong screen (e.g. a tmux warning, or the previous card's text)</td><td><code>runCommand</code> waits a fixed 1.5 s before reading, so anything else drawn first wins</td><td>Re-run to confirm; the fix is to wait for the panel to appear rather than a fixed delay</td></tr>
+<tr><td>Need to run something on the Windows PC from the main Mac</td><td>This Mac's userspace Tailscale can't open normal connections into the tailnet</td><td>Talk to the PC's claude-chat through <code>tailscale nc desktop-k2m7l30 443</code> + TLS, start a chat (<code>terminal:false</code>) and ask Claude there</td></tr>
+<tr><td>Phone can't reach the Mac after any restart</td><td>FileVault is on, so macOS can't auto-login; the server and Tailscale are login items and wait at the login screen. Automatic macOS update installs (on as of 2026-09-10) can trigger such a restart overnight</td><td>Someone types the password at the Mac. Turn off "Install macOS updates" in Software Update (needs admin password)</td></tr>
+<tr><td>Mac drops off the tailnet on 2027-03-09</td><td>Tailscale node key expiry</td><td>Disable key expiry for luqman-mac in the Tailscale admin console</td></tr>
+<tr><td><code>git commit</code> on the Windows PC fails with "Author identity unknown"</td><td>WSL has no git user.name / user.email set (checked 2026-09-10)</td><td>Commit with <code>git -c user.name=… -c user.email=…</code> copied from an earlier commit's author, or set it once on the PC</td></tr>
+<tr><td>Screenshots of the phone page on the Windows PC</td><td><code>dev/shot.mjs</code> only knows the Mac's Chrome, and WSL (NAT mode) can't reach Windows Chrome's debugging port</td><td>Serve a copy of <code>public/</code> with <code>dev/stage.mjs</code>, load a small <code>fake.js</code> before <code>app.js</code> that swaps <code>fetch</code> / <code>EventSource</code> for fake chats and clicks through, then <code>chrome.exe --headless=new --screenshot=&lt;Windows path&gt; --virtual-time-budget=5000 http://localhost:4478/...</code>. Windows' dark mode makes every shot dark</td></tr>
+<tr><td>After an update, the iPhone still shows the old behaviour</td><td>A Home Screen app keeps the page it opened, possibly for days</td><td>Since PR #7 the page reloads itself when <code>/api/whoami</code>'s <code>version</code> changes. A page from before PR #7 has to be closed and reopened once. Remember the page comes from one computer: update that one</td></tr>
+<tr><td>A test of a feature needs real Claude turns, and the weekly limit is tight</td><td>—</td><td>Run a second server (see "A second claude-chat" below) with <code>ANTHROPIC_MODEL=claude-haiku-4-5</code> in its environment; its chats inherit it</td></tr>
+<tr><td>A voice test in headless Chrome used the real microphone API</td><td>Chrome now has an unprefixed <code>SpeechRecognition</code>, which <code>speechApi()</code> picks first</td><td>Replace both <code>window.SpeechRecognition</code> and <code>window.webkitSpeechRecognition</code> with the fake</td></tr>
+<tr><td>The phone kept saying "online" for a computer that had dropped off Wi-Fi</td><td>Nothing reaches the phone to say so; the connection just goes quiet</td><td>Since PR #8 the server sends a named <code>ping</code> event every 20 s, and a minute without one marks the computer offline from when it was last heard</td></tr>
+<tr><td>A new way of reaching the server gets 403 "Not allowed."</td><td>Since PR #8 the Host header must be 127.0.0.1 / localhost or a name on the tailnet (D-016)</td><td>Reach it by one of those names, or add the new one in <code>hostAllowed()</code></td></tr>
+<tr><td>A chat flips to "online" while Claude is still working</td><td>The screen check (D-017) takes the ❯ prompt without "esc to interrupt" for 6 s as finished; a change to Claude Code's footer wording would break it</td><td>Look at a working chat's footer with <code>capture-pane</code> and update the regex in <code>pollNotes</code></td></tr>
+<tr><td>Testing notifications on the Mac</td><td>Headless Chrome can't subscribe to a real push service</td><td>Subscribe a fake address <code>http://127.0.0.1:&lt;port&gt;/…</code> (plain http is allowed only for 127.0.0.1) served by the test, which decrypts with its own ECDH key and checks the VAPID signature. Set <code>CLAUDE_CHAT_ENV_FILE</code> to a scratch file so a test never writes a key into <code>~/.claude/.env</code></td></tr>
+<tr><td>No notification arrives while testing</td><td>A page that's open and visible tells the server it's being looked at, which holds notifications back for 45 s</td><td>Navigate the test page away (it sends <code>looking:false</code>), or check with no page open</td></tr>
+<tr><td>A command like <code>/usage</code> shows nothing in the chat</td><td>Claude Code draws its answer inside the Terminal; not a word of it reaches the transcript (checked 2026-09-11 on 2.1.268 with <code>/usage</code>, <code>/status</code>, <code>/model</code>)</td><td>The phone reads the screen straight after and shows it as a card — <code>runCommand()</code> in <code>server.mjs</code> (D-019)</td></tr>
+<tr><td>A chat ended just before a restart came back</td><td><code>save()</code> waits 200 ms in case more changes follow, and the server stopped before it fired</td><td>Since PR #10 anything still waiting is written out on exit; a check covers it</td></tr>
+<tr><td>Test chats pile up in a test data folder</td><td>The test killed its server before the debounced save ran, so the deletions never reached <code>chats.json</code></td><td>Fixed by the same flush; a test that kills a server should still let it stop cleanly</td></tr>
+<tr><td>A Home Screen app leaves a tall black band under it, and the top of the page hides under the Dynamic Island</td><td><code>apple-mobile-web-app-status-bar-style: black-translucent</code> — iOS draws the page from y=0 but gives it only the height left after the notch and the home indicator, with every <code>env(safe-area-inset-*)</code> at 0</td><td>Use <code>black</code> (D-025). Nothing in the page can paint below its own viewport, so no CSS fixes it. To diagnose: measure a known element in the screenshot — the band is the screen height minus the two insets</td></tr>
+<tr><td>Chips in one sheet stop looking selected when the chat list renders</td><td><code>renderList()</code> used <code>document.querySelectorAll(".chip")</code>, which reaches every chip on the page</td><td>Scope such loops to their own container (<code>$("#chips").children</code>)</td></tr>
+</tbody></table></div>
+<h4 id="methods-trying-a-change-to-the-phone-page-safely">Trying a change to the phone page safely</h4>
+<p><strong>Why:</strong> the phone page is how Luqman reaches running chats — including the chat that is making the change. A broken <code>app.js</code> cuts him off until he is back at the Mac. <strong>How:</strong> copy <code>public/</code> to a scratch folder and edit there. <code>node dev/stage.mjs &lt;folder&gt;</code> serves it on :4478 with the real chats, read-only (only GET requests reach :4477, so nothing is sent, started or ended). <code>node dev/shot.mjs &lt;out-dir&gt; dev/scenarios.example.json</code> takes iPhone-size screenshots (390×844 @2x, light and dark) through Chrome's DevTools protocol and prints any page errors. A scenario's <code>eval</code> can call the page's own functions (<code>onEvent</code>, <code>setOnline</code>) to fake states such as an approval. Copy into <code>public/</code> only when the shots look right — the server reads <code>public/</code> fresh on every request, so no restart.</p>
+<h4 id="methods-claude-s-progress-notes-and-working-after-a-restart">Claude's progress notes and "working" after a restart</h4>
+<p><code>notes.mjs</code> → <code>notesFromScreen(screen)</code> returns the finished notes of the current turn from a <code>tmux capture-pane -p -J -S -1000</code> of the chat. Test it on a saved screen with <code>node -e 'import("./notes.mjs").then(m =&gt; console.log(m.notesFromScreen(require("fs").readFileSync("sample.txt","utf8"))))'</code>. If a restart leaves a working chat marked idle, <code>pollNotes</code> sets it to working when the visible footer contains "esc to interrupt".</p>
+<h4 id="methods-testing-voice-without-an-iphone">Testing voice without an iPhone</h4>
+<p>Headless Chrome has no microphone. In a <code>dev/shot.mjs</code> scenario, replace <code>window.webkitSpeechRecognition</code> with a small class whose <code>start()</code> fires <code>onresult</code> with fixed words, and <code>speechSynthesis.speak</code> with one that calls <code>u.onend</code> after a delay. Pointer events on <code>#mic</code> (<code>pointerdown</code> / <code>pointerup</code>) drive a voice note. The stage copy refuses POSTs, so sending shows the failure path (words go back into the typing box; the call says "Sorry, that didn't reach Claude").</p>
+<h4 id="methods-a-second-claude-chat-on-the-same-mac-for-testing-sev">A second claude-chat on the same Mac (for testing several computers)</h4>
+<pre><code>CLAUDE_CHAT_COMPUTER=&quot;Studio PC (test)&quot; CLAUDE_CHAT_DATA=/tmp/pc2-data CLAUDE_CHAT_SOCKET=claude-chat-test PORT=4479 node server.mjs</code></pre>
+<p>Own data folder, own tmux server, own port. To make the phone page use it, set <code>localStorage.computers = '["http://127.0.0.1:4479"]'</code> in the test page. Stop it by the PID on port 4479 (<code>lsof -t -iTCP:4479 -sTCP:LISTEN</code>) — never <code>pkill node</code>/<code>pkill server.mjs</code>, which would also hit the real server.</p>
+<h4 id="methods-adding-a-command-to-the-phone-s-list">Adding a command to the phone's list</h4>
+<p><code>FAVOURITE_COMMANDS</code> and <code>MORE_COMMANDS</code> in <code>public/app.js</code> — name plus a plain-English line; favourites show as rows, the rest appear when searched. <code>RISKY_COMMANDS</code> holds the ones that confirm first, keyed by name, with the sentence shown in the confirmation. Commands he writes himself need no list: the server finds them in <code>~/.claude/commands/*.md</code> and the chat's own project (<code>GET /api/commands</code>).</p>
+<h4 id="methods-running-the-checks-since-pr-14-they-live-in-the-app">Running the checks (since PR #14 they live in the app)</h4>
+<p><code>node dev/checks/run.mjs</code> runs all six suites — commands, archive, files, context, features, fixes: 181 checks, about six minutes. <code>--quick</code> skips the ones that need Claude to answer; a name runs one suite; <code>node dev/checks/screenshots.mjs</code> takes iPhone-size pictures of every screen in both themes. Each suite starts its own server on :4479 with its own data folder, tmux socket and <code>.env</code>, so the live app is never touched, and they run one at a time because they share the port. Scratch lives in <code>dev/checks/.work</code> (git-ignored). Also there: <code>dev/reach.mjs &lt;host&gt; GET /path</code> to reach a computer exactly as the phone does, and <code>dev/update-computer.mjs &lt;host&gt;</code> to make another computer pull and restart itself.</p>
+<h4 id="methods-testing-a-change-the-way-the-phone-meets-it-used-for">Testing a change the way the phone meets it (used for PR #8)</h4>
+<p>Work in a <code>git worktree</code> outside <code>~/Desktop/project</code>, never in the live folder: the phone reloads itself whenever <code>public/</code> changes. One node script then does it all: starts the worktree's server on :4479 (own data folder with a deliberately broken <code>chats.json</code> / oversized log if that's being tested, tmux socket <code>claude-chat-test</code>, Haiku), runs a proxy on :4480 that forwards to it, answers <strong>502</strong> when it's down and can go <strong>silent</strong> (holds connections, sends nothing) like a computer off the network, and drives the page from :4480 in headless Chrome over the DevTools protocol (<code>Runtime.evaluate</code> can call <code>onEvent</code>, <code>loadMessages</code>, <code>startCall</code> and read <code>home.online</code>). The script owns the server process, so it can kill and restart it; clean up with <code>tmux -L claude-chat-test kill-server</code>. After merging, check the real thing through Tailscale with <code>tailscale nc &lt;host&gt; 443</code> + <code>tls.connect({ socket })</code> (whoami, <code>/</code>, a POST carrying the page's Origin, <code>/events</code>) before updating the next computer.</p>
+<h4 id="methods-adding-a-computer">Adding a computer</h4>
+<p>Tailscale signed in, then one line (README → "More than one computer"). The scripts are in <code>setup/</code> and are served by this Mac with its address filled in (<code>__HOME_URL__</code>). Syncthing pairing: a one-time code from the phone (<code>POST /api/sync/code</code>, made in ⋯ → Computers → Add a computer), then <code>POST /api/sync/pair {id, name, code}</code> adds the device here and shares <code>claude-home</code> (<code>~/.claude</code>, limited by <code>~/.claude/.stignore</code>, D-014); the script adds this Mac on its side. Remove a device through the Syncthing REST API (<code>/rest/config/devices/&lt;id&gt;</code>, key from <code>syncthing cli config gui apikey get</code>) — <code>syncthing cli config devices &lt;id&gt; delete</code> doesn't exist.</p>
+<h4 id="methods-updating-another-computer-since-pr-26-2026-09-11">Updating another computer (since PR #26, 2026-09-11)</h4>
+<p><code>node dev/update-computer.mjs &lt;short host&gt;</code> — e.g. <code>desktop-k2m7l30</code>, <strong>not</strong> the full <code>.ts.net</code> address (the script adds it; the full one gives a TLS "internal error").</p>
+<ol>
+<li>Asks the computer <code>GET /api/code</code> → <code>{ commit, unsaved, stashes }</code>. Any unsaved or stashed change → prints <strong>STOPPED</strong> with the list, updates nothing, exits <strong>2</strong>, starts no helper chat. Decide first: bring the change into the project (a PR, line for line), or discard it — then run again.</li>
+<li>Otherwise a helper chat pulls <code>main</code> and restarts the server. Its instructions also say to stop on any <code>git status</code> output (the guard for computers too old to answer <code>/api/code</code>).</li>
+<li>Ends with <code>&lt;host&gt; is now on &lt;commit&gt;, with no unsaved changes</code> — the check that it worked.</li>
+</ol>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 5 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><h3 id="relations-system-map">System map</h3>
+<pre class="mermaid">flowchart LR
+    Phone[iPhone web app] -- Tailscale HTTPS --&gt; Serve[tailscale serve]
+    Serve --&gt; Server[server.mjs :4477 on 127.0.0.1]
+    Server -- tmux paste / keys --&gt; Claude[claude TUI in tmux, one per chat]
+    Claude -- hooks --&gt; Hook[hook.mjs] -- POST /hook --&gt; Server
+    Claude -- writes --&gt; Transcript[(~/.claude/projects/.../id.jsonl)]
+    Transcript -- read every 0.6 s --&gt; Server
+    Terminal[Terminal.app window] -- tmux attach --&gt; Claude</pre>
+<h3 id="relations-internal-components">Internal components</h3>
+<div class="table"><table><thead><tr><th>Component</th><th>Function</th><th>Depends on</th><th>Used by</th></tr></thead><tbody>
+<tr><td><code>server.mjs</code></td><td>Starts chats, sends messages, reads transcripts, holds approvals, serves the phone page</td><td>tmux, claude, Node built-ins</td><td>phone, <code>hook.mjs</code>, <code>cchat</code></td></tr>
+<tr><td><code>hook.mjs</code></td><td>Forwards Claude Code hook events; waits for the phone's approval answer</td><td><code>data/secret</code></td><td>every chat's <code>claude</code> (via <code>data/hooks.json</code>)</td></tr>
+<tr><td><code>public/</code></td><td>Phone UI (list, chat, approval card, screen view)</td><td>server API + <code>/events</code></td><td>iPhone Safari / home-screen app</td></tr>
+<tr><td><code>bin/cchat</code></td><td>Start a phone-visible chat from the Mac's Terminal</td><td>server API, jq</td><td>Luqman at the Mac</td></tr>
+<tr><td><code>tmux.conf</code></td><td>Settings for the dedicated <code>-L claude-chat</code> tmux server</td><td>—</td><td>server</td></tr>
+<tr><td><code>install.sh</code></td><td>LaunchAgent, <code>cchat</code> link, <code>tailscale serve</code></td><td>—</td><td>one-time setup</td></tr>
+</tbody></table></div>
+<h3 id="relations-external-services">External services</h3>
+<div class="table"><table><thead><tr><th>Service</th><th>Used for</th><th>Env var name</th><th>Cost</th><th>If it goes down?</th></tr></thead><tbody>
+<tr><td>Tailscale</td><td>Private network between iPhone and Mac</td><td>— (sign-in, no key)</td><td>free personal plan</td><td>Phone can't reach the Mac; the Mac keeps working</td></tr>
+<tr><td>Claude Code / Claude Max</td><td>The actual work in each chat</td><td>— (logged-in CLI)</td><td>existing subscription; counts toward weekly limit</td><td>Chats error the same way the Terminal would</td></tr>
+<tr><td>GitHub (juslangit)</td><td>Moves projects between computers; claude-chat itself lives there</td><td>— (gh login)</td><td>free</td><td>Computers keep working; new work just doesn't travel</td></tr>
+<tr><td>Syncthing</td><td>Keeps <code>~/.claude/knowledge</code> the same on every computer</td><td>—</td><td>free</td><td>Notes stop matching until it's back</td></tr>
+<tr><td>GitHub (<code>juslangit/claude-chat</code>, private)</td><td>Off-Mac backup of the code</td><td>— (<code>gh</code> CLI login)</td><td>free</td><td>Nothing — the app runs from the local copy; <code>data/</code> is git-ignored and never pushed</td></tr>
+</tbody></table></div>
+<h3 id="relations-data-models">Data &amp; models</h3>
+<div class="table"><table><thead><tr><th>Entity</th><th>Key fields</th><th>Relationships</th></tr></thead><tbody>
+<tr><td>Chat (<code>data/chats.json</code>)</td><td>id (= Claude session id), name, tmux session name, transcript path</td><td>one chat ↔ one Claude Code session ↔ one tmux session</td></tr>
+</tbody></table></div>
+<h3 id="relations-relationships-with-other-projects">Relationships with other projects</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Type of link</th><th>Notes</th></tr></thead><tbody>
+<tr><td>All projects in <code>~/Desktop/project/</code></td><td>workplace</td><td>Every chat starts in the project folder root</td></tr>
+<tr><td>sky</td><td>sibling</td><td>Sky is voice-first and cloud-hosted; claude-chat drives the Mac. Voice input is a v2 idea borrowed from Sky</td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 29 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><blockquote>One decision = one entry. Never delete old entries — mark them <code>Superseded by D-00X</code>. The point of this file: six months from now you'll ask "why did I do it this way?" — the answer is here.</blockquote>
+<details class="fold" id="decisions-d-001-custom-app-instead-of-claude-code-s-built-in"><summary><span>D-001 — Custom app instead of Claude Code's built-in Remote Control</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Claude Code 2.1.267 ships <code>claude remote-control</code>, a server mode that lets the Claude iPhone app list and spawn sessions on this Mac. It covers most of the request.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Remote Control</td><td>Official, ~15 min, nothing to host</td><td>Sessions run in the background — no Terminal window per chat; Claude's UI</td></tr>
+<tr><td>Custom app</td><td>Visible Terminal per chat, own WhatsApp-style UI</td><td>Real project to maintain; must be kept private</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Custom app. Luqman chose it when both were laid out.</li>
+<li><strong>Reason:</strong> He wants each phone chat to also be a Terminal window he can see and type into at the Mac.</li>
+<li><strong>Consequences / trade-offs:</strong> We maintain it, and it depends on Claude Code's TUI layout and transcript format.</li>
+<li><strong>Reversible?</strong> easily — Remote Control can be used at any time alongside it</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-002-tmux-the-normal-claude-tui-not-the-agent-sdk"><summary><span>D-002 — tmux + the normal <code>claude</code> TUI, not the Agent SDK</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> A chat must be a real Terminal window on the Mac and also be driven from the phone.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>tmux session running <code>claude</code>; phone input pasted in with <code>tmux paste-buffer</code>; replies read from the transcript <code>.jsonl</code></td><td>Terminal window is the genuine Claude Code; desk and phone share one session</td><td>Screen-scraping to confirm input arrived</td></tr>
+<tr><td>Agent SDK / <code>claude -p</code> in the server</td><td>Clean structured API</td><td>Terminal would only be a mirror, not the real Claude Code</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> tmux.</li>
+<li><strong>Reason:</strong> Probed on 2026-09-10: bracketed paste into the TUI works, replies appear in the transcript live, and <code>--session-id</code> makes the transcript path predictable.</li>
+<li><strong>Consequences / trade-offs:</strong> If Claude Code redraws its input box differently, <code>inputBox()</code> in <code>server.mjs</code> needs updating.</li>
+<li><strong>Reversible?</strong> with difficulty</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-003-approvals-through-a-permissionrequest-hook-p"><summary><span>D-003 — Approvals through a <code>PermissionRequest</code> hook, phone mode <code>acceptEdits</code></span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> Superseded by D-006 (the <code>acceptEdits</code> part; the hook stays)</li>
+<li><strong>Context:</strong> Luqman chose "ask me on the phone". His global default is <code>bypassPermissions</code>.</li>
+<li><strong>Decision:</strong> Phone chats start with <code>--permission-mode acceptEdits</code> (edits automatic, commands ask). A <code>PermissionRequest</code> hook passed via <code>--settings</code> holds the request open to the server until the phone answers (up to 30 min).</li>
+<li><strong>Reason:</strong> Probed on 2026-09-10: while the hook waits, the Terminal still shows its own "Do you want to proceed?" prompt, so either side can answer; the phone's answer shows as "Allowed by PermissionRequest hook". <code>--settings</code> hooks add to the global ones — his SessionStart memory hook still ran.</li>
+<li><strong>Consequences / trade-offs:</strong> His global bypass setting is untouched; only phone-created sessions ask.</li>
+<li><strong>Reversible?</strong> easily — change the <code>--permission-mode</code> in <code>startClaude()</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-004-tailscale-in-userspace-mode-via-homebrew-cli"><summary><span>D-004 — Tailscale in userspace mode via Homebrew CLI, not the Mac app</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> The Tailscale Mac app installs from a <code>.pkg</code> that needs an admin password, which Claude cannot enter.</li>
+<li><strong>Decision:</strong> <code>brew install tailscale</code>, <code>tailscaled --tun=userspace-networking</code> as a user LaunchAgent (<code>com.juslangit.tailscaled</code>), state in <code>~/Library/Application Support/tailscale-user/</code>.</li>
+<li><strong>Reason:</strong> Fully installable without sudo. The Mac only needs to <em>receive</em> connections from the phone, which userspace mode handles.</li>
+<li><strong>Consequences / trade-offs:</strong> No menu-bar icon; the CLI needs <code>--socket="$HOME/Library/Application Support/tailscale-user/tailscaled.sock"</code> on every call. The Mac itself cannot reach other tailnet devices by name.</li>
+<li><strong>Reversible?</strong> easily — install the app later and remove the LaunchAgent</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-005-no-npm-packages-no-frontend-framework"><summary><span>D-005 — No npm packages, no frontend framework</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman must be able to own and maintain this.</li>
+<li><strong>Decision:</strong> Only Node built-ins on the server; plain HTML/CSS/JS on the phone; Server-Sent Events instead of WebSockets.</li>
+<li><strong>Reason:</strong> Fewer moving parts, nothing to update, every line readable.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-006-phone-chats-run-in-bypasspermissions"><summary><span>D-006 — Phone chats run in <code>bypassPermissions</code></span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> After using it, Luqman asked for bypass permissions whenever he uses chats in this app. D-003 had phone chats in <code>acceptEdits</code>, so every non-trivial command stopped for Approve / Deny.</li>
+<li><strong>Decision:</strong> <code>startClaude()</code> passes <code>--permission-mode bypassPermissions</code>. The <code>PermissionRequest</code> hook and the phone's approval card stay, as a fallback for anything Claude Code still asks about.</li>
+<li><strong>Reason:</strong> Matches his global default for plain <code>claude</code>; he wants phone chats to just run. <code>skipDangerousModePermissionPrompt: true</code> in <code>~/.claude/settings.json</code> means no warning dialog blocks a new chat's startup.</li>
+<li><strong>Consequences / trade-offs:</strong> Anything a phone chat decides to do runs without a check. The global deny list (sudo, <code>rm -rf</code>, <code>git reset --hard</code>, force-push…) still applies. Only new and resumed chats get the new mode; chats already running keep the mode they started with. Verified 2026-09-10: a test chat showed "bypass permissions on" and ran <code>node -e "console.log(6*7)"</code> without asking.</li>
+<li><strong>Reversible?</strong> easily — change the <code>--permission-mode</code> in <code>startClaude()</code> back to <code>acceptEdits</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-007-follow-whatsapp-on-the-iphone-not-android-wh"><summary><span>D-007 — Follow WhatsApp on the iPhone, not Android WhatsApp</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman asked for the entire UI to be "the same like WhatsApp". The first version borrowed Android WhatsApp's colours (teal top bar, round + button at the bottom right), but he uses an iPhone.</li>
+<li><strong>Decision:</strong> Copy WhatsApp on iOS: white list with a big "Chats" title, green + at the top right, search and filter chips, tailed bubbles on a doodle wallpaper, tap the name for Chat info.</li>
+<li><strong>Reason:</strong> It is the WhatsApp he sees every day on the same phone, so nothing has to be learned.</li>
+<li><strong>Consequences / trade-offs:</strong> The ⋮ menu is gone; Rename / End chat / Open on Mac live on the Chat info page. The wallpaper doodles are our own drawing, not WhatsApp's artwork. No bottom tab bar — there is only one section to put in it for now. The old look is not in git (the repo has no commits yet).</li>
+<li><strong>Reversible?</strong> easily — it is only <code>public/</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-008-voice-uses-the-iphone-s-own-speech-the-same-"><summary><span>D-008 — Voice uses the iPhone's own speech, the same as Sky</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman asked for voice chat (voice notes and a call screen).</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>iPhone <code>webkitSpeechRecognition</code> + <code>speechSynthesis</code></td><td>Free, instant, no keys, no packages, audio stays on the phone</td><td>Voice sounds robotic; Safari only; iOS quirks</td></tr>
+<tr><td>Whisper on the Mac + ElevenLabs voice</td><td>Better accuracy, human voice</td><td>Installs, API key, per-reply cost, audio leaves the phone</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> iPhone speech. Luqman picked "iPhone's voice" when both were laid out.</li>
+<li><strong>Reason:</strong> Same trade Sky made (Sky D-2026-09-06); fits D-005 (no packages).</li>
+<li><strong>Consequences / trade-offs:</strong> Recognition is set to en-US. Needs Safari / the Home Screen app.</li>
+<li><strong>Reversible?</strong> easily — <code>listen()</code> and <code>speakNext()</code> in <code>app.js</code> are the only speech code</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-009-claude-s-progress-notes-are-read-off-the-ter"><summary><span>D-009 — Claude's progress notes are read off the Terminal screen</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Claude Code doesn't reliably write the text Claude says between steps into the transcript, so the phone only saw "N steps" during long jobs.</li>
+<li><strong>Decision:</strong> <code>notes.mjs</code> reads the tmux screen: ⏺ blocks after the last <code>❯</code> prompt that aren't tool calls, counted once something follows them. The server polls working chats every 1.5 s.</li>
+<li><strong>Reason:</strong> The screen is the only place the notes always appear. Checked on a real screen sample.</li>
+<li><strong>Consequences / trade-offs:</strong> Depends on Claude Code's screen layout (⏺, ❯, ──── rules, "esc to interrupt"). If that changes, notes stop appearing — nothing else breaks. The Terminal may show a shortened wording of a note.</li>
+<li><strong>Reversible?</strong> easily — delete the <code>pollNotes</code> block</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-010-spoken-messages-carry-a-tag-for-claude"><summary><span>D-010 — Spoken messages carry a tag for Claude</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Speech recognition mishears words, and spoken replies must be short.</li>
+<li><strong>Decision:</strong> Voice notes end with <code>[🎤 voice note: …may be misheard]</code>; call messages with <code>[📞 voice call: … reply in one to three short spoken sentences…]</code>. The phone hides the tag.</li>
+<li><strong>Reason:</strong> Claude then reads past mishearings and keeps call answers speakable.</li>
+<li><strong>Reversible?</strong> easily — <code>VOICE_NOTE</code> / <code>VOICE_CALL</code> in <code>app.js</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-011-one-phone-app-for-every-computer-talking-to-"><summary><span>D-011 — One phone app for every computer, talking to each directly</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman wants one iPhone app for several computers (another Mac, a Windows PC).</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Phone talks to each computer's server directly</td><td>No hub; a computer works even if another is off</td><td>Needs CORS on each server</td></tr>
+<tr><td>This Mac as a hub that relays to the others</td><td>One address</td><td>This Mac's userspace Tailscale can't open connections into the tailnet (D-004); everything stops if it's off</td></tr>
+<tr><td>One Home Screen icon per computer</td><td>No work</td><td>Switching icons; no combined list</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Direct. He picked "one app, all computers".</li>
+<li><strong>Reason:</strong> Simplest that works with D-004, and each computer stays independent.</li>
+<li><strong>Consequences / trade-offs:</strong> Each server allows requests only from pages on this tailnet (<code>*.tail8806f8.ts.net</code>, learned from <code>tailscale status</code>) or localhost; anything else gets 403. That also closes an older gap where any website open on the phone could POST to the server. Computers are found through <code>tailscale status</code> + <code>/api/whoami</code>, and remembered on the phone.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-012-projects-travel-by-github-claude-notes-by-sy"><summary><span>D-012 — Projects travel by GitHub, Claude notes by Syncthing</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Decision:</strong> Luqman picked "Both". Projects are git repos on GitHub (private unless already public); a chat starting in a project runs <code>git pull --ff-only</code> first when nothing is unsaved. <code>~/.claude/knowledge</code> is a Syncthing folder (<code>claude-knowledge</code>) shared between computers; setup scripts pair new ones through <code>/api/sync/pair</code>.</li>
+<li><strong>Reason:</strong> Git is the safe way to move code (history, no half-copied files); Syncthing suits a folder of notes that should just be the same everywhere. iCloud Drive was ruled out for code (evicts files, can damage <code>.git</code>).</li>
+<li><strong>Consequences / trade-offs:</strong> Work only reaches another computer once it's pushed — ask Claude to "save to GitHub" before switching. Editing the same notes on two computers at once can make Syncthing conflict files.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-013-windows-runs-claude-chat-inside-wsl-projects"><summary><span>D-013 — Windows runs claude-chat inside WSL, projects in the Windows folder</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> claude-chat needs tmux, which doesn't run on Windows itself.</li>
+<li><strong>Decision:</strong> Server, tmux and Claude Code run in WSL (Ubuntu); projects live in the normal Windows folder (<code>Desktop\project</code>, or <code>%USERPROFILE%\project</code> if the Desktop is in OneDrive), reached as <code>/mnt/c/...</code>. Luqman picked the Windows folder so Unreal, Blender and other Windows apps open the projects directly. A Task Scheduler task starts it at log-in; <code>tailscale serve</code> on Windows publishes it; "Open on PC" opens Windows Terminal.</li>
+<li><strong>Consequences / trade-offs:</strong> Claude is a bit slower on <code>/mnt/c</code> than on WSL's own disk. Git uses Linux line endings (<code>core.autocrlf input</code>).</li>
+<li><strong>Reversible?</strong> with difficulty</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-014-the-whole-claude-setup-travels-by-syncthing-"><summary><span>D-014 — The whole Claude setup travels by Syncthing, keys included, behind a pairing code</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active (extends D-012, which only synced the notes)</li>
+<li><strong>Context:</strong> Asked whether other computers should get his personal Claude setup, Luqman chose "everything, including keys" over "instructions and notes, no keys".</li>
+<li><strong>Decision:</strong> The Syncthing folder <code>claude-home</code> is <code>~/.claude</code>, cut down by <code>~/.claude/.stignore</code> to <code>CLAUDE.md</code>, <code>settings.json</code> (incl. the deny list that guards bypass mode), <code>.env</code>, <code>.freesound-token.json</code>, <code>skybrain/</code> (the <code>mem</code> tool and the SessionStart recall hook) and <code>knowledge/</code>. It replaced the notes-only folder <code>claude-knowledge</code>. A computer pairs only with a one-time 6-digit code made on the phone (⋯ → Computers → Add a computer; 30 minutes, one use; refused from non-phone tailnet devices). New computers put aside their own <code>CLAUDE.md</code>/<code>settings.json</code>/<code>.env</code> as <code>*.before-sync</code> so the main Mac's copies win.</li>
+<li><strong>Reason:</strong> The deny list and the memory tool should work the same everywhere; Syncthing is peer-to-peer and encrypted, and a code means a key-carrying pairing needs someone holding the phone.</li>
+<li><strong>Consequences / trade-offs:</strong> Every paired computer holds the keys. Editing settings on one computer changes them on all. Checked 2026-09-10: 117 files / 536 KB shared, no history or transcripts.</li>
+<li><strong>Reversible?</strong> easily — remove a device in Syncthing, or delete lines from <code>.stignore</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-015-claude-s-questions-are-answered-through-the-"><summary><span>D-015 — Claude's questions are answered through the permission hook, not by pressing keys</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Claude's multiple-choice questions (the <code>AskUserQuestion</code> tool) reached the phone as "Wants to run: Asked you a question" with Approve / Deny, neither of which answered them. Luqman had to go to the PC to answer, and asked for it to be fixed so he never has to.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Answer in the <code>PermissionRequest</code> hook: <code>allow</code> plus <code>updatedInput.answers</code></td><td>Exact; no screen reading; typed answers and multi-select just work</td><td>Relies on an input field Claude Code documents for the SDK, not for hooks</td></tr>
+<tr><td>Press keys in the Terminal's question menu through tmux</td><td>Uses what the screen view already does</td><td>Must read the menu off the screen; typed answers and multi-select are fiddly; breaks if the menu layout changes</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> The hook. Probed 2026-09-10 on Claude Code 2.1.267: the Terminal printed "User answered Claude's questions: · Which colour? → Blue" and "Allowed by PermissionRequest hook".</li>
+<li><strong>Consequences / trade-offs:</strong> New <code>POST /api/chats/:id/answer</code>. Answers are keyed by the question's words; several picks are joined with ", "; Skip is a deny with the message "Luqman skipped this question from his phone." The Terminal's own menu stays usable at the same time. The transcript line's <code>toolUseResult.answers</code> shows the answer as his message on the phone, wherever it was given.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-016-requests-are-checked-by-the-name-they-were-s"><summary><span>D-016 — Requests are checked by the name they were sent to, not by a login</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> The code review found two holes. GET requests carry no Origin header, so a malicious website open in a browser on the Mac or PC could use DNS rebinding (point its own name at 127.0.0.1) to read transcripts, Terminal screens and the live stream. And a server that started before Tailscale never learned the tailnet's name, so it accepted pages from any <code>*.ts.net</code> site — including strangers' public Funnel pages.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Allow-list the Host header: 127.0.0.1, localhost, names on this tailnet</td><td>Browsers can't fake Host; nothing for Luqman to type or manage</td><td>Reaching the server by any other name gets refused</td></tr>
+<tr><td>A login or token on every request</td><td>Strongest</td><td>A password to manage on a personal tool (02-planning: "no password to manage")</td></tr>
+<tr><td>Leave it, since only the tailnet can reach the server</td><td>Nothing to do</td><td>Doesn't cover a website open on the computer itself</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> The Host allow-list. Tailscale is now looked up on every call, so the tailnet name is learned as soon as Tailscale is up. Until then, only the page this computer served itself is let in (its Origin must match the request's Host), never another <code>*.ts.net</code> site.</li>
+<li><strong>Consequences / trade-offs:</strong> A new way of reaching the server (a raw 100.x address, a new name) gets 403 until it's added in <code>hostAllowed()</code>. Checked through the real tailscale serve on 2026-09-10: the page, a POST carrying the page's Origin, and the stream all pass; a page from another tailnet gets 403.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-017-the-screen-decides-finished-when-the-hooks-d"><summary><span>D-017 — The screen decides "finished" when the hooks don't</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> A chat's status comes from hooks (UserPromptSubmit → working, Stop → idle). When a hook goes missing — hooks broken on the PC by the <code>%20</code> path bug, or a server restart mid-turn — the phone said "typing…" forever.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Read Claude Code's footer: the ❯ prompt without "esc to interrupt" for 6 s = finished</td><td>Same signal already used to spot "working" after a restart; quick</td><td>Depends on Claude Code's footer wording</td></tr>
+<tr><td>A timeout: working for more than N minutes = finished</td><td>Simple</td><td>Wrong for long turns, and slow for short ones</td></tr>
+<tr><td>Look in the transcript for Claude's final reply</td><td>Exact when it's there</td><td>The transcript has no reliable "turn ended" marker</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> The footer, as a backstop to the hooks — they still set the status first. A chat waiting on an approval is left alone.</li>
+<li><strong>Consequences / trade-offs:</strong> Tested 2026-09-10 on Claude Code 2.1.267: a real turn with a 12 s command was never marked finished early, and a faked stuck "working" cleared in 6.5 s. If Claude Code changes the footer wording, chats would flip to "online" mid-turn (gotcha in <code>04-methods.md</code>).</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-018-notifications-through-apple-s-web-push-sent-"><summary><span>D-018 — Notifications through Apple's web push, sent with Node's own crypto, one key for all computers</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-10</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman picked push notifications: his iPhone should buzz when Claude finishes or needs him, even with the app closed. An iPhone allows web push only for a Home Screen app (iOS 16.4+), through Apple's push service, with the Web Push protocol: RFC 8291 encryption and RFC 8292 (VAPID) signing.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Write RFC 8291/8292 with <code>node:crypto</code> (<code>push.mjs</code>, ~100 lines)</td><td>Keeps D-005 (no packages); same app, nothing else to install</td><td>Our own crypto code to get right</td></tr>
+<tr><td>The <code>web-push</code> npm package</td><td>Well known</td><td>Breaks D-005; a dependency to keep up to date</td></tr>
+<tr><td>A separate notification service and app (ntfy, Pushover)</td><td>No crypto to write</td><td>Another app and account; notifications not from Claude Chats itself</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> <code>node:crypto</code>. Checked in the test against the reference library <code>http_ece</code> (installed only in scratch space), and every test notification was decrypted and its signature verified.</li>
+<li><strong>Consequences / trade-offs:</strong> The phone subscribes with one VAPID public key, so every computer must sign with the same private key. It is <code>CLAUDE_CHAT_VAPID_PUBLIC</code> / <code>CLAUDE_CHAT_VAPID_PRIVATE</code> in <code>~/.claude/.env</code>, made on first use by the computer the phone asks, and copied to the others by Syncthing (D-014). No notification goes out while the app is open in front of him: the page says so every 20 s, and when it leaves. A turn started at a computer's Terminal also notifies. If the key is ever remade, the phone has to turn notifications off and on again.</li>
+<li><strong>Reversible?</strong> easily — ⋯ → Notifications → off; the server code is separate in <code>push.mjs</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-019-a-command-s-answer-is-read-off-the-terminal-"><summary><span>D-019 — A command's answer is read off the Terminal screen</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman wanted to tap Claude Code's own commands from the phone. A probe on a test server showed they already run when sent — but <code>/usage</code>, <code>/status</code> and <code>/model</code> write nothing to the transcript, because Claude Code draws their answers inside the Terminal. So the chat stayed empty, and <code>/model</code>'s menu also needed keys the phone's screen view didn't have (it stopped at 4; the menu has six choices).</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Read the screen after the command and show it as a card in the chat</td><td>The answer is in the conversation, and stays there to scroll back to</td><td>Has to work out what part of the screen is new, and strip the Terminal's furniture</td></tr>
+<tr><td>Just open the screen view for every command</td><td>Nothing to work out; exactly what the computer shows</td><td>Nothing is kept in the chat, and it's a wall of Terminal for a simple answer</td></tr>
+<tr><td>Only send the command, show nothing</td><td>Simplest</td><td>The same as today: you tap and nothing happens</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> The card. <code>runCommand()</code> captures the screen before and after, keeps what changed, drops the input box, the logo, the drawn rules and the panel's left margin, and pushes it as a <code>role: "command"</code> message. A panel that only shows something is closed with Esc so the chat stays usable; one that asks you to pick (it says "Enter to…", or shows a <code>❯ 1.</code> list) is left open and the phone opens the screen view, whose number keys now run 1–9.</li>
+<li><strong>Consequences / trade-offs:</strong> The card is a snapshot, not live — a panel that keeps changing is only caught once. Long lines scroll sideways inside the card rather than wrapping, so columns stay lined up. If Claude Code redraws its panels differently one day, the cards get noisier but nothing breaks.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-020-the-look-follows-a-reference-video-dark-ambe"><summary><span>D-020 — The look follows a reference video: dark amber glass, with Home and a tab bar</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman wanted every feature kept and the whole look changed, pointing at a design he liked: a dark "smart messenger" in orange and amber. The app had been dressed as WhatsApp since 2026-09-10 (D-007).</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Follow the reference fully: its colours <strong>and</strong> its shape (a Home screen and a floating tab bar)</td><td>Looks like the thing he picked; Home gives a place for "what's running" at a glance</td><td>A new screen to design, and two sheets become screens</td></tr>
+<tr><td>Only restyle what exists</td><td>Least work, no new surfaces</td><td>Half the reference is its arrangement; it would not look like it</td></tr>
+<tr><td>Keep WhatsApp's look</td><td>Familiar</td><td>Not what he asked for</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Follow it fully, and keep a light theme as well — dark is the real design, light is the same shapes in warm cream for daytime. The glow behind everything is painted once, not animated (his choice).</li>
+<li><strong>Consequences / trade-offs:</strong> <code>public/style.css</code> and <code>public/index.html</code> were rewritten and <code>app.js</code> gained Home rendering and tab routing; every element id was kept, which is why all 121 checks passed unchanged. The ⋯ menu and the computers sheet no longer exist — those rows live on the Settings and Computers screens. The reference's 3D mascot and photographic light streaks were not copied: the streaks are soft CSS gradients, and there is no onboarding screen to put a mascot on. Said so before building rather than approximating silently.</li>
+<li><strong>Reversible?</strong> yes — the appearance is one stylesheet plus the layout file; PR #10 is the last WhatsApp- looking commit if he ever wants it back</li>
+</ul>
+<h4 id="decisions-the-colours-added-2026-09-11-pr-12">The colours (added 2026-09-11, PR #12)</h4>
+<p>Luqman then saved a palette and asked the app to follow it: <code>#000000</code> black, <code>#562b35</code> deep maroon, <code>#ff9810</code> orange, <code>#fd975c</code> coral, <code>#24a7a1</code> teal. They are used by role, and that mapping is the thing to keep if anything is restyled again:</p>
+<div class="table"><table><thead><tr><th>Colour</th><th>Where it goes</th></tr></thead><tbody>
+<tr><td>black <code>#000000</code></td><td>the canvas behind everything</td></tr>
+<tr><td>maroon <code>#562b35</code></td><td>cards, rows, fields, sheets, the floating bar, and his own message bubbles</td></tr>
+<tr><td>orange <code>#ff9810</code></td><td>anything tappable — buttons, active tab, unread badges, Approve, send — and attention states</td></tr>
+<tr><td>coral <code>#fd975c</code></td><td>links, quote bars, the swipe-to-reply arrow, search marks, and text where orange is unreadable</td></tr>
+<tr><td>teal <code>#24a7a1</code></td><td>living things: online dots, read ticks, "typing…", the listening ring on a call</td></tr>
+</tbody></table></div>
+<p>Two values are derived rather than given, because the palette has no light neutral: <code>#fff5ef</code> as the light background and <code>#c96a09</code> / <code>#2a1319</code> for text in light mode. Avatars use only the three bright colours — maroon avatars disappear against the maroon cards.</p>
+</div></details>
+<details class="fold" id="decisions-d-021-archived-is-kept-on-the-computer-and-means-l"><summary><span>D-021 — Archived is kept on the computer, and means "leave me alone"</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman had too many chats in the list and asked for archive as well as delete. Pins, the closest thing already built, are kept on the phone in its own storage.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Keep <code>archived</code> on the chat itself, in <code>chats.json</code></td><td>Holds on any phone, survives clearing the app's data, and lets the computer skip notifications for it</td><td>A flag the server has to carry, and it's on the computer that owns the chat</td></tr>
+<tr><td>Keep it on the phone, like pins</td><td>Nothing to change on the server</td><td>Lost when the app's data is cleared, doesn't follow him to another phone, and the computer would still notify</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> On the computer. He chose it when asked, and it's what makes the second half work: <code>notify()</code> skips an archived chat, so archiving is genuinely "stop bothering me" rather than only hiding a row.</li>
+<li><strong>Consequences / trade-offs:</strong> Pins and archive now live in different places — pins on the phone, archive on the computer. That is deliberate: a pin is about how <em>this</em> phone sorts a list, archiving is about whether a chat should reach him at all. Archived chats still run, still record everything, and still show their replies the moment they're opened; they simply stay out of the list, out of Home, out of the unread count and out of notifications until unarchived.</li>
+<li><strong>Reversible?</strong> easily — the flag is one field, and unarchiving is the same call with <code>false</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-022-files-reach-the-phone-by-token-and-claude-is"><summary><span>D-022 — Files reach the phone by token, and Claude is told how to send them</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Photos went phone → Claude only. Luqman is a 3D artist: the useful direction is Claude → phone, so a render or a screenshot can be looked at while he's away from the Mac.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>A route that serves any path the phone asks for</td><td>Trivial</td><td>Hands anything on the computer to whoever can reach the app</td></tr>
+<tr><td>Only files this chat has pointed at, each behind a token</td><td>Nothing else is reachable; no path traversal to get wrong</td><td>The chat has to point at a file first</td></tr>
+<tr><td>Watch a folder for new files</td><td>No pointing needed</td><td>Noisy, and guesses at what he wants to see</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Tokens. A file becomes fetchable when <code>cchat send &lt;file&gt;</code> names it, or when Claude writes its path in a reply; each gets a sha1-derived token that only that chat knows. Unknown tokens 404, folders are refused, 60 MB cap. Claude learns about <code>cchat send</code> through <code>--append-system-prompt</code> on every chat, so no new habit is needed — asking for the render is enough.</li>
+<li><strong>Consequences / trade-offs:</strong> Paths in replies are matched loosely (absolute, <code>~/…</code>, or relative to the chat's folder) but only count when the file really exists and is a picture, clip or document, so ordinary words that look like paths are ignored. A first version matched absolute paths only, which a real reply promptly dodged by abbreviating.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-023-the-memory-gauge-is-read-from-the-transcript"><summary><span>D-023 — The memory gauge is read from the transcript, not the screen</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> His <code>/usage</code> showed 86% of the weekly limit going on sessions over 150k context. To act on that he needs to see how full a chat is <em>while he's in it</em>.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Read <code>message.usage</code> out of the transcript Claude Code already writes</td><td>Exact, free, updates with every answer</td><td>Needs a limit to compare against (200k, hardcoded, overridable)</td></tr>
+<tr><td>Run <code>/context</code> on a timer and read the panel off the screen</td><td>Uses what the app can already do</td><td>A command every few minutes, and it depends on how the panel is drawn</td></tr>
+<tr><td>Count the characters in the conversation ourselves</td><td>No dependency</td><td>A guess, and wrong as soon as files or tools are involved</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> The transcript. <code>input_tokens</code> plus the cached parts is the size of the prompt Claude just answered, which is what "full" means. Shown only past 50%, so an ordinary chat stays uncluttered.</li>
+<li><strong>Consequences / trade-offs:</strong> The gauge only moves when Claude answers — it doesn't creep up mid-turn, and right after a compact it stays stale until the next answer. <code>CLAUDE_CHAT_CONTEXT_LIMIT</code> overrides the 200k if a model ever differs.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-024-a-second-claude-account-is-a-token-not-a-sec"><summary><span>D-024 — A second Claude account is a token, not a second login</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman has two Claude accounts — <code>luqmanhakeem@todak.com</code> (Pro) signed in on the Mac and <code>academy@todak.com</code> (Max 20×) signed in on the Windows PC. On 2026-09-11 his Max account hit its weekly limit and he wanted to move to Pro from the phone: <em>"i cannot change from max to pro in my phone"</em>. Claude Code signs in once per computer and keeps the login in the macOS Keychain, under one fixed service name, so there is nothing on the phone that can change it.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>A long-lived token per account (<code>claude setup-token</code>), given to a chat as <code>CLAUDE_CODE_OAUTH_TOKEN</code></td><td>Both accounts usable at once, nothing is logged out, per-chat</td><td>Adding one needs an OAuth round trip; the token lasts a year and then needs redoing</td></tr>
+<tr><td>Drive <code>/login</code> in the TUI from the phone each time</td><td>No token to store</td><td>Changes the whole computer, one account at a time, and is a full sign-in every switch</td></tr>
+<tr><td>A separate <code>CLAUDE_CONFIG_DIR</code> per account</td><td>Each dir keeps its own profile, so the plan is known for free</td><td>macOS keeps credentials in the Keychain under one service name, so two dirs still share one login — and transcripts would move out from under the app</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Tokens. <code>CLAUDE_CODE_OAUTH_TOKEN</code> beats the Keychain login (checked: a deliberately invalid one gives <code>401 OAuth access token is invalid</code> instead of falling back), so a chat started with it runs as that account while every other chat carries on as before. A chat records the account it started with and keeps it when resumed.</li>
+<li><strong>Where things live:</strong> the tokens go in <code>~/.claude/.env</code> as <code>CLAUDE_CHAT_ACCOUNT_&lt;SLUG&gt;_TOKEN</code>, with <code>_LABEL</code>, <code>_PLAN</code> and <code>_EMAIL</code> beside them — the same file as every other key, and the one Syncthing already shares, so an account added on one computer is there on the other. Only <em>which</em> account a computer starts new chats with is local, in <code>data/accounts.json</code>.</li>
+<li><strong>Consequences / trade-offs:</strong> Adding an account is an OAuth flow, so the phone runs <code>claude setup-token</code> in tmux, shows the claude.com link, and takes the code back — the one part that could not be made a single tap. A <code>setup-token</code> token is issued with <code>scope=user:inference</code> only, so it may not be allowed to read the profile; the label and plan typed on the phone stand unless the profile call succeeds.</li>
+<li><strong>Reversible?</strong> easily — remove the four lines from <code>.env</code> and the computer falls back to its own login.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-025-the-iphone-status-bar-is-opaque-not-see-thro"><summary><span>D-025 — The iPhone status bar is opaque, not see-through</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> His screenshot showed the greeting hidden under the Dynamic Island and a tall black band under the floating tab bar: <em>"there is a gap at the bottom, fix that, i dont want gap that big."</em> Measuring the screenshot pinned it down — the tab bar's bottom edge was at 763.6pt of an 874pt screen, exactly <code>778 − 14</code>, so the page had been given a 778pt viewport (874 minus the 62pt notch and the 34pt home indicator) while still being drawn from y=0, with every <code>env(safe-area-inset-*)</code> reporting 0.</li>
+<li><strong>Decision:</strong> <code>apple-mobile-web-app-status-bar-style: black</code> instead of <code>black-translucent</code>, and <code>viewport-fit=cover</code> dropped with it. iOS then lays the page out where it draws it, and the 96pt that had nowhere to go disappears. Nothing inside the page can paint below its own viewport, so no amount of CSS could have covered that band — the meta tag was the only lever.</li>
+<li><strong>Consequences / trade-offs:</strong> The warm glow no longer runs up under the status bar; the strip above the app is plain black, which matches <code>--bg</code> in dark mode and reads as a dark header in light mode. An already-installed Home Screen app may need to be removed and re-added for iOS to notice the new style.</li>
+<li><strong>Reversible?</strong> easily, but the gap comes back with it.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-026-chats-save-knowledge-to-sky-ai-brain-only-cl"><summary><span>D-026 — Chats save knowledge to Sky AI Brain only; Claude Code's auto memory is off</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Luqman asked that knowledge from app chats go to Supabase (Sky AI Brain), not Claude Code's built-in memory. He raised it because some chats showed "Claude's memory 100% full" — which is actually the context gauge from D-023 (how long that one chat is), not saved memory. The built-in memory held 15 small notes (~30 KB), one of them in <code>~/Desktop/project</code>, already duplicated in Sky AI Brain as #78.</li>
+<li><strong>Decision:</strong> <code>startClaude()</code> sets <code>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1</code> in each chat's tmux session, and <code>PHONE_NOTE</code> tells Claude to save with <code>mem remember</code> instead. The duplicate note was moved to <code>builtin-memory-archive/</code> in this folder.</li>
+<li><strong>Reason:</strong> One place for his knowledge. Scoped to the app, as asked — plain <code>claude</code> in a Terminal is untouched.</li>
+<li><strong>Consequences / trade-offs:</strong> Only new and resumed chats pick it up. Verified 2026-09-11: a test chat's <code>/memory</code> screen read "Auto-memory: off". The context gauge is unaffected — a long chat still fills it.</li>
+<li><strong>Reversible?</strong> easily — remove the env line in <code>startClaude()</code></li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-027-each-computer-s-link-is-its-own-app-settings"><summary><span>D-027 — Each computer's link is its own app; Settings switches between them</span></summary><div>
+<ul>
+<li><strong>Amended 2026-09-12 (PR #31):</strong> only in Safari. With both apps on the Home Screen, tapping another computer switches the account screen in place instead — iOS cannot open one Home Screen app from another.</li>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active (adds to D-011, which still gives one list of every computer's chats on any link)</li>
+<li><strong>Context:</strong> Luqman wanted switching computer to take him to that computer's own link — e.g. on the Mac's link, pressing Windows goes to <a href="https://desktop-k2m7l30.tail8806f8.ts.net">https://desktop-k2m7l30.tail8806f8.ts.net</a>.</li>
+<li><strong>Options picked (2026-09-11):</strong> only the computer buttons on the account screen (Settings → face) switch link — New chat, Home and the Computers tab stay as they were; one Home Screen icon per computer; pins and unread counters made the same on both links.</li>
+<li><strong>Decision:</strong> Tapping another computer there goes to <code>&lt;its base&gt;/?from=&lt;name&gt;#settings</code>. The page it lands on tidies the address (<code>history.replaceState</code>) and, the first time outside the Home Screen app, shows a tip to add it as its own icon. Each server names its page <code>Claude Mac</code> / <code>Claude PC</code> (apple title + manifest, substituted in <code>serveStatic</code>) so the icons can be told apart. Pins (<code>c.pinnedAt</code>) and read marks (<code>c.seen</code>) move from each link's localStorage onto the chat's computer (PATCH; <code>seen</code> only goes up and never past <code>count</code>, reset on a resume); old local copies are moved over once, then forgotten.</li>
+<li><strong>Reason:</strong> localStorage and notification permission belong to one link, so two links would otherwise show different pins and counters. A Home Screen web app can't jump to another link inside itself — iOS opens it in a sheet on top — hence one icon each.</li>
+<li><strong>Consequences / trade-offs:</strong> Drafts, the reply-sound setting and notifications stay per link (allow notifications once on each). A chat on a computer that's off can't be pinned until it's back.</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-027-other-people-install-a-first-computer-straig"><summary><span>D-027 — Other people install a first computer straight from GitHub; the repo goes public</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active — public since 2026-09-11, after Luqman's final yes</li>
+<li><strong>Context:</strong> Luqman asked whether the app was ready for other people and, told it wasn't, said "do it". Before: the only way in was a script downloaded from his main Mac, so a Windows-only person had no way in at all, and the repo was private.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Public repo, one-line setup from raw.githubusercontent.com</td><td>One line to paste, Mac or Windows</td><td>Anyone can read the code and its history</td></tr>
+<tr><td>Private, invite each person</td><td>Code stays private</td><td>They need a GitHub account and a sign-in before the setup can even be downloaded</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Public (Luqman picked it). <code>setup/mac.sh</code> and <code>setup/windows.ps1</code> know they came straight from GitHub because the <code>__HOME_URL__</code> placeholder is still unfilled — checked by the value's <em>shape</em> (<code>https://*</code>), since <code>server.mjs</code> replaces every copy of the placeholder, including one in a comparison. A first computer clones claude-chat itself, skips GitHub sign-in and pairing, and prints its tailnet address. <code>wsl.sh</code> takes a 5th argument <code>first|join</code> (defaults to <code>join</code>, so the old PowerShell still works). The first computer paired with creates the <code>claude-home</code> Syncthing folder and <code>.stignore</code> itself (<code>pairSync</code>).</li>
+<li><strong>Reason:</strong> Symmetric: any Mac or PC can be the first computer, and "Add a computer" works from any of them.</li>
+<li><strong>Consequences / trade-offs:</strong> History checked before going public: no real keys (only <code>sk-ant-oat01-pretend</code> test tokens); it does show academy@todak.com on 21 commits, the tailnet name and DESKTOP-K2M7L30. <code>/setup/*</code> now answers 503 until the computer knows its Tailscale address, instead of handing out a script that would have fallen into first-computer mode. <code>windows.ps1</code> has only been read, not run, since the change.</li>
+<li><strong>Reversible?</strong> the code, easily; going public, not really — copies can't be recalled</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-028-chats-follow-the-computer-s-own-settings-not"><summary><span>D-028 — Chats follow the computer's own settings, not Luqman's</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-11</li>
+<li><strong>Status:</strong> active (refines D-006 and D-026 — behaviour on Luqman's computers is unchanged)</li>
+<li><strong>Context:</strong> D-006 hard-coded <code>bypassPermissions</code> and D-026 hard-coded Sky AI Brain. On someone else's computer that meant no permission checks with no deny list, and a <code>mem</code> tool that isn't there, so nothing remembered.</li>
+<li><strong>Decision:</strong> <code>--permission-mode</code> = <code>permissions.defaultMode</code> from that computer's <code>~/.claude/settings.json</code>, or <code>acceptEdits</code> when unset or unreadable (D-003's phone default). <code>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1</code> and the <code>mem remember</code> note only when <code>~/.local/bin/mem</code> exists. Both read at every chat start.</li>
+<li><strong>Reason:</strong> Luqman's settings.json says <code>bypassPermissions</code> and his computers have <code>mem</code>, so nothing changes for him; a fresh install gets the safe defaults with no setting to find. One place to change: the same setting plain <code>claude</code> uses.</li>
+<li><strong>Consequences / trade-offs:</strong> If Luqman ever removed <code>defaultMode</code> from his settings, phone chats would start asking about commands. Messages to Claude now say "The user denied/skipped…" instead of "Luqman…".</li>
+<li><strong>Reversible?</strong> easily</li>
+</ul>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 5 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-project-links">Project links</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>URL</th></tr></thead><tbody>
+<tr><td>Repo</td><td></td></tr>
+<tr><td>Production</td><td></td></tr>
+<tr><td>Staging</td><td></td></tr>
+<tr><td>Dashboard / analytics</td><td></td></tr>
+<tr><td>Design (Figma etc.)</td><td></td></tr>
+<tr><td>Board / issue tracker</td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-external-documentation">External documentation</h3>
+<div class="table"><table><thead><tr><th>Topic</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-credentials">Credentials</h3>
+<blockquote>⚠️ <strong>Never write key values here.</strong> Env var names only. The real values are stored in <code>~/.claude/.env</code> (chmod 600).</blockquote>
+<div class="table"><table><thead><tr><th>Env var name</th><th>Used for</th><th>Where to get it</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-references-inspiration">References &amp; inspiration</h3>
+<h3 id="references-reading-notes">Reading notes</h3></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 5 sessions <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-14"><summary><span>2026-09-14</span></summary><div><h3 id="log-2026-09-14-what-was-done">What was done</h3>
+<ul>
+<li>PR #33 (merged): fixed a bug that PR #32 introduced when adding a computer. With subject folders, the project list names claude-chat <code>ai/claude-chat</code>:</li>
+<ul>
+<li>on a Mac, setup cloned a second copy there;</li>
+<li>on a Windows PC, setup cloned it only there, then failed to start it from <code>Desktop/project/claude-chat</code>. <code>setup/mac.sh</code> and <code>setup/wsl.sh</code> now always put claude-chat at <code>Desktop/project/claude-chat</code>. Other projects keep their subject folders.</li>
+</ul>
+<li><code>dev/checks/files.mjs</code> works out where claude-chat really is, instead of hard-coding <code>Desktop/project/claude-chat</code>. The old path would have created a stray folder on the Desktop.</li>
+<li>README: log and update paths, and a line about subject folders.</li>
+<li>Checks: setup 41/41 (3 new), quick suites 192/192, files 22/22.</li>
+</ul>
+<h3 id="log-2026-09-14-what-was-learned">What was learned</h3>
+<ul>
+<li>A change to what <code>/api/projects</code> returns also changes what the setup scripts clone on a new computer. Check <code>setup/</code> whenever project names change shape.</li>
+</ul></div></details><details class="fold" id="log-2026-09-13"><summary><span>2026-09-13</span></summary><div><h3 id="log-2026-09-13-what-was-done">What was done</h3>
+<ul>
+<li>Luqman's project folder was arranged into subject folders (<code>game/</code>, <code>3d/</code>, <code>ai/</code>, <code>web/</code>). claude-chat now lives at <code>~/Desktop/project/ai/claude-chat</code>.</li>
+<li>PR #32 (merged): New chat opens subject folders and lists their projects as <code>game/referee-for-fun</code>. <code>projectDir()</code> only accepts names the list shows. <code>cchat</code> picks <code>subject/project</code> from inside a nested project. Flat project folders work as before.</li>
+<li>New quick suite <code>dev/checks/projects.mjs</code>, 15/15. All quick suites 189/189.</li>
+<li>LaunchAgent plist paths updated and the server restarted. The running "Developer" chat was resumed so its <code>--settings</code> hooks point at the new <code>hook.mjs</code> path.</li>
+</ul>
+<h3 id="log-2026-09-13-decisions-made">Decisions made</h3>
+<ul>
+<li>A <strong>subject folder</strong> is one with no <code>.git</code> that holds only folders (hidden files ignored). An empty folder counts as a new project, not a subject.</li>
+</ul>
+<h3 id="log-2026-09-13-what-was-learned">What was learned</h3>
+<ul>
+<li>A chat started before a move keeps the old absolute hook path in its running <code>claude</code> process. Resume it after moving claude-chat, or its phone status and approvals go quiet.</li>
+</ul>
+<h3 id="log-2026-09-13-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> Check the New chat list on the iPhone shows <code>game/…</code>, <code>3d/…</code> and so on</li>
+</ul></div></details><details class="fold" id="log-2026-09-12"><summary><span>2026-09-12</span></summary><div><h3 id="log-2026-09-12-the-usage-card-had-no-meter-branch-feat-usage">The /usage card had no meter (branch <code>feat/usage-meter</code>)</h3>
+<ul>
+<li>Luqman sent a photo of a <code>/usage</code> card: headings ("Current session", "Current week") but no bars and no percentage, and asked to keep the card as it is and add a meter he can read at a glance.</li>
+<li>Cause: <code>newOnScreen</code>'s <code>LOGO_LINE = /^\s*[▝▘▗▖▛▜▙▟█]/</code> (there to drop the Claude Code logo) also matched Claude Code's meter lines, which start with block characters: <code>   ███████████████████████████████████████████████▌   95% used</code>. Nothing with a number survived.</li>
+<li>Fix: <code>METER_LINE = /^\s*([█▉▊▋▌▍▎▏▓▒░]{3,})\s+(\d{1,3})%(.*)$/</code> is spared from both filters, and <code>metersFrom()</code> reads each one into <code>{ label, percent, note }</code> — label from the line above, note from a "Resets …" line below — carried on the card message as <code>meters</code>. The phone draws them as bars above the text (<code>meterHtml</code>), teal → orange past 60% → red past 85%, matching the "chat is X% full" gauge.</li>
+<li>Captured the panel while open to get the exact characters (send <code>/usage</code> with <code>send</code>, wait, capture the pane, Esc): <code>runCommand</code> closes the panel before its own capture, so a normal probe shows nothing.</li>
+<li>Traps hit while doing it: <code>cat &gt;&gt; file</code> with no heredoc waits on stdin and hangs a background command; a fresh worktree has no <code>dev/checks/.work</code>, so redirecting output there fails before anything runs.</li>
+</ul>
+<h3 id="log-2026-09-12-messages-wait-for-a-computer-that-s-off-pr-30">Messages wait for a computer that's off (PR #30, <code>e1a4113</code>)</h3>
+<ul>
+<li>Luqman picked this from the open ideas. Sending to a computer that's asleep used to just fail with a toast.</li>
+<li>The phone keeps them: <code>queued</code> in localStorage (chat key → [{id, text, at}]), shown under the conversation in <code>#waiting</code> as greyed-out bubbles with a clock (<code>ICON.clock</code>) instead of ticks; the chat list row says "Waiting to send" / "N messages waiting to send"; tapping one asks, then throws it away.</li>
+<li><code>sendMessage</code> queues when <code>!compOf(c).online</code>, and also when the POST fails with a reachability error (<code>offlineError()</code> — TypeError / "Failed to fetch" / "Load failed" / timeout), which also marks the computer offline. A real refusal (chat deleted, waiting for your OK) still throws as before.</li>
+<li><code>flushQueue(comp)</code> runs from the live stream's <code>onopen</code> after <code>refreshComputer</code>, sends oldest first, drops anything the computer refuses (with a toast), and stops for later on a reachability error. <code>send()</code> says "&lt;computer&gt; is off — it'll go when it's back" when a message is held.</li>
+<li>Quoting a swipe-to-reply is resolved before queueing, so the quote survives the wait. Photos are not queued: the picture has to be stored on the computer.</li>
+<li>Checks: five new ones in <code>fixes</code> (queue while off, kept on the phone so closing the app is safe, list count, throw one away, and it really arrives — polling the computer's messages afterwards). 55/55; 333/339 overall.</li>
+<li><strong>Unrelated flake seen once:</strong> the <code>commands</code> suite failed 6 checks when tmux printed "focus-events off · add 'set -g focus-events on' to ~/.tmux.conf" over the screen — <code>runCommand</code> waits a fixed 1.5 s, read that instead of the <code>/usage</code> panel, and every later card was one screen behind (<code>/status</code> showed the usage text). Re-running the same suite on the same code passed 35/35. Worth making <code>runCommand</code> wait for the panel rather than a fixed delay.</li>
+<li>Trap (hit twice): inside a JS template literal in a check, <code>\s</code> collapses to <code>s</code>, so a tidy-up regex silently became <code>/s+/g</code> and deleted every "s" from the text it compared. It must be written <code>\\s</code>.</li>
+</ul>
+<h3 id="log-2026-09-12-switching-computer-happens-inside-the-app-pr-">Switching computer happens inside the app (PR #31, <code>c29f564</code>)</h3>
+<ul>
+<li>Luqman has both apps on his Home Screen (Claude Mac, Claude PC) and said switching must not open a website. iOS gives a Home Screen web app no way to open another one — an out-of-scope link opens the in-app browser — so the link-switching from PR #28/D-027 was wrong for him.</li>
+<li>Now: <code>inHomeScreenApp()</code> (one function, so checks can pretend either way). In the app, tapping another computer sets <code>accountOn</code> and reloads the account screen in place; in Safari it still opens that computer's link with the icon tip. <code>route()</code> no longer resets <code>accountOn</code> to this computer each time Settings opens — it keeps the chosen one and only falls back when that computer goes offline. The note under the account list now says "tap another one to change it here".</li>
+<li>links suite covers both paths (switch in place, stays put across tabs, comes back, and the Safari jump): 34/34; 343/343 overall. Both computers on <code>c29f564</code>, page version <code>c6faf49c1ea9</code>.</li>
+<li>Trap, twice in a row: a <code>rep(...)</code> call ending with <code>"""))</code> or a stray <code>)</code> on its own line makes the whole python edit script fail before writing anything — the suite then re-runs unchanged code and the same failures look like a real bug. Check the script wrote something ("edited …") before believing a re-run.</li>
+</ul></div></details><details class="fold" id="log-2026-09-11"><summary><span>2026-09-11</span></summary><div><h3 id="log-2026-09-11-what-was-done">What was done</h3>
+<ul>
+<li>Luqman: <em>"make the app so it can type command '/usage' for example. or even better, put an entire section just for command so i just click whatever command that i want"</em>.</li>
+<li><strong>Probed before building</strong> (test server, Haiku): a slash command pasted from the phone does run — but its answer is drawn inside the Terminal and <strong>nothing about it reaches the transcript</strong>, so the chat showed nothing at all (checked on Claude Code 2.1.268 with <code>/usage</code>, <code>/status</code> and <code>/model</code>). <code>/model</code> opens a six-choice menu, and the screen view only offered keys 1–4.</li>
+<li>He picked, from options: the answer as a <strong>card in the chat</strong>; <strong>favourites + search</strong>; risky ones <strong>confirm first</strong>; the button in the <strong>chat's top bar</strong>.</li>
+<li>Built on <code>feat/commands</code> in a worktree, merged as PR #10 (<code>078abe5</code>):</li>
+<ul>
+<li>⌘ button in a chat's top bar → Commands sheet: 14 favourites with plain-English descriptions, ~40 more through the search box, and "Send /whatever anyway" for anything not listed.</li>
+<li><code>POST /api/chats/:id/command</code> sends it, reads what the screen gained (skipping the unchanged conversation above, the input box, Claude Code's logo, its rules and the panel's left margin) and puts it in the chat as a card (<code>role: "command"</code>, D-019).</li>
+<li>Panels that only show something are closed with Esc afterwards, so the chat stays usable; ones that ask you to pick stay open and the phone opens the screen view. Screen keys now run 1–9.</li>
+<li><code>/clear</code>, <code>/rewind</code>, <code>/exit</code>, <code>/quit</code>, <code>/logout</code>, <code>/batch</code>, <code>/loop</code>, <code>/background</code> confirm first.</li>
+<li><code>GET /api/commands</code> lists commands he has written himself (<code>~/.claude/commands</code>, and the chat's project).</li>
+</ul>
+<li><strong>Found and fixed on the way:</strong> <code>save()</code> waits 200 ms, so a change made just before the server stopped was lost — a chat ended right before a restart came back afterwards. Pending saves are now written out on exit (SIGTERM/SIGINT/SIGHUP), with a check for it. Six stale test chats in the test data were the clue.</li>
+<li>Deployed: Mac restarted and checked through Tailscale (page, <code>/api/commands</code>, a command on a missing chat); PC updated by a helper chat, which was then deleted. Both on page version <code>78fbf1c88310</code>.</li>
+</ul>
+<h3 id="log-2026-09-11-decisions-made">Decisions made</h3>
+<ul>
+<li>D-019 — a command's answer is read off the Terminal screen, because it never reaches the transcript.</li>
+</ul>
+<h3 id="log-2026-09-11-stuck-on-problems">Stuck on / problems</h3>
+<ul>
+<li>None. 121 checks pass: 31 new, plus the 43 from PR #9 and the 47 from PR #8, all against this version.</li>
+</ul>
+<h3 id="log-2026-09-11-what-was-learned">What was learned</h3>
+<ul>
+<li>The command inventory from the claude-code-guide agent said <code>/usage</code> and <code>/status</code> print into the conversation. The live probe proved they don't. Trust the probe over the description.</li>
+<li><code>/usage</code> on 2026-09-11 says 86% of usage came from sessions over 150k context, and the weekly limit resets on 13 September (with a +50% promo until then). The account shows as Claude Pro.</li>
+</ul>
+<h3 id="log-2026-09-11-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> Try the ⌘ button on the iPhone, and turn on notifications from the Home Screen app (still pending from PR #9)</li>
+<li><span class="box">to do</span> Ideas offered on 2026-09-11, not picked yet: messages that wait for an offline computer; Claude sending files and renders back to the phone; a "what changed today" view with Undo; picking the model per chat from the list; archiving old chats; keeping the test scripts in the repo; a walkthrough of how the app works</li>
+<li><span class="box">to do</span> Housekeeping still outstanding: keep the Mac plugged in, turn off automatic macOS updates, disable Tailscale key expiry for <code>luqman-mac</code> (drops off 2027-03-09), run the setup on the second Mac</li>
+</ul>
+<h3 id="log-2026-09-11-later-the-whole-look-rebuilt-pr-11">Later — the whole look rebuilt (PR #11)</h3>
+<ul>
+<li>Luqman: <em>"keep all the feature, change the overall UI"</em>, with a Dribbble link as the reference, and <em>"if u cannot do like the reference, dont do it, i search other reference for u."</em></li>
+<li><strong>Dribbble can't be read</strong> — <code>curl</code> gets 202 and no body, WebFetch nothing, oEmbed 404, a text proxy hits "Human Verification". Said so plainly and asked for the image another way (memory saved).</li>
+<li>He saved a <strong>reference video</strong> in <code>dev/ref/</code> instead. No ffmpeg on this Mac, so the frames were pulled out with headless Chrome: serve the file, seek a <code>&lt;video&gt;</code>, draw each moment into a canvas (<code>frames.mjs</code>). The design: a dark "smart messenger" in orange and amber — near-black with warm light ribbons, translucent cards, pill search and filter chips, a floating glass tab bar, bubbles with the time tucked inside.</li>
+<li>He picked: follow it fully (tab bar <strong>and</strong> a Home screen), keep a light theme too, still glow not moving.</li>
+<li>Built on <code>feat/amber-ui</code>: <code>style.css</code> and <code>index.html</code> rewritten, <code>app.js</code> gained Home and tab routing. Home has a greeting, a box that turns what you type into the first message of a new chat, a date card (working / waiting / unread), "Happening now" cards and the computers with online dots. Computers and Settings became screens, so the ⋯ menu and the computers sheet are gone — every element id was kept, so every feature stayed wired up. Avatars are warm amber now instead of teal (D-020).</li>
+<li>Tested: <strong>121 checks</strong> (31 + 43 + 47) re-run against the redesign, all passing, plus screenshots of every screen in both themes; six visual fixes after the first pass (wrapping greeting, the date card's sun over its own text, "Chat info"/"Done" colliding, a half-width button, the swipe label peeking out, and a conversation's top being brighter than the reference).</li>
+<li>Deployed: PR #11 merged (<code>00dc63a</code>), Mac restarted and checked through Tailscale, PC updated by a helper chat. Both on page version <code>bf1c474f45d9</code>. Screenshots left in <code>dev/ref/screens/</code> (that folder is now git-ignored, so his video and these stay out of the repo).</li>
+</ul>
+<h3 id="log-2026-09-11-later-the-colours-come-from-his-palette-pr-12">Later — the colours come from his palette (PR #12)</h3>
+<ul>
+<li>He saved a palette screenshot in <code>dev/ref/</code>: <strong>#000000</strong> black, <strong>#562b35</strong> deep maroon, <strong>#ff9810</strong> orange, <strong>#fd975c</strong> coral, <strong>#24a7a1</strong> teal (it took two tries to find — the first look was before he saved it; a <code>find</code> over the home folder, then a second look at <code>dev/ref</code>, turned it up).</li>
+<li>Applied by role: black is the canvas; maroon the cards, rows, sheets and his own bubbles; orange everything tappable (buttons, active tab, unread badges, Approve); coral the softer accents (links, quote bars, the swipe arrow, search marks, and text where orange is hard to read); teal the living things (online dots, read ticks, "typing…", the listening ring). The top wash runs orange → coral → maroon → black.</li>
+<li>Light mode keeps all five on <code>#fff5ef</code> (coral at its palest), with orange darkened to <code>#c96a09</code> for text and maroon to <code>#2a1319</code> for body copy — the palette has no light neutral, so those two are derived.</li>
+<li>Judgement call: avatars use the three bright colours only. Maroon avatars vanished into the maroon cards — seen in the first screenshot pass, fixed in the second.</li>
+<li>Also fixed: <code>manifest.json</code> still carried WhatsApp's green as the app's theme colour; it and the status bar tint are now black and orange.</li>
+<li>Deployed: PR #12 merged (<code>c4bed8d</code>); both computers on page version <code>38260973c32b</code>. Tested with screenshots of every screen in both themes (no page errors) and the commands suite (31 checks) as a smoke test, since #11's 121 checks had already passed against the same markup.</li>
+</ul>
+<h3 id="log-2026-09-11-later-archive-and-a-clear-out-for-stopped-cha">Later — archive, and a clear-out for stopped chats (PR #13)</h3>
+<ul>
+<li>Luqman: <em>"add feature to delete chat and archive because i dont want to see so many chat."</em> Delete already existed as "End chat"; what was missing was archive, so that was the build.</li>
+<li>He picked: archived remembered <strong>on the computer</strong>, archived chats <strong>leave him alone entirely</strong>, and yes to a one-tap clear-out of stopped chats.</li>
+<li>Built: swipe a chat <strong>left</strong> to archive (right still pins) or Chat info → Archive; an <strong>Archived</strong> row at the top of the list with a count, which opens what's inside and back again; archived chats stay out of Home, out of the back-arrow count and out of notifications (<code>notify()</code> skips them, D-021); "End chat" renamed <strong>Delete chat</strong> with a confirmation that says what actually goes; Settings → <strong>Delete stopped chats</strong> (<code>DELETE /api/chats/stopped</code>), greyed out when there are none.</li>
+<li>Tested: 27 new checks, including a fake Apple push service proving an archived chat sends nothing and that notifications return the moment it's unarchived. The features suite (43) still passes — it covers the swipe code that was extended to work in both directions.</li>
+<li>Deployed: PR #13 merged (<code>56cb563</code>); both computers on page version <code>1ded2b6a73a8</code>.</li>
+</ul>
+<h3 id="log-2026-09-11-later-the-three-he-picked-from-the-improvemen">Later — the three he picked from the improvement list (PRs #14, #15, #16)</h3>
+<p>Asked what else could be improved, he chose the top three: files coming back from Claude, a memory gauge with one-tap compacting, and keeping the checks in the project. Built in that dependency order, checks first.</p>
+<p><strong>#14 — the checks live in the app now.</strong> They had been in a session scratch folder and needed repairing three times in a day. Now <code>dev/checks/{commands,archive,files,context,features,fixes}.mjs</code> with <code>dev/checks/run.mjs</code> (all, by name, or <code>--quick</code> to skip the ones needing Claude), plus <code>dev/reach.mjs</code> (reach a computer as the phone does), <code>dev/update-computer.mjs &lt;host&gt;</code> (how the PC gets updated) and <code>dev/video-frames.mjs</code>. Paths are repo-relative; scratch goes in <code>dev/checks/.work</code> (git-ignored); the <code>http_ece</code> cross-check is optional and skips when it isn't installed.</p>
+<p><strong>#15 — Claude can send files back.</strong> <code>cchat send &lt;file&gt; [caption]</code> from inside a chat, and Claude is told about it with <code>--append-system-prompt</code>, so "send me the render" is enough. A file it merely names in a reply also appears — full path, <code>~/…</code>, or relative to the chat's folder (D-022). Pictures show, clips play, anything else is a card. Only files the chat has pointed at are fetchable, each by token; 60 MB cap. <strong>Found while building:</strong> the first version only matched absolute paths, and a real Haiku reply abbreviated the path — so the fixture-based check replaced the model-dependent one, and relative paths were added.</p>
+<p><strong>#16 — how full a chat is.</strong> The transcript records what each answer cost, so the prompt half of that is the memory gauge (D-023) — no screen reading. The phone shows a line under the chat's name once it's half full (teal → orange at 70% → red at 90%) and tapping it explains compacting and runs <code>/compact</code>. This came straight from his own <code>/usage</code>: 86% of his weekly limit went on sessions over 150k.</p>
+<ul>
+<li>Deployed: all three merged (<code>361d7f3</code>, <code>ef23be9</code>, <code>6ac9d8e</code>); both computers on <code>1c3c625a7ab9</code>, the PC updated with the newly in-repo <code>dev/update-computer.mjs</code>.</li>
+<li>Checks now: <strong>181</strong> — commands 31, archive 27, files 22, context 12, features 42, fixes 47.</li>
+</ul>
+<h3 id="log-2026-09-11-17-the-gap-at-the-bottom-and-switching-claude">#17 — the gap at the bottom, and switching Claude accounts from the phone</h3>
+<p>He sent a screenshot with two things in one message: <em>"there is a gap at the bottom, fix that, i dont want gap that big. also create a profile section on the right of the settings … i cannot change from max to pro in my phone"</em>.</p>
+<p><strong>The gap.</strong> Measured straight off the screenshot: the tab bar's bottom edge sat at 763.6pt of an 874pt iPhone, which is exactly <code>778 − 14</code> — so the page had a 778pt viewport (874 minus the 62pt notch and the 34pt home indicator) while still being drawn from the very top, with every <code>env(safe-area-inset-*)</code> at 0. That is what <code>black-translucent</code> does in a Home Screen app, and nothing inside the page can paint below its own viewport, so only the meta tag could fix it (D-025). The status bar is opaque now, <code>viewport-fit=cover</code> is gone, the floating bar sits 12px off the bottom instead of 14, pages reserve 96px for it instead of 112, and Home — the one screen with no top bar — got the clearance the others get from theirs.</p>
+<p><strong>The account.</strong> Settings has a face on the right of its bar; tapping it shows who Claude Code is signed in as and whether that is Pro or Max, read out of <code>~/.claude.json</code> (<code>organizationType</code> + <code>organizationRateLimitTier</code>). Below it every account, with a tick on the one new chats run as, and computer chips when more than one computer is online. Adding the second account never leaves the phone: the computer runs <code>claude setup-token</code>, the phone shows the claude.com link, he signs in and pastes the code back, and the token goes into <code>~/.claude/.env</code> — which Syncthing already shares — as <code>CLAUDE_CHAT_ACCOUNT_&lt;SLUG&gt;_TOKEN</code> (D-024).</p>
+<p><strong>Worth knowing:</strong> the two computers are already on different accounts — the Mac on <code>luqmanhakeem@todak.com</code> (Pro), the PC on <code>academy@todak.com</code> (Max 20×). So the phone now <em>shows</em> both; to run a Mac chat on Max he still has to add that account's token on the Mac once.</p>
+<p><strong>Found while building:</strong> <code>renderList()</code> was clearing the <code>on</code> class off every <code>.chip</code> on the page, not just its own filter chips — so the sheets' chips (New chat's computer picker, and the new plan picker) never looked selected. Scoped to <code>#chips</code>.</p>
+<ul>
+<li>Deployed: PR #17 merged (<code>050529b</code>); both computers on <code>1f0476fdd873</code>.</li>
+<li>Checks now: <strong>221</strong> — commands 31, archive 27, accounts 40, files 22, context 12, features 42, fixes 47.</li>
+</ul>
+<h3 id="log-2026-09-11-later-knowledge-goes-to-supabase-only-d-026">Later — knowledge goes to Supabase only (D-026)</h3>
+<ul>
+<li>Luqman asked that app chats save knowledge to Sky AI Brain, not Claude Code's built-in memory, because chats showed "Claude's memory 100% full". That bar is the context gauge (chat length), not saved memory — explained to him; the label is misleading and a rename was offered.</li>
+<li>Branch <code>fix/supabase-only-memory</code>: <code>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1</code> per chat + a line in <code>PHONE_NOTE</code>. Server restarted on the Mac; test chat's <code>/memory</code> showed "Auto-memory: off". Not yet on the Windows PC.</li>
+<li>Archived the one built-in note from <code>~/Desktop/project</code> (duplicate of Sky AI Brain #78).</li>
+<li>Luqman picked <strong>"This chat is X% full"</strong> for the gauge (also the compact prompt and <code>/context</code> description). Checks: quick 67/67, context 12/12. PR #19 merged (<code>5eff90d</code>); Mac on main, Windows PC updated with <code>dev/update-computer.mjs desktop-k2m7l30</code> (short name — the script adds <code>.tail8806f8.ts.net</code> itself; passing the full address gives a TLS "internal error"). PC confirmed serving the new wording.</li>
+</ul>
+<h3 id="log-2026-09-11-later-bottom-strip-on-the-iphone-pr-20">Later — bottom strip on the iPhone (PR #20)</h3>
+<ul>
+<li>After #18 reached the PC, Luqman's screenshot showed a black strip under the app with the tab bar cut off. The phone's report on the PC (<code>data/viewport.log</code>, read through a helper chat): screen 874, window 812, screens laid out to 874 — nothing drawn below 812 = the screen minus the 62 pt status bar.</li>
+<li>Cause (per the iPhone PWA guide in 07-references candidates: gist fozzedout/5e77925381991a9570151550992baf14): with black-translucent + viewport-fit=cover, a root sized <code>100%</code> makes iOS fall back to the short size. #18 had moved the screens to <code>--app-h</code> but left <code>html, body</code> at <code>100%</code>. Now <code>html, body { height: var(--app-h) }</code>.</li>
+<li>Report now includes <code>page</code> (root height) and a second <code>settled</code> reading at 6 s.</li>
+<li>221/221 checks. PR #20 merged (<code>39a0b10</code>), PC updated. Waiting on Luqman to fully close and reopen the app on the iPhone; if a gap remains, read the new <code>viewport.log</code> lines on the PC.</li>
+</ul>
+<h3 id="log-2026-09-11-later-bottom-strip-confirmed-fixed-hold-menu-">Later — bottom strip confirmed fixed; hold menu, no sliding, no zoom (PR #21)</h3>
+<ul>
+<li>Luqman's next screenshot showed the app reaching the bottom, so PR #20's <code>html, body { height: var(--app-h) }</code> worked.</li>
+<li>Same screenshot: the chat list had slid ~30 pt left. Cause: the swipe labels (<code>.row::before/::after</code> at ±76px) made <code>.page</code> wider than the screen, and <code>overflow-y: auto</code> lets it scroll sideways too. <code>.page</code> and <code>.scroller</code> now <code>overflow-x: hidden</code>.</li>
+<li>No zoom: <code>* { touch-action: manipulation }</code> (double-tap), <code>maximum-scale=1, user-scalable=no</code>, <code>gesturestart</code> blocked.</li>
+<li>Hold a chat 0.5 s → <code>#row-menu</code> sheet: Pin/Unpin, Archive/Unarchive, Delete (shared <code>deleteChat()</code> with Chat info). The click the phone sends on lift-off is swallowed by a capturing listener while <code>held</code> is set, or it would close the menu (backdrop) or open the chat. Swipes kept.</li>
+<li>Checks 233/233 (archive suite now 39, +11 for the menu). PR #21 merged (<code>7af7dec</code>), PC updated and confirmed.</li>
+</ul>
+<h3 id="log-2026-09-11-later-rename-select-in-the-hold-menu-swipes-r">Later — Rename + Select in the hold menu, swipes removed from chats (PR #22)</h3>
+<ul>
+<li>Luqman picked all three follow-ups. Hold menu is now Pin, Archive, Rename, Select chats, Delete.</li>
+<li>Selecting: <code>state.picking</code> (Set of keys). Ticks on rows, tap toggles, title "N selected", Done (glass pill) replaces +, <code>#pick-bar</code> (class <code>tabs</code>) replaces the tab bar with Archive/Unarchive + Delete (one confirm). <code>route()</code> and the Archived row end it. Shared <code>renameChat()</code> with Chat info.</li>
+<li>Row swipes removed (handler, <code>data-swipe*</code>, <code>.row::before/::after</code>). Message swipe-to-reply stays.</li>
+<li>Toasts hidden while <code>#row-menu</code> is open (taller sheet; a toast sat on its title).</li>
+<li>Checks 246/246 (archive 51, features 43). PR #22 merged (<code>1ea54b3</code>), PC updated.</li>
+<li>Trap: in <code>dev/checks/archive.mjs</code>, <code>D</code> is the data folder — extra test chats are <code>C</code> and <code>E</code>.</li>
+<li><strong>Found on the PC:</strong> an uncommitted fix from an earlier PC session, kept by the update helper as a working-tree change plus <code>stash@{0}</code> ("local compose-field fix"): the composer's <code>.field</code> clashes with the sheets' <code>.field</code> (style.css has both), making the message box full width (Send pushed off) and fixed-height. PC renames it <code>.compose-field</code>. Confirmed the clash exists on main. Not in the repo yet — asked Luqman whether to bring it in.</li>
+<li>Luqman said yes: the PC's compose-field fix went in as PR #23 (<code>f85a200</code>), line for line, with two new features checks (typing box leaves room for Send — failed before the fix, Send at 582 on a 500 screen; box grows with lines). 248/248. On the PC, <code>git diff origin/main</code> on the two files was empty, so the helper discarded the local copy and dropped <code>stash@{0}</code>; then updated. PC confirmed clean on <code>f85a200</code>, no stash.</li>
+</ul>
+<h3 id="log-2026-09-11-later-select-all-pr-24">Later — Select all (PR #24)</h3>
+<ul>
+<li>Luqman picked Select all. <code>#pick-all</code> pill on the header's left while selecting: ticks every chat that <code>matches()</code> (Search + chips), reads "Deselect all" once they're all ticked, disabled when nothing shows.</li>
+<li><code>.glass-btn.pill</code> made compact (12px padding, .88rem, nowrap) so "Deselect all · 12 selected · Done" fits 402 pt with the title centred — there's a check for exactly that.</li>
+<li>Checks 254/254 (archive 57). PR #24 merged (<code>9a24474</code>), PC updated and confirmed.</li>
+<li>Still offered, not picked: warn about unsaved changes before updating a computer; Undo after archiving.</li>
+</ul>
+<h3 id="log-2026-09-11-later-undo-after-archiving-pr-25-and-the-upda">Later — Undo after archiving (PR #25) and the update guard (PR #26)</h3>
+<ul>
+<li>Luqman picked both remaining options.</li>
+<li>Undo: <code>toast(text, { label, run })</code>; archiving/unarchiving (menu, Chat info, several) offers Undo for 6 s, flipping back exactly the chats that went through. No Undo for Delete. Checks 258/258 (archive 61).</li>
+<li>Update guard: <code>GET /api/code</code> (<code>git rev-parse</code>/<code>status --porcelain</code>/<code>stash list</code>, <code>trimEnd</code> so the leading space of " M file" survives). update-computer stops (exit 2) on any unsaved/stashed change; helper prompt stops on any <code>git status</code> output too. Tried against the Mac with 3 unsaved files: STOPPED, no helper chat. Checks 259/259. Merged (<code>32fd280</code>); the PC's first run couldn't check (old server, 404) so the helper's guard applied — it found nothing, pulled, restarted; PC now reports <code>32fd280</code>, clean. Mac on <code>32fd280</code>, clean.</li>
+</ul>
+<h3 id="log-2026-09-11-later-readme-says-mac-and-windows-ready-for-o">Later — README says Mac and Windows; "ready for other people?" answered (branch <code>docs/mac-and-windows-readme</code>)</h3>
+<ul>
+<li>Luqman read the README and felt it said Mac only. Asked to make it clear it works on Windows and Mac with Claude Code, and whether the app is ready for other people — if so, add a guide from installing Claude Code.</li>
+<li>README rewritten: "What you need" (Mac or Windows 10/11 + Claude Code + Tailscale + iPhone), a Mac/Windows side-by-side table (where Claude runs, window, project folder, <code>cchat</code>, login start, log, restart — PC restart is <code>pkill -f "node server.mjs"</code> in Ubuntu, start.sh brings it back), "the Mac" → "the computer" throughout, Windows setup steps spelt out (WSL restart, Linux password, Ubuntu window for the login). Also fixed stale rows: chats in the list are held for a menu now, not swiped (PR #21); button is "Resume on the computer"; added <code>accounts.mjs</code> to Files.</li>
+<li><strong>Answer: not ready for other people.</strong> No guide written, a "Can someone else use it?" section lists why: private repo; first computer must be a Mac (Windows setup downloads from it); adding a computer copies Luqman's whole ~/.claude incl. keys; chats are tied to Sky AI Brain (<code>mem</code>, auto memory off); bypass permissions relies on his deny list; "Luqman" in hook/server messages; notifications untested.</li>
+<li>Committed as the first commit of PR #27.</li>
+</ul>
+<h3 id="log-2026-09-11-later-each-computer-s-own-link-branch-feat-co">Later — each computer's own link (branch <code>feat/computer-links</code>)</h3>
+<ul>
+<li>Luqman asked that switching computer takes him to that computer's link. Picked: the account screen's computer buttons only; one Home Screen icon per computer; pins and unread the same on both (D-027).</li>
+<li>Built in a git worktree (scratchpad <code>links</code>) so the live page was never half-edited.</li>
+<li>Found and fixed while there: <code>markSeen</code>, the row badge and the back-button count compared <code>c.id</code> with <code>state.current</code>, which is a key (<code>home/&lt;id&gt;</code>) — never equal, so opening a chat never cleared its unread count.</li>
+<li>New suite <code>dev/checks/links.mjs</code> (30 checks): the page's Home Screen name per OS, pins/read marks on the server (order, idempotent pin, survive restart, <code>seen</code> clamped and one-way), migration of old local pins and read marks, unread cleared by opening a chat and by Mark everything read, the account screen's buttons, the jump to the other link (played by a second computer at the same address), tidied address, one-time tip. archive/features/screenshots updated from <code>state.pinned</code>/<code>state.seen</code> to the chat fields.</li>
+</ul>
+<h3 id="log-2026-09-11-later-other-people-can-install-it-pr-27-merge">Later — Other people can install it (PR #27, merged <code>4d3de5f</code>; D-027, D-028)</h3>
+<ul>
+<li>Luqman said "do it"; asked only about repo access → picked <strong>Public</strong>. History scanned first: no real keys (only <code>sk-ant-oat01-pretend</code> in the accounts checks); shows academy@todak.com, the tailnet name, DESKTOP-K2M7L30. Not flipped yet — ask once more before <code>gh repo edit --visibility public</code>.</li>
+<li>Built: first-computer mode in <code>mac.sh</code>/<code>windows.ps1</code> (placeholder still unfilled → first; checked by shape because the server replaces every copy), <code>wsl.sh … first|join</code>, <code>pairSync</code> creates <code>claude-home</code> + <code>.stignore</code>, permission mode from settings.json (acceptEdits default), <code>mem</code>-gated Sky AI Brain, "The user denied…", Chat info "PC", <code>install.sh</code> mkdir LaunchAgents, <code>/setup/*</code> 503 without an address, README install guide.</li>
+<li>Found on the way: a fresh Mac account may lack <code>~/Library/LaunchAgents</code> (install.sh would have died); the served script used to fall back to a literal <code>__HOME_URL__</code>; Windows PowerShell 5.1 + EAP Stop turns stderr from a native command into a stop, so Tailscale's state is read from <code>status --json</code> in a try.</li>
+<li>Checks: new <code>setup</code> 38/38 (sandbox: fake HOME, shims for brew/curl/git/gh/tailscale/syncthing/launchctl/sudo; skipped if /Applications/Tailscale.app exists, since the scripts would find the real one). <code>--quick</code> 140/140; real Claude: commands 31/31, files 22/22, context 12/12.</li>
+<li>Mac pulled to <code>4d3de5f</code> and restarted; served <code>/setup/mac</code> still comes out in join mode (FIRST=false).</li>
+<li>Luqman confirmed both: repo made <strong>public</strong> (raw mac.sh/windows.ps1/wsl.sh 200 without auth; anonymous <code>git ls-remote</code> sees main at <code>4d3de5f</code>), and the PC updated 32fd280 → <code>4d3de5f</code>, clean.</li>
+<li>Not done: <code>windows.ps1</code> first mode never run on a real PC; no real fresh-Mac install.</li>
+<li>Merged as PR #28 (<code>84bd5a8</code>) after main moved on (#27, for-everyone): only README clashed — took main's and re-added the lines (Home Screen name, pins row + "go to another computer's own app" row, notifications per app, <code>links</code> in the suites table). All 327 checks passed on the merged code. Mac and PC both on <code>84bd5a8</code>, page version <code>6b66326cab8e</code>, names "Claude Mac" / "Claude PC"; PC clean, no stash.</li>
+</ul></div></details><details class="fold" id="log-2026-09-10"><summary><span>2026-09-10</span></summary><div><h3 id="log-2026-09-10-what-was-done">What was done</h3>
+<ul>
+<li>Luqman asked for a WhatsApp-style phone app to use Claude Code on the home Mac, one chat per Terminal session, "+" on the phone opening a new Terminal with Claude Code in the project folder.</li>
+<li>Found Claude Code's built-in Remote Control covers most of it; laid out both options. He chose the custom app, visible Terminal per chat, chats starting at the project folder root, and approvals on the phone.</li>
+<li>Installed tmux 3.7c and Tailscale 1.102.3 (CLI, userspace mode, login item). Trusted <code>~/Desktop/project</code> in Claude Code.</li>
+<li>Probed the three mechanisms before building: paste into the TUI via tmux, read the transcript, and a <code>PermissionRequest</code> hook waiting for an outside answer. All worked.</li>
+<li>Built the app: <code>server.mjs</code>, <code>hook.mjs</code>, phone UI in <code>public/</code>, <code>bin/cchat</code>, <code>install.sh</code>. No npm packages.</li>
+<li>Installed the server as a login item. End-to-end test: 14/14 passed (send during startup, deny, allow, screen view, kill + resume with memory intact). Checked the phone layout in screenshots.</li>
+</ul>
+<h3 id="log-2026-09-10-decisions-made">Decisions made</h3>
+<ul>
+<li>D-001 custom app over Remote Control · D-002 tmux + real TUI · D-003 approvals via hook, phone sessions in <code>acceptEdits</code> · D-004 Tailscale userspace CLI · D-005 no dependencies</li>
+</ul>
+<h3 id="log-2026-09-10-stuck-on-problems">Stuck on / problems</h3>
+<ul>
+<li>Tailscale needs Luqman to sign in (Mac link + iPhone app) before the phone can reach the app.</li>
+<li>First paste into a new session was silently dropped while Claude Code was starting — fixed with verify-and-retry sending.</li>
+</ul>
+<h3 id="log-2026-09-10-what-was-learned">What was learned</h3>
+<ul>
+<li>While a <code>PermissionRequest</code> hook is waiting, the Terminal shows its normal prompt too; answering there ends the hook.</li>
+<li>Hooks passed with <code>--settings</code> add to the user's own hooks rather than replacing them.</li>
+<li><code>claude --resume &lt;id&gt;</code> keeps the same transcript and remembers the conversation.</li>
+<li>Phone chats use the same Claude Max weekly limit (85% used on 2026-09-10, resets 2026-09-13).</li>
+</ul>
+<ul>
+<li>Luqman signed in to Tailscale on the Mac and iPhone and enabled Serve. App published at <a href="https://luqman-mac.tail8806f8.ts.net">https://luqman-mac.tail8806f8.ts.net</a>; loaded over the tailnet with a Let's Encrypt cert.</li>
+</ul>
+<h3 id="log-2026-09-10-next">Next</h3>
+<ul>
+<li><span class="box done">done</span> Luqman signs in to Tailscale on the Mac and iPhone</li>
+<li><span class="box done">done</span> Publish on Tailscale (<code>tailscale serve --bg 4477</code>)</li>
+<li><span class="box">to do</span> Open <a href="https://luqman-mac.tail8806f8.ts.net">https://luqman-mac.tail8806f8.ts.net</a> on the iPhone and Add to Home Screen</li>
+<li><span class="box">to do</span> First real use away from home</li>
+<li><span class="box">to do</span> <del>Consider automatic login after a power cut</del> — not possible: FileVault is on, which blocks auto-login. Instead: turn off automatic macOS update installs and keep the Mac plugged in (it's a laptop; was on battery at 52% on 2026-09-10)</li>
+</ul>
+<h3 id="log-2026-09-10-later-chats-switched-to-bypass-permissions">Later — chats switched to bypass permissions</h3>
+<ul>
+<li>Luqman asked for bypass permissions whenever he uses chats in claude-chat. <code>startClaude()</code> now passes <code>--permission-mode bypassPermissions</code> instead of <code>acceptEdits</code> (D-006). Server restarted.</li>
+<li>Verified with a throwaway chat: footer showed "bypass permissions on", and <code>node -e</code> ran and answered 42 with no approval card. Test chat deleted.</li>
+<li>Chats that were already running keep their old mode until they're ended and resumed.</li>
+</ul>
+<h3 id="log-2026-09-10-later-whatsapp-iphone-look">Later — WhatsApp (iPhone) look</h3>
+<ul>
+<li>Luqman asked for the entire UI to look like WhatsApp, and for Claude to keep asking questions and suggesting improvements for him to pick from (saved as a standing preference).</li>
+<li>Rebuilt <code>public/</code> (index.html, style.css, app.js) to follow WhatsApp on the iPhone (D-007): white Chats list with a big title, search, filter chips (All / Unread / Working / Stopped), two-line previews, green unread badges, ticks on your own last message, "Connecting…" title when the Mac can't be reached. Inside a chat: beige wallpaper with our own doodles, bubbles with tails, time and ticks in the corner (grey = Claude got it, blue = answered or working), date pills, "online / typing… / last seen" under the name, "tap here for chat info" for 3 s. A Chat info page (Screen, Open on Mac, Rename, End chat) replaces the ⋮ menu. Claude's steps fold into one "N steps" bubble. The approval card looks like a business message with reply buttons. The send button appears only once you type. Dark mode follows WhatsApp dark.</li>
+<li>Built in a test copy served read-only on :4478, screenshotted at iPhone size (light, dark, approval, info, new chat, filters) with no page errors, then copied into <code>public/</code>. No server restart needed. Test scripts kept in <code>dev/</code>.</li>
+<li>Status bar meta changed from black-translucent to default so the clock stays readable on the white bar. iOS only picks this up when the page is added to the Home Screen again.</li>
+</ul>
+<h3 id="log-2026-09-10-later-first-commits-and-chats-that-start-insi">Later — first commits, and chats that start inside a project</h3>
+<ul>
+<li>First git commits, on branch <code>feat/whatsapp-ui</code>: the original app with its first UI, then the iPhone WhatsApp restyle, so either look can be restored.</li>
+<li>Luqman picked all eight suggested improvements; build order recorded in <code>02-planning.md</code>.</li>
+<li>Built #1, start a chat inside a project. The <strong>+</strong> sheet lists the folders in <code>~/Desktop/project</code> like WhatsApp contacts (most recently changed first, with search, and how many chats are open in each), plus "Whole project folder". Tapping one starts Claude in that folder and names the chat after it. Chat info shows the folder. <code>cchat</code> run inside a project does the same.</li>
+<li>Server: each chat now stores its <code>cwd</code>; the transcript path and <code>--resume</code> follow it. Old chats without one keep using <code>~/Desktop/project</code>. <code>GET /api/projects</code> lists the folders; a project name from the phone must be a folder directly inside <code>~/Desktop/project</code> (<code>../etc</code> is refused).</li>
+<li>Tested for real: a throwaway chat in <code>portfolio</code> started there with no trust prompt, answered "ok" back to the phone side, and was deleted.</li>
+<li>Found: Claude's in-between messages in a long turn never reach the transcript, so the phone shows only "N steps" until the final reply (gotcha in <code>04-methods.md</code>).</li>
+</ul>
+<h3 id="log-2026-09-10-later-private-github-repo">Later — private GitHub repo</h3>
+<ul>
+<li>Luqman asked for a private repo. Before pushing, checked that <code>data/</code> (hook secret, chat list, log, terminal captures) and <code>.env</code> are git-ignored, and scanned all 3 commits for keys, tailnet hostnames, 100.x addresses and email: none found.</li>
+<li>Created <code>main</code> at <code>0e4c605</code> (the tip of <code>feat/project-chats</code>, which contains <code>feat/whatsapp-ui</code>) and pushed it to <a href="https://github.com/juslangit/claude-chat">https://github.com/juslangit/claude-chat</a> (private). <code>main</code> tracks <code>origin/main</code>. The two feature branches still exist locally only; they were not pushed.</li>
+</ul>
+<h3 id="log-2026-09-10-later-voice-notes-a-call-screen-and-a-friendl">Later — voice notes, a call screen, and a friendlier chat</h3>
+<ul>
+<li>Luqman asked for "more user friendly, more features, and a voice chat". From options he picked: voice notes + a call screen, the iPhone's own voice (not ElevenLabs), live progress, plain-English steps, quick replies and a reply sound (plan in <code>02-planning.md</code>).</li>
+<li>Voice notes: hold 🎤, talk (words show live), let go to send, slide left to cancel. If sending fails the words go back into the typing box.</li>
+<li>Call screen (📞 in the chat's top bar, or Chat info → Call): greets you, listens, sends after a 1.6 s pause, Claude's notes and reply are read aloud, then it listens again. Mute, End, Skip, Approve/Deny if Claude asks. Keeps the screen awake. Speech uses the iPhone's own recognition and voice, the same as Sky (D-008).</li>
+<li>Spoken messages carry a tag so Claude knows they came through speech recognition, and on a call to answer in 1–3 short sentences (D-010). The phone hides the tag and shows a small mic/phone.</li>
+<li>Live progress: new <code>notes.mjs</code> reads Claude's progress notes off the tmux screen (D-009); the server polls working chats every 1.5 s and sends <code>note</code> events. The "typing…" bubble shows the latest note and the latest step.</li>
+<li>Steps are plain English ("Edited style.css", or the Bash description) with the raw command or path small underneath.</li>
+<li>Quick replies (Yes, go ahead / Explain simpler / What changed? / What's next? / Continue) while Claude waits. A synthesised pop when Claude answers (lower one for approvals); on/off in ⋯.</li>
+<li>Fixed on the way: after a server restart a working chat showed "online" until the next hook. The server now marks a chat working when its footer shows "esc to interrupt".</li>
+<li>Tested: the note reader on a real screen sample (4 of 4 notes, none of the steps); live after a restart. Screenshots with a faked microphone and voice: recording, release, call listening and talking, quick replies, Chat info tiles, sound toggle, progress bubble light and dark.</li>
+<li>Not testable from the Mac: real iPhone speech recognition and voice, the mic permission prompt, audio through the speaker vs earpiece after listening, screen wake lock. Luqman to try.</li>
+</ul>
+<h3 id="log-2026-09-10-later-several-computers-one-iphone">Later — several computers, one iPhone</h3>
+<ul>
+<li>Luqman asked to use several computers from the one iPhone, with the projects on all of them. Picked: another Mac + a Windows PC; GitHub for projects and Syncthing for the Claude notes; one app listing every computer's chats; he runs one setup command on each; Windows keeps projects in the normal Windows folder; put the missing projects on GitHub as private repos.</li>
+<li>GitHub: pushed claude-chat's voice branch; created private repos <code>sky</code> and <code>peta-lot-tanah</code> (checked first: no keys in files or history). 9 of 10 projects are on GitHub; <code>portfolio</code> is empty.</li>
+<li>Syncthing 2.1.5 on this Mac (brew service), sharing <code>~/.claude/knowledge</code> as folder <code>claude-knowledge</code>. Device ID 4DJP2WX-DSHQ6XP-3PZ6MMZ-R72GRY4-3OJJZWF-J7K4NEE-2IB5NLL-KDRPGAX.</li>
+<li>Server: <code>/api/whoami</code>, <code>/api/computers</code> (tailnet peers from <code>tailscale status</code>), CORS limited to pages from this tailnet (everything else 403), <code>/api/sync/pair</code> (a new computer's setup pairs Syncthing), <code>/setup/mac|windows|wsl</code> (setup scripts with this Mac's address filled in), project list includes each GitHub address, <code>git pull --ff-only</code> before a project chat starts (skipped when something is unsaved), Windows/WSL support (Windows Terminal, <code>%COMPUTERNAME%</code>, tailscale.exe), and env vars for the data folder and tmux socket so a second copy can run on one Mac.</li>
+<li>Phone: one Chats list for all computers (each row says which), New chat picks the computer, ⋯ → Computers, Chat info shows the computer. Chat keys are "&lt;computer&gt;/&lt;chat id&gt;".</li>
+<li>Tested with a pretend second computer on this Mac (port 4479): discovery, origin checks (tailnet allowed; other sites and other tailnets 403; hook without secret 403), a real chat there answered "ok" and its hooks reached the right server, New chat on the other computer, setup downloads, Syncthing pairing with a throwaway ID (then removed). Screenshots with two computers.</li>
+<li>Not tested: the setup scripts on a real second Mac or Windows PC (no PowerShell here, so <code>windows.ps1</code> isn't even syntax-checked). Luqman runs them.</li>
+<li>Seen in use: a multiple-choice question from Claude shows on the phone as "Wants to run: Asked you a question" and can stay stuck after it's answered — the queued "buttons for Claude's questions" item would fix it. The server restart cleared it.</li>
+<li>Luqman chose to copy his whole Claude setup, keys included (D-014). Syncthing folder <code>claude-home</code> = <code>~/.claude</code> limited by <code>.stignore</code> (instructions, settings, keys, Sky AI Brain tool, notes), replacing <code>claude-knowledge</code>. Pairing now needs a one-time code from the phone (⋯ → Computers → Add a computer), which also shows the line to paste. Tested: unknown device can't make a code, wrong/missing code refused, right code works once. He started the Windows setup while this was being built — a run begun before the change stops at pairing and just needs running again.</li>
+<li>Bug found in first real use: the iPhone was refused a pairing code ("caller: unknown") because the address from tailscale serve's X-Forwarded-For wasn't compared in its bare form. Fixed (strip port, brackets, ::ffff:; include this Mac) and checked through Tailscale via <code>tailscale nc</code> + TLS. At that point the Windows PC (DESKTOP-K2M7L30, 100.104.28.73) was on the tailnet but claude-chat wasn't answering on it yet and it wasn't paired.</li>
+<li>Windows PC set up by Luqman (~19:00): Ubuntu installed in WSL without a restart; claude-chat answering at <a href="https://desktop-k2m7l30.tail8806f8.ts.net">https://desktop-k2m7l30.tail8806f8.ts.net</a>; Syncthing paired (PC device MEBQJV6-…) and sharing <code>claude-home</code>. He first typed the pairing code into the Ubuntu window instead of PowerShell — the script's prompt should make clear which window to type in.</li>
+<li>Bugs from first use on the PC (user folder "TODAK ACADEMY", with a space): server.mjs and hook.mjs took their folder from <code>new URL(import.meta.url).pathname</code>, which keeps <code>%20</code>, so the hook path in hooks.json didn't exist — every hook failed ("SessionStart:startup hook error … cjs/loader") and chats stayed on "starting…". Fixed with <code>fileURLToPath</code> (PR #4). Also: a message pasted while the PC was starting Claude stayed in the input box — Enter now retried 5× over 20 s; errors now name the computer instead of "the Mac"; the progress bubble showed the previous chat's last step (now reset per chat). Gotcha for 04-methods: always test paths with spaces.</li>
+<li>"Chat 19:12" on the PC ignored every key: its tmux pane was in view-mode (<code>#{pane_in_mode}</code>=1, mode=view-mode) — most likely tmux showing its "can't read tmux.conf" error from the %20 path bug. Cancelled it through a helper chat on the PC ("Update claude-chat"), which also does <code>git pull</code> and restarts the PC server by PID. The server now leaves scroll/view mode before typing (PR #5).</li>
+</ul>
+<h3 id="log-2026-09-10-later-answering-claude-s-questions-from-the-p">Later — answering Claude's questions from the phone (on the Windows PC)</h3>
+<ul>
+<li>Luqman, on his iPhone: "i cannot answer your question in powershell or terminal in this chat, fix that. i dont want to go to my pc everytime u ask". Claude's multiple-choice questions reached the phone as "Wants to run: Asked you a question" with Approve / Deny, which don't answer anything.</li>
+<li>Probed first: a <code>PermissionRequest</code> hook answering <code>allow</code> + <code>updatedInput.answers</code> is accepted by Claude Code 2.1.267 (D-015).</li>
+<li>Built (PR #6, merged): the question shows as a message from Claude with a reply button per choice; tick-all-that-fit questions get checkboxes and Send; several questions come one at a time (Back / Skip); typing or a voice note while a question waits answers it; on a call it is read out and answered by talking. The list says "Asks: …", the chat says "asked you a question", and the answer shows as his message (also when answered at the computer). Server: <code>POST /api/chats/:id/answer</code>.</li>
+<li>Tested: 15/15 end-to-end checks on a test server (port 4479, Haiku) with a real Claude turn — two questions in one call incl. multi-select and a typed answer, then a skipped one; Claude's reply used the answers. Phone-size screenshots (list, single, multi with ticks, typed answer) via Windows Chrome.</li>
+<li>Deployed on the PC: pulled <code>main</code>, restarted the server by PID (start.sh brings it back). Running chats get it straight away, because hook.mjs is read fresh on every hook.</li>
+<li>The Mac did NOT get it: it answered once, then went offline at about 19:44 (Tailscale "last seen"), so the helper chat couldn't be started there.</li>
+</ul>
+<h3 id="log-2026-09-10-next-2">Next</h3>
+<ul>
+<li><span class="box">to do</span> When the Mac is back: <code>git pull</code> in <code>~/Desktop/project/ai/claude-chat</code> and <code>launchctl kickstart -k gui/$(id -u)/com.juslangit.claude-chat</code></li>
+<li><span class="box done">done</span> Find out why the Mac went offline at 19:44 — found 2026-09-10 20:50: not sleep (no sleep/wake in <code>pmset -g log</code>). <code>tailscaled.log</code> shows Wi-Fi went fully down at 19:43:20 ("all links down") and came back at 20:21:41 on a <em>different</em> network (192.168.10.x before, 192.168.100.x after), on battery (55%). Most likely the MacBook was moved between two places. Not an app bug.</li>
+<li><span class="box">to do</span> Luqman tries a real question on the iPhone. The phone page must come from an updated computer (for now <a href="https://desktop-k2m7l30.tail8806f8.ts.net">https://desktop-k2m7l30.tail8806f8.ts.net</a>); the Mac's copy still has the old Approve / Deny</li>
+</ul>
+<h3 id="log-2026-09-10-later-the-phone-kept-running-the-old-page">Later — the phone kept running the old page</h3>
+<ul>
+<li>First real try on the iPhone failed: "i cannot choose the answer for your question, fix that". The question reached the phone and came back skipped. Cause: the Home Screen app was still running the page it had opened before PR #6, so it showed Approve / Deny — Approve is refused for a question, Deny skips it.</li>
+<li>Fixed (PR #7, merged, running on the PC): <code>/api/whoami</code> reports <code>version</code>, a fingerprint of <code>public/</code>; the page reloads itself when it changes (on reconnect, on returning to the app, every 2 minutes; not during a call or voice note; drafts kept; no reload loop). An old page that tries to Approve a question is told to close and reopen the app.</li>
+<li>Tested: version stable, follows file changes; a fake-computer test page reloaded once and kept its draft.</li>
+<li>The page on the phone right now still predates this, so Luqman must close and reopen the app once. The Mac (still offline) also needs PR #6 and #7: a background check in this session updates it when it's back.</li>
+<li>The Mac came back online at 20:22. A helper chat there ("Update claude-chat", deleted afterwards) pulled to <code>fdac130</code> (PR #7) and restarted the server; its <code>/api/whoami</code> reports version <code>7aaf210d1b27</code>, the same as the PC. Both computers now have PR #6 and #7. Why the Mac was offline 19:44–20:22 is still unknown.</li>
+</ul>
+<h3 id="log-2026-09-10-later-code-review-and-fixing-everything-it-fo">Later — code review, and fixing everything it found (PR #8)</h3>
+<ul>
+<li>Luqman: "i want to fix the app, what more can be fix". A read-only bug sweep of the code found ten real defects; the two serious ones were checked against the code by hand. Also found why the Mac was offline 19:43–20:21: its Wi-Fi dropped and came back on a different network (see Next above) — not the app.</li>
+<li>He picked all ten, plus the stuck-"typing…" fix, Windows tools on the PC's PATH, and a new "offline since" notice. The queued features (pin, search, swipe to reply, photos, push) are to be asked about afterwards.</li>
+<li>Built in a separate git worktree in the session scratchpad, so the live <code>public/</code> — which the phone reloads from — stayed untouched until merge. Tested on a second server (:4479, Haiku) behind a small proxy acting like tailscale serve (502 while the server is down; silent while "off the network"): 47/47 checks, incl. a real Claude turn with a 12 s command (never marked finished early) and the phone page in headless Chrome (reconnected 3.3 s after restart; a silent computer shown offline after 71 s).</li>
+<li>The test confirmed the old bug: with the proxy answering 502, the page's live stream ended up closed for good.</li>
+<li>Changed: phone reconnect + ping watchdog; mid-load messages kept; chats.json via spare file + rename, unreadable one set aside; call gives up on a dead mic after three tries; Tailscale looked up on every call; Host header check (D-016); five wrong pairing codes cancel it; Windows title characters; tab-separated project lists in setup; log trimmed past 5 MB; stopped chats not polled; status from the screen as a backstop to hooks (D-017); Windows folders on Claude's PATH in WSL; "offline since" on the list, in the chat's top bar and in Computers.</li>
+<li>Deployed: PR #8 merged (<code>6fd7698</code>). Mac: pulled, server restarted (running chat unaffected), checked through Tailscale the way the phone reaches it — page loads, its POSTs pass, a page from another tailnet gets 403, the stream sends <code>retry: 3000</code>. PC: a helper chat pulled and restarted the server by PID, then was deleted. Both report page version <code>976b3702bb5c</code>; the phone reloads itself onto it.</li>
+<li>Not tested: the Windows PATH folders and <code>windows.ps1</code> (no WSL or PowerShell on the Mac).</li>
+</ul>
+<h3 id="log-2026-09-10-later-photos-pins-search-swipe-to-reply-push-">Later — photos, pins, search, swipe to reply, push notifications (PR #9)</h3>
+<ul>
+<li>Asked which queued features to build next, Luqman picked all four (photos, pin chats, search in a chat, swipe to reply) plus push notifications.</li>
+<li>Built in a git worktree again. Photos: <strong>+</strong> in the typing bar, shrunk on the phone to 1600 px JPEG, saved in <code>data/photos/&lt;chat&gt;/</code>, Claude told the path ("open it to see it") — it reads the file and sees the picture. Pins: swipe a chat right, or Chat info → Pin chat (kept in the phone's storage). Search: Chat info → Search, matches marked in place, newest first, arrows. Swipe a message right to reply: quoted above the typing box, sent as <code>Replying to your message: "…"</code>, shown as a quote. Notifications: <code>push.mjs</code> (RFC 8291 + VAPID with <code>node:crypto</code>, D-018) and <code>public/sw.js</code>; sent when a turn ends or Claude asks, never while the app is in front of him; key <code>CLAUDE_CHAT_VAPID_*</code> in <code>~/.claude/.env</code>, made when he first turns them on.</li>
+<li>Tested: 43/43 new checks against a fake push service on a test server — encryption matches the reference library <code>http_ece</code>, every notification decrypted with a valid signature, Claude (Haiku) sent a red photo answered "Red", reply quote reached Claude, pins/search/notification rules behaved. The 47 checks from PR #8 still pass. Screenshots light and dark.</li>
+<li>Deployed: PR #9 merged (<code>57c4365</code>). Mac restarted (running chat unaffected), checked through Tailscale: page, <code>sw.js</code>, the page's POSTs and <code>/api/presence</code>, stream. Page version <code>c92c07b8c719</code>.</li>
+<li>Not testable from the Mac: a real notification on the iPhone. Luqman turns it on in the Home Screen app (⋯ → Notifications → Allow); a test one is sent straight away and the server log shows Apple's answer.</li>
+<li>PC: a helper chat pulled and restarted its server (then deleted); checked through Tailscale — page version <code>c92c07b8c719</code> like the Mac, <code>sw.js</code> served, <code>/api/presence</code> accepts the Mac page, its chats intact. Both computers run PR #9. The real <code>~/.claude/.env</code> has no notification key yet; it's made when he turns them on.</li>
+</ul></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>bba1391</code></td><td class="nowrap">2026-09-17</td><td>Add the project record</td></tr><tr class="merge"><td><code>3ee2045</code></td><td class="nowrap">2026-09-14</td><td>Merge pull request #33 from juslangit/fix/setup-subject-folders</td></tr><tr class=""><td><code>07cc9c8</code></td><td class="nowrap">2026-09-14</td><td>Don&#x27;t copy claude-chat twice when projects sit in subject folders</td></tr><tr class="merge"><td><code>0e4c9ab</code></td><td class="nowrap">2026-09-13</td><td>Merge pull request #32 from juslangit/feat/subject-folders</td></tr><tr class=""><td><code>ed87cc3</code></td><td class="nowrap">2026-09-13</td><td>List projects inside subject folders on the phone</td></tr><tr class=""><td><code>bf7b893</code></td><td class="nowrap">2026-09-12</td><td>Say in the README how switching computer works now</td></tr><tr class="merge"><td><code>c29f564</code></td><td class="nowrap">2026-09-12</td><td>Merge pull request #31 from juslangit/feat/switch-in-app</td></tr><tr class=""><td><code>42f9653</code></td><td class="nowrap">2026-09-12</td><td>Switch computer inside the Home Screen app, not through a browser</td></tr><tr class=""><td><code>043d335</code></td><td class="nowrap">2026-09-12</td><td>Say in the README that a message waits for a computer that&#x27;s off</td></tr><tr class="merge"><td><code>e1a4113</code></td><td class="nowrap">2026-09-12</td><td>Merge pull request #30 from juslangit/feat/queued-messages</td></tr><tr class=""><td><code>13316c9</code></td><td class="nowrap">2026-09-12</td><td>Messages wait for a computer that&#x27;s off, and go when it&#x27;s back</td></tr><tr class="merge"><td><code>9015ff6</code></td><td class="nowrap">2026-09-12</td><td>Merge pull request #29 from juslangit/feat/usage-meter</td></tr><tr class=""><td><code>6c6fcc7</code></td><td class="nowrap">2026-09-12</td><td>Draw the meters in a /usage card instead of dropping them</td></tr><tr class="merge"><td><code>84bd5a8</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #28 from juslangit/feat/computer-links</td></tr><tr class="merge"><td><code>7b37c1a</code></td><td class="nowrap">2026-09-11</td><td>Merge main (the for-everyone setup) into feat/computer-links</td></tr><tr class=""><td><code>8b7bd2b</code></td><td class="nowrap">2026-09-11</td><td>Open another computer&#x27;s own app from Settings; keep pins and read marks on the computers</td></tr><tr class="merge"><td><code>4d3de5f</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #27 from juslangit/feat/for-everyone</td></tr><tr class=""><td><code>fc83713</code></td><td class="nowrap">2026-09-11</td><td>Let other people install it: a first computer straight from GitHub, safe defaults, a step-by-step guide</td></tr><tr class=""><td><code>6b47841</code></td><td class="nowrap">2026-09-11</td><td>Say it runs on a Mac or a Windows PC, and why it isn&#x27;t ready for other people yet</td></tr><tr class="merge"><td><code>32fd280</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #26 from juslangit/feat/update-guard</td></tr><tr class=""><td><code>3d4e005</code></td><td class="nowrap">2026-09-11</td><td>Don&#x27;t update a computer that has changes that aren&#x27;t in the project</td></tr><tr class="merge"><td><code>a8ee764</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #25 from juslangit/feat/undo-archive</td></tr><tr class=""><td><code>4e3e818</code></td><td class="nowrap">2026-09-11</td><td>Undo after archiving</td></tr><tr class="merge"><td><code>9a24474</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #24 from juslangit/feat/select-all</td></tr><tr class=""><td><code>058e0a9</code></td><td class="nowrap">2026-09-11</td><td>Select all while selecting chats</td></tr><tr class="merge"><td><code>f85a200</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #23 from juslangit/fix/compose-field</td></tr><tr class=""><td><code>bcab44e</code></td><td class="nowrap">2026-09-11</td><td>Give the typing box its own class, so Send stays on the screen</td></tr><tr class="merge"><td><code>1ea54b3</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #22 from juslangit/feat/select-chats</td></tr><tr class=""><td><code>c34e4de</code></td><td class="nowrap">2026-09-11</td><td>Rename and select chats from the hold menu; chats aren&#x27;t swiped any more</td></tr><tr class="merge"><td><code>7af7dec</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #21 from juslangit/feat/hold-menu</td></tr><tr class=""><td><code>fecf2fd</code></td><td class="nowrap">2026-09-11</td><td>Hold a chat for Pin, Archive and Delete; no sideways sliding or zooming</td></tr><tr class="merge"><td><code>39a0b10</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #20 from juslangit/fix/bottom-gap</td></tr><tr class=""><td><code>fe4a353</code></td><td class="nowrap">2026-09-11</td><td>Size the page itself to the full screen, so nothing is cut off at the bottom</td></tr><tr class="merge"><td><code>5eff90d</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #19 from juslangit/fix/supabase-only-memory</td></tr><tr class=""><td><code>41d97c2</code></td><td class="nowrap">2026-09-11</td><td>Save knowledge to Sky AI Brain only, and call the gauge &quot;This chat is X% full&quot;</td></tr><tr class="merge"><td><code>d4fc68b</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #18 from juslangit/feat/full-screen</td></tr><tr class=""><td><code>e7142fa</code></td><td class="nowrap">2026-09-11</td><td>Run the app to the very top of the iPhone screen again</td></tr><tr class="merge"><td><code>050529b</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #17 from juslangit/feat/profile</td></tr><tr class=""><td><code>2b41fd2</code></td><td class="nowrap">2026-09-11</td><td>Fix the gap under the app, and switch Claude accounts from the phone</td></tr><tr class="merge"><td><code>6ac9d8e</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #16 from juslangit/feat/context</td></tr><tr class=""><td><code>0572ab3</code></td><td class="nowrap">2026-09-11</td><td>show how full a chat is, and let one tap free it up</td></tr><tr class="merge"><td><code>ef23be9</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #15 from juslangit/feat/files-back</td></tr><tr class=""><td><code>6dad9bd</code></td><td class="nowrap">2026-09-11</td><td>let Claude send files back to the phone</td></tr><tr class="merge"><td><code>361d7f3</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #14 from juslangit/feat/checks</td></tr><tr class=""><td><code>027c9c7</code></td><td class="nowrap">2026-09-11</td><td>keep the checks in the project, with one command to run them</td></tr><tr class="merge"><td><code>56cb563</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #13 from juslangit/feat/archive</td></tr><tr class=""><td><code>a28047b</code></td><td class="nowrap">2026-09-11</td><td>archive chats, and a clear-out for the stopped ones</td></tr><tr class="merge"><td><code>c4bed8d</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #12 from juslangit/feat/palette</td></tr><tr class=""><td><code>e4f77a2</code></td><td class="nowrap">2026-09-11</td><td>take the colours from the palette Luqman saved</td></tr><tr class="merge"><td><code>00dc63a</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #11 from juslangit/feat/amber-ui</td></tr><tr class=""><td><code>18f0d44</code></td><td class="nowrap">2026-09-11</td><td>rebuild the look: dark amber glass, a Home screen and a floating tab bar</td></tr><tr class="merge"><td><code>078abe5</code></td><td class="nowrap">2026-09-11</td><td>Merge pull request #10 from juslangit/feat/commands</td></tr><tr class=""><td><code>af1f160</code></td><td class="nowrap">2026-09-11</td><td>add a commands section: tap /usage, /model and the rest from the phone</td></tr><tr class="merge"><td><code>57c4365</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #9 from juslangit/feat/photos-pins-search-reply-push</td></tr><tr class=""><td><code>f7c60ad</code></td><td class="nowrap">2026-09-10</td><td>add photos, pinned chats, search in a chat, swipe to reply and push notifications</td></tr><tr class="merge"><td><code>6fd7698</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #8 from juslangit/fix/reliability-security</td></tr><tr class=""><td><code>82db113</code></td><td class="nowrap">2026-09-10</td><td>fix reconnects, lost messages, stuck status and security gaps; show when a computer went offline</td></tr><tr class="merge"><td><code>fdac130</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #7 from juslangit/fix/phone-page-updates</td></tr><tr class=""><td><code>9903e05</code></td><td class="nowrap">2026-09-10</td><td>reload the phone page when its computer gets a new version</td></tr><tr class="merge"><td><code>ddf1cc4</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #6 from juslangit/feat/phone-questions</td></tr><tr class=""><td><code>8673233</code></td><td class="nowrap">2026-09-10</td><td>answer claude&#x27;s multiple-choice questions from the phone</td></tr><tr class="merge"><td><code>f5c89cf</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #5 from juslangit/fix/leave-scroll-mode</td></tr><tr class=""><td><code>62a4193</code></td><td class="nowrap">2026-09-10</td><td>leave tmux scroll mode before typing into a chat</td></tr><tr class="merge"><td><code>d5b4af6</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #4 from juslangit/fix/paths-with-spaces</td></tr><tr class=""><td><code>24ab6aa</code></td><td class="nowrap">2026-09-10</td><td>fix folders with spaces, slow first enter, and a stray progress step</td></tr><tr class="merge"><td><code>5d340bf</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #3 from juslangit/fix/pair-code-phone-check</td></tr><tr class=""><td><code>d0de38c</code></td><td class="nowrap">2026-09-10</td><td>recognise the iphone when it asks for a pairing code</td></tr><tr class="merge"><td><code>8af0cb3</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #2 from juslangit/feat/claude-setup-sync</td></tr><tr class=""><td><code>23b60f8</code></td><td class="nowrap">2026-09-10</td><td>share the whole claude setup between computers, behind a pairing code</td></tr><tr class="merge"><td><code>8d42fa7</code></td><td class="nowrap">2026-09-10</td><td>Merge pull request #1 from juslangit/feat/multi-computer</td></tr><tr class=""><td><code>02eac34</code></td><td class="nowrap">2026-09-10</td><td>use claude-chat from one iphone across several computers</td></tr><tr class=""><td><code>fc25abc</code></td><td class="nowrap">2026-09-10</td><td>add voice notes, voice calls and live progress to the phone app</td></tr><tr class=""><td><code>0e4c605</code></td><td class="nowrap">2026-09-10</td><td>start chats inside a project folder</td></tr><tr class=""><td><code>ad9f5f5</code></td><td class="nowrap">2026-09-10</td><td>restyle the phone ui like whatsapp on the iphone</td></tr><tr class=""><td><code>5a844ef</code></td><td class="nowrap">2026-09-10</td><td>add claude-chat: phone chats that drive claude code on the mac</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

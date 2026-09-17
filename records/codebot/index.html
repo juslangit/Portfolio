@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Codebot Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+:root { --ground: #F4F6FA; --surface: #FFFFFF; --ink: #10141F; --muted: #59617A; --line: #DCE2ED;
+  --accent: #0F7A85; --accent-soft: #DDF3F5; --flag: #FFB040; --flag-ink: #2A1B05; --done: #16795F;
+  --display: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --body: "Space Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #0E1220; --surface: #161C2A; --ink: #E8F0FF; --muted: #96A6C2; --line: #2C3654;
+  --accent: #40D6E0; --accent-soft: #14343A; --done: #68DE8A; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #0E1220; --surface: #161C2A; --ink: #E8F0FF; --muted: #96A6C2; --line: #2C3654;
+  --accent: #40D6E0; --accent-soft: #14343A; --done: #68DE8A; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#pipeline">Pipeline</a></li><li><a href="#screens">Screens</a><ul><li><a href="#the-first-room">The first room</a></li><li><a href="#watching-it-run">Watching it run</a></li><li><a href="#when-it-goes-wrong">When it goes wrong</a></li><li><a href="#the-palette-grows">The palette grows</a></li><li><a href="#on-a-phone">On a phone</a></li></ul></li><li><a href="#idea">Idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">Relations</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#checks">Tests and tools</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Codebot</b><span>Project record · built 2026-09-17 from main</span></p>
+  <h1>Codebot</h1>
+  <p class="thesis">A Roblox game where you learn Luau by writing it. Your code is the controller: there is no joystick, you write <code>move()</code> and a robot walks one tile. Rooms are ordered so each introduces exactly one new idea, and other players solve the same room beside you with their robots visible. It exists because 4.38 million visits to a single-player lesson reader prove the demand and prove nobody stays.</p>
+  <div class="stats"><div class="stat"><b>339</b><span>Checks</span></div><div class="stat"><b>8</b><span>Rooms</span></div><div class="stat"><b>4113</b><span>Lines of Luau</span></div><div class="stat"><b>1495</b><span>Lines of interpreter</span></div><div class="stat"><b>8</b><span>Decisions</span></div><div class="stat"><b>13</b><span>Commits</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>planning</td></tr>
+<tr><td>Current phase</td><td>Phase 1 — interpreter core</td></tr>
+<tr><td>Deadline / target</td><td>none set</td></tr>
+<tr><td>Repo</td><td><code>~/Desktop/project/game/codebot</code> (not pushed yet)</td></tr>
+<tr><td>URL / deployment</td><td>not published</td></tr>
+<tr><td>Main stack</td><td>Roblox / Luau, Rojo 7.7.0, Lune 0.10.5</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Kids who play Roblox and want to make Roblox games have to learn Luau, and every route to it — YouTube, CodaKid, Outschool, Luablox — requires leaving Roblox and none of them is a game. The one in-game option, Scripting School, is single-player and has not been updated since 2026-02-12. Its 4.38M visits against a snapshot of 5 concurrent players is the shape of the opportunity: the demand is real, the retention is not.</p>
+<h3 id="overview-what-counts-as-done">What counts as "done"</h3>
+<p>v1 is done when a player who has never written a line of code can join, and within an hour have written a <code>for</code> loop, an <code>if</code>, and a function of their own — as real Luau, on a phone, with other players in the room — and come back the next day to room 9.</p>
+<h3 id="overview-what-is-not-in-scope">What is NOT in scope</h3>
+<ul>
+<li>Languages other than Luau. Teaching four languages is what diluted the incumbent.</li>
+<li><code>loadstring</code>, in any form. See D-001.</li>
+<li>Selling lessons. Monetisation, if any, is cosmetic only.</li>
+<li>Any room that cannot be solved without a keyboard.</li>
+</ul>
+<h3 id="overview-map-of-files-in-this-folder">Map of files in this folder</h3>
+<ul>
+<li><code>01-idea.md</code> — the problem, the incumbent's numbers, the idea, assumptions</li>
+<li><code>02-planning.md</code> — MVP scope, the language subset, the room ladder, phases, risks</li>
+<li><code>03-milestones.md</code> — milestones &amp; progress</li>
+<li><code>04-methods.md</code> — how to work on this, commands, patterns</li>
+<li><code>05-relations.md</code> — components and dependencies</li>
+<li><code>06-decisions.md</code> — decision log (D-001 interpreter, D-002 palette, D-003 multiplayer, D-004 client/server)</li>
+<li><code>07-references.md</code> — links and documentation</li>
+<li><code>log/</code> — per-session notes</li>
+</ul></div>
+</section>
+<section class="chapter" id="pipeline">
+  <p class="kicker">How the game gets made</p>
+  <h2>Pipeline</h2>
+  <p class="lede">Codebot was started on 2026-09-17. The hardest part of it — a Luau interpreter written in Luau — was built and fully tested before Roblox Studio was opened once, because Roblox cannot run player-written code and the thing that replaces it does not need Roblox to exist. Everything the player sees is built by code at run time, so the whole game is readable text in git.</p>
+  <ol class="pipeline"><li><b>Idea</b><span>Luqman asked for a Roblox game that teaches Luau. One incumbent exists, with 4.38M visits, single-player, and five people in it.</span><code>01-idea.md</code></li><li><b>Decide</b><span>No loadstring, so we write our own interpreter; real Luau syntax entered by tapping, because most Roblox play is on phones.</span><code>06-decisions.md</code></li><li><b>Tokenize</b><span>Cut the player&#x27;s text into pieces, each knowing the line and column it came from.</span><code>src/shared/Interpreter/Tokenizer.luau</code></li><li><b>Parse</b><span>Turn those pieces into a tree, so that inside the loop becomes something the program can say.</span><code>src/shared/Interpreter/Parser.luau</code></li><li><b>Run</b><span>Walk the tree one statement at a time, pausing between each so the game can draw it.</span><code>src/shared/Interpreter/Interp.luau</code></li><li><b>Rooms</b><span>The curriculum as pictures, with a test that runs every room&#x27;s own answer and checks it reaches the goal.</span><code>src/shared/Rooms.luau</code></li><li><b>Build</b><span>The room, the robot, the camera and the panel, all generated by code at run time.</span><code>src/client/</code></li><li><b>Test</b><span>Every part that has no Roblox in it is tested from a terminal with Lune, Studio closed.</span><code>tests/</code></li><li><b>Look</b><span>Press Play in Studio and read the screen. The only part of this game that cannot be tested.</span><code>docs/shots/</code></li><li><b>Log</b><span>What was done, decided and learned in each session goes into the notes.</span><code>log/</code></li><li><b>Record</b><span>This page, rebuilt from the notes, the screenshots and git.</span><code>tools/docs/build_docs.py</code></li></ol>
+  <h3 id="tools">Tools</h3>
+  <div class="table"><table><tbody><tr><td><strong>Roblox and Luau</strong></td><td>The engine. Chosen for free multiplayer, saves and an audience that is already there — none of which a website gives.</td></tr><tr><td><strong>Rojo</strong></td><td>Keeps the game as .luau files on disk instead of a binary place file, so it lives in git and can be read. <code>rojo build</code> makes a place with Studio closed.</td></tr><tr><td><strong>Lune</strong></td><td>Runs the interpreter, the rooms and the code builder from a terminal, which is how everything below the screen is tested.</td></tr><tr><td><strong>StyLua and Selene</strong></td><td>Formatter and linter. Selene also parses every file, which catches a syntax error without opening Studio.</td></tr><tr><td><strong>Our own interpreter</strong></td><td>Roblox's loadstring is off by default and is remote code execution when fed a player's string, so the game carries a tokenizer, parser and stepping evaluator of its own.</td></tr><tr><td><strong>Knowledge base</strong></td><td>The project notes this page is built from, kept outside the repo.</td></tr></tbody></table></div>
+</section>
+<section class="chapter" id="screens">
+  <p class="kicker">What the player sees</p>
+  <h2>Screens</h2>
+  <p class="lede">Screenshots from the game. Each carries the date it was taken: older ones show the game as it was then, and are kept as a record rather than replaced.</p>
+  <section class="gallery" id="the-first-room"><h3>The first room</h3><p class="note">Room 1 offers three buttons and asks for one line. Everything a beginner needs to succeed once is on the screen and nothing else is.</p><div class="shots wide odd"><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/room1-empty.png</code></div><figcaption><span>Room 1 before anything is written: four tiles, the robot facing the goal, and a palette holding only move(), turnRight() and turnLeft().</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/room1-tapped.png</code></div><figcaption><span>After one tap. The panel shows move() as real Luau, not a block, and the RUN button is the only thing left to press.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/room1-solved.png</code></div><figcaption><span>The robot on the goal tile, the tile pulsing, and the message reading Solved in 1 lines. That is par.</span></figcaption></figure></div></section><section class="gallery" id="watching-it-run"><h3>Watching it run</h3><p class="note">The line being run is lit, the variables are listed underneath, and the robot moves one tile per step. This is the whole teaching mechanism.</p><div class="shots wide odd"><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/loop-running.png</code></div><figcaption><span>Room 4 mid-run: the highlight sitting on move() inside the loop, i = 3 in the variables line, and the robot three tiles along the hall.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/loop-variables.png</code></div><figcaption><span>The same loop a moment later, with i = 7, showing the counter changing as the robot walks.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/wall-blocked.png</code></div><figcaption><span>Room 6, where blocked() is true: the robot nose to the wall, about to turn.</span></figcaption></figure></div></section><section class="gallery" id="when-it-goes-wrong"><h3>When it goes wrong</h3><p class="note">Every error is a sentence pointing at a line. A beginner who cannot read the error is a beginner who stops playing.</p><div class="shots wide odd"><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/error-missing-end.png</code></div><figcaption><span>A loop with no end. The message names line 1, where the loop opened, not the bottom of the program where the parser gave up.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/error-not-equal.png</code></div><figcaption><span>Someone typed != out of habit. The message says Luau writes it as ~= instead of refusing with a symbol.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/error-infinite.png</code></div><figcaption><span>while true do move() end, stopped at the step cap with a sentence explaining that it is probably repeating forever.</span></figcaption></figure></div></section><section class="gallery" id="the-palette-grows"><h3>The palette grows</h3><p class="note">Pieces arrive room by room, and the piece that is new in a room is drawn in the accent colour. That is the only tutorial the game has.</p><div class="shots wide odd"><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/palette-room1.png</code></div><figcaption><span>Room 1: three buttons.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/palette-room4.png</code></div><figcaption><span>Room 4: the loop arrives, highlighted, along with the numbers.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/palette-room8.png</code></div><figcaption><span>Room 8: everything, grouped, with local function newly lit.</span></figcaption></figure></div></section><section class="gallery" id="on-a-phone"><h3>On a phone</h3><p class="note">The reason the palette exists. Nothing here needs a keyboard, and the layout is sized from the height of the screen rather than in fixed pixels.</p><div class="shots tall"><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/phone-room1.png</code></div><figcaption><span>Room 1 on a phone: the panel narrower, the text still large, every button a thumb&#x27;s width.</span></figcaption></figure><figure class="shot missing"><div class="gap">Screenshot not taken yet: <code>docs/shots/phone-loop.png</code></div><figcaption><span>Building a for loop by tapping, with the pieces wrapping into rows.</span></figcaption></figure></div></section>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 7 sections</p>
+  <h2>Idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<p>Millions of kids play Roblox and want to make Roblox games. To do that they have to learn Luau. Today they learn it from YouTube videos, paid outside courses (CodaKid, Outschool), or browser platforms (Luablox) — all of which require leaving Roblox, and none of which are a game.</p>
+<p>Inside Roblox there is exactly one incumbent, <strong>Scripting School</strong> (TwoToned Studios, live since 2021). Its numbers, pulled from the Roblox games API on 2026-09-17:</p>
+<div class="table"><table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
+<tr><td>Lifetime visits</td><td>4,380,084</td></tr>
+<tr><td>Favourites</td><td>188,456</td></tr>
+<tr><td>Concurrent players (one snapshot)</td><td>5</td></tr>
+<tr><td>Max players per server</td><td><strong>1</strong></td></tr>
+<tr><td>Last updated</td><td>2026-02-12</td></tr>
+</tbody></table></div>
+<p>Read together, those say two things. The demand is proven and large — 4.38M visits is not an accident. And retention is dead: <code>maxPlayers: 1</code> means it is a single-player lesson reader with a 3D lobby around it. It uses none of what Roblox is actually for. People arrive, read, and never come back.</p>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<p>A 3D puzzle game where <strong>you write real Luau to walk a robot through a room</strong>. Your code is the controller: there is no joystick, no jump button. You write <code>move()</code> and the robot moves one tile.</p>
+<p>Other players are in the same room solving the same puzzle at the same time, and you can watch their robots run — and fail — beside yours. Rooms are ordered so each one introduces exactly one new idea: a line of code, then several lines in order, then a loop, then a variable, then a condition, then a function of your own.</p>
+<p>The code is real Luau syntax, not blocks, so everything learned transfers directly to Roblox Studio.</p>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick us</th></tr></thead><tbody>
+<tr><td>Roblox player, has never coded</td><td>Wants to make games, doesn't know where to start</td><td>It is a game, not a lesson. No account, no payment, no leaving Roblox</td></tr>
+<tr><td>Roblox player part-way through a tutorial</td><td>Understands <code>print()</code>, stalls at loops</td><td>Rooms isolate one concept at a time and <em>show</em> it running</td></tr>
+<tr><td>Parent / teacher looking for a coding activity</td><td>Something the child will choose to open</td><td>Sits where the child already is</td></tr>
+</tbody></table></div>
+<h3 id="idea-value-advantage">Value / advantage</h3>
+<ul>
+<li><strong>Same proven demand, opposite design.</strong> The incumbent proves people want this and is single-player, un-updated since February 2026, and holds nobody.</li>
+<li><strong>The multiplayer is the teaching.</strong> Watching another player's robot solve a room in three lines when yours took nine is the moment a beginner learns what a loop is for. That cannot happen in a single-player lesson reader.</li>
+<li><strong>It transfers.</strong> Real Luau syntax means the player leaves able to open Studio.</li>
+<li><strong>Custom 3D.</strong> Most Roblox developers cannot model; Luqman can. The robot and the rooms can look like nothing else on the platform.</li>
+</ul>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td>A beginner can write their first working line within 60 seconds of joining</td><td>Watch someone who has never coded play room 1, unhelped</td><td>untested</td></tr>
+<tr><td>Tapping tokens is fast enough to not feel like a chore on a phone</td><td>Build the palette, use it on a phone for ten rooms</td><td>untested</td></tr>
+<tr><td>Watching other players run their code is interesting rather than noise</td><td>Put 4 robots in one room and see if it reads or becomes a mess</td><td>untested</td></tr>
+<tr><td>Stepping one line at a time teaches better than run-and-see-the-result</td><td>Ship both, let the player toggle, see which is used</td><td>untested</td></tr>
+<tr><td>Players return for room 2 on a second day</td><td>DataStore retention numbers after launch</td><td>untested</td></tr>
+</tbody></table></div>
+<h3 id="idea-alternatives-considered">Alternatives considered</h3>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Block-based code (Scratch style)</td><td>Works on touch, no syntax errors</td><td>Teaches concepts, not Luau; does not transfer to Studio</td><td>rejected — the transfer is the whole point</td></tr>
+<tr><td>Free-text typing only</td><td>Simplest to build</td><td>Most Roblox play is on phones; typing code on a touchscreen drives beginners off</td><td>rejected as the only input; kept as an option alongside the palette</td></tr>
+<tr><td>Script-a-turret wave defence</td><td>More replayable, code as strategy</td><td>Much bigger build, teaching is indirect</td><td>parked — a strong v2 direction</td></tr>
+<tr><td>Co-op, four robots, one puzzle</td><td>Strongest social hook</td><td>Breaks when a player leaves mid-round</td><td>parked for v2</td></tr>
+</tbody></table></div>
+<h3 id="idea-side-ideas-parking-lot">Side ideas (parking lot)</h3>
+<ul>
+<li>A room the player writes themselves and shares by code, so players teach each other.</li>
+<li>A "ghost" replay of the shortest known solution, unlocked after you solve a room.</li>
+<li>Scoring by lines used, so a solved room can still be improved — the thing that makes Human Resource Machine replayable.</li>
+<li>Later languages beyond Luau. Deliberately not v1: the Luau-transfers-to-Studio promise is the differentiator, and diluting it is what the incumbent did.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 8 sections <button class="unfold" type="button" data-for="planning">Open all</button></p>
+  <h2>Planning</h2>
+  <div class="prose"><details class="fold" id="planning-scope"><summary><span>Scope</span></summary><div>
+<h4 id="planning-must-have-mvp">Must have (MVP)</h4>
+<ul>
+<li><span class="box">to do</span> A Luau interpreter written in Luau: tokenizer, parser, stepping evaluator</li>
+<li><span class="box">to do</span> The subset of Luau listed under "Language subset" below, and nothing more</li>
+<li><span class="box">to do</span> A code editor that works on a touchscreen: tap-to-build token palette + typing</li>
+<li><span class="box">to do</span> Step-by-step execution — current line highlighted, variables panel, ~2 lines/sec</li>
+<li><span class="box">to do</span> A grid room: floor tiles, walls, a robot, a goal tile</li>
+<li><span class="box">to do</span> 8 rooms, each introducing exactly one new idea (see "Room ladder")</li>
+<li><span class="box">to do</span> Up to 8 players per server, all in the same room, all robots visible</li>
+<li><span class="box">to do</span> Progress and best-line-count saved with DataStore</li>
+<li><span class="box">to do</span> Errors that a beginner can read — never a raw stack trace</li>
+</ul>
+<h4 id="planning-nice-to-have-v2">Nice to have (v2)</h4>
+<ul>
+<li><span class="box">to do</span> Ghost replay of the best known solution, unlocked after solving</li>
+<li><span class="box">to do</span> Player-authored rooms shared by code</li>
+<li><span class="box">to do</span> Co-op rooms needing more than one robot</li>
+<li><span class="box">to do</span> Script-a-turret wave mode</li>
+<li><span class="box">to do</span> Game passes (cosmetic robot skins only — never sell the lessons)</li>
+</ul>
+<h4 id="planning-won-t-build">Won't build</h4>
+<ul>
+<li>Languages other than Luau. The transfer-to-Studio promise is the differentiator.</li>
+<li><code>loadstring</code>. See D-001.</li>
+<li>Tables, metatables, <code>pairs</code>/<code>ipairs</code>, string methods, coroutines — not in v1's subset.</li>
+<li>Anything that needs a keyboard to complete.</li>
+</ul>
+</div></details>
+<details class="fold" id="planning-language-subset"><summary><span>Language subset</span></summary><div>
+<p>Everything the interpreter must handle for v1, and nothing beyond it:</p>
+<div class="table"><table><thead><tr><th>Category</th><th>In v1</th></tr></thead><tbody>
+<tr><td>Values</td><td>numbers, strings, booleans, <code>nil</code></td></tr>
+<tr><td>Variables</td><td><code>local x = 1</code>, reassignment</td></tr>
+<tr><td>Operators</td><td><code>+ - * / %</code>, <code>== ~= &lt; &lt;= &gt; &gt;=</code>, <code>and or not</code>, <code>..</code></td></tr>
+<tr><td>Control flow</td><td><code>if / elseif / else / then / end</code>, <code>while ... do</code>, numeric <code>for i = a, b do</code></td></tr>
+<tr><td>Functions</td><td><code>local function f(a, b) ... end</code>, calls, <code>return</code></td></tr>
+<tr><td>Built-ins given to the robot</td><td><code>move()</code>, <code>turnLeft()</code>, <code>turnRight()</code>, <code>blocked()</code>, <code>atGoal()</code>, <code>print(...)</code></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="planning-room-ladder"><summary><span>Room ladder</span></summary><div>
+<p>Each room may introduce exactly one new idea. That constraint is the curriculum.</p>
+<div class="table"><table><thead><tr><th>#</th><th>Room</th><th>New idea</th><th>Target solution</th></tr></thead><tbody>
+<tr><td>1</td><td>First Step</td><td>a line of code does one thing</td><td><code>move()</code></td></tr>
+<tr><td>2</td><td>Three Tiles</td><td>lines run top to bottom, in order</td><td>three <code>move()</code> lines</td></tr>
+<tr><td>3</td><td>The Corner</td><td>more than one command exists</td><td><code>move()</code>, <code>turnRight()</code>, <code>move()</code></td></tr>
+<tr><td>4</td><td>The Long Hall</td><td>repeating yourself is the problem</td><td><code>for i = 1, 8 do move() end</code></td></tr>
+<tr><td>5</td><td>Two Halls</td><td>a variable names a number</td><td><code>local steps = 8</code></td></tr>
+<tr><td>6</td><td>The Wall</td><td>asking a question about the world</td><td><code>if blocked() then ... end</code></td></tr>
+<tr><td>7</td><td>Unknown Distance</td><td>repeat until something is true</td><td><code>while not atGoal() do ... end</code></td></tr>
+<tr><td>8</td><td>Your Own Move</td><td>naming your own block of code</td><td><code>local function step2() ... end</code></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="planning-phases"><summary><span>Phases</span></summary><div>
+<div class="table"><table><thead><tr><th>Phase</th><th>Goal</th><th>Output</th><th>Estimate</th></tr></thead><tbody>
+<tr><td>1</td><td>Interpreter core</td><td>Tokenizer + parser + evaluator, tested headless with Lune, no Roblox involved</td><td>—</td></tr>
+<tr><td>2</td><td>Robot in a room</td><td>One grid room in Studio, code drives the robot, single-player</td><td>—</td></tr>
+<tr><td>3</td><td>Editor</td><td>Token palette + typing, works on a touchscreen</td><td>—</td></tr>
+<tr><td>4</td><td>The ladder</td><td>All 8 rooms, progression, DataStore saves</td><td>—</td></tr>
+<tr><td>5</td><td>Multiplayer</td><td>8 players per server, every robot visible</td><td>—</td></tr>
+<tr><td>6</td><td>Ship</td><td>Thumbnail, description with search terms, publish</td><td>—</td></tr>
+</tbody></table></div>
+<p>Phase 1 is deliberately first and deliberately offline: the hardest and most valuable part of this project can be built and fully tested without opening Studio.</p>
+</div></details>
+<details class="fold" id="planning-stack-tooling"><summary><span>Stack &amp; tooling</span></summary><div>
+<div class="table"><table><thead><tr><th>Layer</th><th>Choice</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Engine</td><td>Roblox / Luau</td><td>Free multiplayer, saves, payments and an audience that is already there</td></tr>
+<tr><td>Source on disk</td><td>Rojo 7.7.0</td><td>Keeps the game as <code>.luau</code> files in git — the thing that makes it a portfolio piece</td></tr>
+<tr><td>Headless tests</td><td>Lune 0.10.5</td><td>Runs and tests the interpreter with Studio closed</td></tr>
+<tr><td>Lint / format</td><td>Selene 0.31.0 / StyLua 2.5.2</td><td></td></tr>
+<tr><td>Packages</td><td>Wally 0.3.2</td><td>Only if actually needed</td></tr>
+<tr><td>3D art</td><td>Blender</td><td>Custom meshes for the robot and rooms</td></tr>
+<tr><td>Audio</td><td><code>sfx</code> CLI</td><td>CC0 by default, per the standing rule</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="planning-requirements"><summary><span>Requirements</span></summary><div>
+<h4 id="planning-functional">Functional</h4>
+<ul>
+<li>Player code can never touch anything outside the robot's built-in functions.</li>
+<li>Execution can be stepped, paused and reset at any time.</li>
+<li>Every error message names the line and says what to do, in plain words.</li>
+<li>A room is solvable on a phone with no keyboard attached.</li>
+</ul>
+<h4 id="planning-non-functional">Non-functional</h4>
+<ul>
+<li>A running program must not be able to freeze the server: cap execution steps per run.</li>
+<li>The interpreter runs on the <strong>client</strong> for responsiveness; the server re-runs the winning program before recording a best score, so a hacked client cannot fake it.</li>
+<li>First room playable within 60 seconds of joining.</li>
+</ul>
+</div></details>
+<details class="fold" id="planning-risks"><summary><span>Risks</span></summary><div>
+<div class="table"><table><thead><tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr></thead><tbody>
+<tr><td>Writing a parser is more work than expected</td><td>high</td><td>medium</td><td>Subset is fixed and small; tested headless from day one</td></tr>
+<tr><td>Tapping tokens feels slow and players quit</td><td>high</td><td>medium</td><td>Test on a real phone at phase 3, before building all 8 rooms</td></tr>
+<tr><td>Four robots running at once is visual noise</td><td>medium</td><td>medium</td><td>Other players' robots render faded and small; toggle to hide</td></tr>
+<tr><td>Nobody finds the game</td><td>high</td><td>high</td><td>Name and description carry the search terms kids actually type</td></tr>
+<tr><td>An infinite loop in player code hangs the client</td><td>medium</td><td>high</td><td>Hard step cap per run, enforced in the evaluator itself</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="planning-resources-needed"><summary><span>Resources needed</span></summary><div>
+<ul>
+<li>No API keys. Nothing paid.</li>
+<li>A Roblox account for publishing (Luqman's).</li>
+<li>A phone to test touch input at phase 3.</li>
+</ul>
+</div></details></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 9 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><blockquote>Status: <code>not started</code> · <code>in progress</code> · <code>done</code> · <code>stalled</code> · <code>cancelled</code></blockquote>
+<details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
+<div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M1</td><td>Tokenizer</td><td>2026-09-17</td><td>done</td><td>36 headless checks passing under Lune</td></tr>
+<tr><td>M2</td><td>Parser</td><td>2026-09-17</td><td>done</td><td>61 headless checks; 97 across the interpreter so far</td></tr>
+<tr><td>M3</td><td>Stepping interpreter</td><td>2026-09-17</td><td>done</td><td>55 checks; 152 across the interpreter. Phase 1 complete</td></tr>
+<tr><td>M4</td><td>Robot in a room</td><td>2026-09-17</td><td>done</td><td>All eight rooms, robot, camera and panel, built by code. 80 more checks</td></tr>
+<tr><td>M5</td><td>Touch editor</td><td>2026-09-17</td><td>done</td><td>Palette built, 44 more checks. <strong>Still to do: try it on a real phone</strong></td></tr>
+<tr><td>M6</td><td>The room ladder</td><td>2026-09-17</td><td>done</td><td>Rooms open one at a time, progress saved, server verifies every solve. 63 more checks</td></tr>
+<tr><td>M7</td><td>Multiplayer</td><td></td><td>not started</td><td>8 players per server, every robot visible</td></tr>
+<tr><td>M8</td><td>Ship</td><td></td><td>not started</td><td>Thumbnail, searchable description, publish</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m1-tokenizer-2026-09-17"><summary><span>M1 — Tokenizer  ✅ 2026-09-17</span></summary><div>
+<p><strong>Goal:</strong> Turn the player's code into a list of tokens, each knowing where it came from. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> Names, keywords, numbers, text, operators and comments</li>
+<li><span class="box done">done</span> Two-character operators (<code>==</code>, <code>~=</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>..</code>) never split</li>
+<li><span class="box done">done</span> Every token carries its line and column</li>
+<li><span class="box done">done</span> Beginner mistakes explained in sentences, not symbol errors</li>
+<li><span class="box done">done</span> Runs and is tested with Studio closed</li>
+</ul>
+<p><strong>Learned:</strong> The friendly-error table turned out to be the most valuable part, and it cost almost nothing — a lookup of eight entries. A beginner who types <code>!=</code> gets told what Luau uses instead, rather than "unexpected symbol", and that is the difference between carrying on and quitting.</p>
+</div></details>
+<details class="fold" id="milestones-m2-parser-2026-09-17"><summary><span>M2 — Parser  ✅ 2026-09-17</span></summary><div>
+<p><strong>Goal:</strong> Turn the token list into a tree describing the shape of the program. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> The whole v1 subset from <code>02-planning.md</code> and nothing beyond it</li>
+<li><span class="box done">done</span> <code>if</code> / <code>while</code> / numeric <code>for</code> / <code>local function</code> / calls / <code>return</code> / <code>break</code></li>
+<li><span class="box done">done</span> Operator precedence correct, including <code>and</code> / <code>or</code> / <code>not</code> and right-associative <code>..</code></li>
+<li><span class="box done">done</span> A missing <code>end</code> names the line the block <em>opened</em> on, not the end of the file</li>
+<li><span class="box done">done</span> <code>=</code> used where <code>==</code> was meant is caught and explained</li>
+</ul>
+<p><strong>Learned:</strong> The first version reported a missing <code>end</code> <em>at</em> the end of the file. The message named the right line but the error's line number pointed at the player's last innocent line, which is what the editor would have highlighted. Naming a line in the text is not the same as pointing at it — both have to agree.</p>
+<p><strong>Dependencies:</strong> M1 <strong>Blockers:</strong> none</p>
+</div></details>
+<details class="fold" id="milestones-m3-stepping-interpreter-2026-09-17"><summary><span>M3 — Stepping interpreter  ✅ 2026-09-17</span></summary><div>
+<p><strong>Goal:</strong> Run the tree one step at a time so the game can draw each step. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> <code>step()</code> advances one statement and reports the line it is on</li>
+<li><span class="box done">done</span> Variables readable from outside, for the variables panel</li>
+<li><span class="box done">done</span> Hard cap on total steps, so an infinite loop cannot hang the client</li>
+<li><span class="box done">done</span> A depth cap as well, so runaway recursion cannot blow the stack</li>
+<li><span class="box done">done</span> Robot built-ins injected by the caller, never global</li>
+<li><span class="box done">done</span> Runtime errors carry a line number and a plain sentence</li>
+</ul>
+<p><strong>Learned:</strong> Stepping is done with a coroutine, which keeps the evaluator as ordinary recursive code — a <code>while</code> loop in player code is a real <code>while</code> loop in the evaluator. A hand-rolled state machine would have bought nothing and cost every line's readability.</p>
+<p>The sandbox is a consequence of the design rather than a feature bolted on: there is no global table inside a program at all, so <code>game</code>, <code>require</code>, <code>getfenv</code> and <code>loadstring</code> are not blocked, they simply do not exist. Five checks assert exactly that.</p>
+<p><strong>Dependencies:</strong> M2 <strong>Blockers:</strong> none</p>
+<p><strong>Phase 1 is complete.</strong> The interpreter is finished, is 152 headless checks, and has never needed Roblox Studio to be open.</p>
+</div></details>
+<details class="fold" id="milestones-m4-robot-in-a-room-2026-09-17"><summary><span>M4 — Robot in a room  ✅ 2026-09-17</span></summary><div>
+<p><strong>Goal:</strong> A room in Studio with the interpreter driving the robot. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> Rooms defined as pictures in <code>Rooms.luau</code>, all eight of them</li>
+<li><span class="box done">done</span> <code>RobotWorld.luau</code> holds the rules — walls, facing, move, blocked, atGoal — with no Roblox in it, so they can be tested</li>
+<li><span class="box done">done</span> <code>RoomView.luau</code> builds the room and robot out of parts and animates the events</li>
+<li><span class="box done">done</span> Camera framed on the room, sized to fit the biggest one</li>
+<li><span class="box done">done</span> A panel with the room's brief, a code box, Run and Reset, a line highlight, a message line and a variables line</li>
+<li><span class="box done">done</span> The place builds with <code>rojo build</code> and needs nothing assembled by hand</li>
+</ul>
+<p><strong>Learned:</strong> Splitting the rules from the drawing paid for itself immediately. Because <code>RobotWorld</code> has no Roblox in it, a test could run every room's own intended solution and assert it reaches the goal — and it failed on two rooms straight away. <em>The Wall</em> turned into a wall and <em>Your Own Move</em> had a path its own answer could not walk. Both were rewritten before Studio was opened. Neither would have been found by reading, and finding them by playing would have cost an evening each.</p>
+<p>A second bug the compiler could not catch: <code>CodePanel</code> had a field called <code>highlight</code> and a method called <code>highlight</code>. Lua looks the field up first, so <code>panel:highlight(3)</code> would have tried to call a Frame. Renamed the field to <code>highlightBar</code>.</p>
+</div></details>
+<details class="fold" id="milestones-completion-history"><summary><span>Completion history</span></summary><div>
+<div class="table"><table><thead><tr><th>Date</th><th>Milestone</th><th>Lesson</th></tr></thead><tbody>
+<tr><td>2026-09-17</td><td>M1 Tokenizer</td><td>Building the interpreter outside Roblox first means the hardest part of the game has a test suite before Studio is ever opened</td></tr>
+<tr><td>2026-09-17</td><td>M2 Parser</td><td>An error message that names a line and an error that points at a line are two different things, and the player only sees the second one</td></tr>
+<tr><td>2026-09-17</td><td>M3 Stepping interpreter</td><td>Lune and Roblox disagree about errors thrown across a coroutine boundary. Catching inside the coroutine removes the disagreement instead of betting on it</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m5-touch-editor-2026-09-17-untested-on-a-phone"><summary><span>M5 — Touch editor  ✅ 2026-09-17 (untested on a phone)</span></summary><div>
+<p><strong>Goal:</strong> Write code without a keyboard. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> <code>CodeBuilder.luau</code> assembles tapped pieces into real Luau, with correct spacing</li>
+<li><span class="box done">done</span> It indents automatically, so the player is shown laid-out code without being taught to lay it out</li>
+<li><span class="box done">done</span> DELETE removes a whole piece, not a character</li>
+<li><span class="box done">done</span> <code>Palette.luau</code> gives each room only the pieces it needs, growing room by room</li>
+<li><span class="box done">done</span> A test that every room's own solution is buildable from that room's buttons</li>
+<li><span class="box done">done</span> A TYPE toggle for keyboards, and typed text converts back into pieces</li>
+<li><span class="box done">done</span> The panel is laid out from the height of the screen, not in fixed pixels</li>
+<li><span class="box">to do</span> <strong>Actually tried on a phone.</strong> Nothing below this line is proven until it is.</li>
+</ul>
+<p><strong>Learned:</strong> Holding the taps rather than the finished string is what makes DELETE make sense: tapping <code>move()</code> once and deleting it once are symmetrical, and deleting characters never would be. The auto-indent came out of the same design almost for free, and it is the part most likely to matter — a beginner who has never been taught to indent will still open Studio with code that looks right.</p>
+</div></details>
+<details class="fold" id="milestones-m6-the-room-ladder-2026-09-17"><summary><span>M6 — The room ladder  ✅ 2026-09-17</span></summary><div>
+<p><strong>Goal:</strong> Rooms in order, progress kept. <strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> Room 1 open to everyone; each solved room opens the next</li>
+<li><span class="box done">done</span> A returning player starts on the first room they have not solved</li>
+<li><span class="box done">done</span> Fewest lines kept per room</li>
+<li><span class="box done">done</span> Saved with a DataStore, and playable without one</li>
+<li><span class="box done">done</span> <strong>The server re-runs a submitted solution before recording it</strong> (D-004)</li>
+<li><span class="box done">done</span> A submission is capped by length, by steps and by a cooldown</li>
+<li><span class="box done">done</span> A profile that failed to load is never saved over (D-007)</li>
+</ul>
+<p><strong>Learned:</strong> <code>Solution.luau</code> exists so that "solved" has exactly one definition, used by the client to talk to the player and by the server to decide what counts. It is also the first file in <code>shared</code> to require its neighbours, so it carries the dual-target require — which turned out to work exactly as documented.</p>
+</div></details>
+<details class="fold" id="milestones-m7-m8"><summary><span>M7..M8</span></summary><div>
+<p>Still as planned in <code>02-planning.md</code>: multiplayer, then shipping.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 8 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><blockquote>One decision = one entry. Never delete old entries — mark them <code>Superseded by D-00X</code>.</blockquote>
+<details class="fold" id="decisions-d-001-write-our-own-luau-interpreter-instead-of-us"><summary><span>D-001 — Write our own Luau interpreter instead of using <code>loadstring</code></span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> The game's whole premise is running code the player wrote. Roblox's <code>loadstring</code> is gated behind <code>ServerScriptService.LoadStringEnabled</code>, which <strong>defaults to <code>false</code></strong>, exists only on the server, and which Roblox's own documentation recommends leaving off: feeding it a player-supplied string is textbook remote code execution.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>A — enable <code>LoadStringEnabled</code></td><td>Almost no work; full Luau</td><td>Any player can run arbitrary code on our server. Not shippable</td></tr>
+<tr><td>B — write an interpreter in Luau</td><td>Fully sandboxed; we control every step</td><td>Real work: tokenizer, parser, evaluator</td></tr>
+<tr><td>C — block-based code compiled to our own opcodes</td><td>Safe, no syntax errors</td><td>Stops being Luau, so it no longer transfers to Studio</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> B.</li>
+<li><strong>Reason:</strong> Three things, in order of importance. It is the only safe option. It is <em>better</em> than <code>loadstring</code> for teaching, because an interpreter we own can pause on line 4, highlight it, show <code>i = 3</code> and move the robot one tile — <code>loadstring</code> gives a black box that either works or throws. And it is the strongest portfolio artifact in the project: a tokenizer, a parser and a stepping evaluator with a test suite read well in git.</li>
+<li><strong>Consequences / trade-offs:</strong> We support a deliberately small subset of Luau and must say so honestly in the game. Every new language feature is work.</li>
+<li><strong>Reversible?</strong> No — the whole codebase sits on it.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-002-real-luau-syntax-entered-through-a-tap-to-bu"><summary><span>D-002 — Real Luau syntax, entered through a tap-to-build token palette</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Most Roblox sessions are on phones and tablets. Asking a beginner on an iPad to type <code>for i = 1, 10 do</code> is where they quit. But block-based code does not transfer to Roblox Studio, which is the reason the player is here.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Typing only</td><td>Simplest</td><td>Unusable for most of the actual audience</td></tr>
+<tr><td>Blocks only</td><td>Touch-friendly, no syntax errors</td><td>Teaches concepts, not Luau</td></tr>
+<tr><td>Token palette producing real Luau text</td><td>Touch-friendly <em>and</em> real syntax</td><td>More UI work than either</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> A palette of tappable tokens (<code>for</code>, <code>i</code>, <code>=</code>, <code>1</code>, <code>do</code>, <code>move()</code>, …) that assembles into real Luau text on screen, with a keyboard accepted as an alternative into the same editor.</li>
+<li><strong>Reason:</strong> It keeps the transfer-to-Studio promise while remaining playable with one thumb. The player reads genuine Luau from the first minute even though they never typed a character.</li>
+<li><strong>Consequences / trade-offs:</strong> The palette must be context-aware to stay short, which is real design work. Syntax errors are rarer but not impossible.</li>
+<li><strong>Reversible?</strong> With difficulty — the editor is a large piece of UI.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-003-multiplayer-everyone-in-the-same-room"><summary><span>D-003 — Multiplayer, everyone in the same room</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> The incumbent, Scripting School, has 4.38M lifetime visits and <code>maxPlayers: 1</code>. It proves the demand and fails to hold anyone.</li>
+<li><strong>Decision:</strong> Up to 8 players per server, all working the same room, every robot visible while it runs.</li>
+<li><strong>Reason:</strong> It is the only thing Roblox offers that a website cannot, and it is the incumbent's exact weakness. It is also pedagogy: seeing another player's robot finish a room in three lines when yours took nine is how a beginner discovers what a loop is <em>for</em>. A lesson cannot do that.</li>
+<li><strong>Consequences / trade-offs:</strong> Four robots at once risks visual noise; other players render faded, with a toggle to hide them.</li>
+<li><strong>Reversible?</strong> Easily — it can be turned down to a solo server.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-004-interpreter-runs-on-the-client-server-re-run"><summary><span>D-004 — Interpreter runs on the client, server re-runs to confirm a score</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> Stepping code must feel instant, which argues for the client. But a client can be modified, and best-line-count is a leaderboard number.</li>
+<li><strong>Decision:</strong> Execute on the client for responsiveness. When a player claims a solve, send the program text to the server, which runs the same interpreter and only then records the score.</li>
+<li><strong>Reason:</strong> Responsiveness where it is felt, authority where it is needed. The interpreter is shared code, so this costs nothing extra.</li>
+<li><strong>Consequences / trade-offs:</strong> The server needs its own step cap so a submitted program cannot hang it.</li>
+<li><strong>Reversible?</strong> Easily.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-005-the-room-is-built-on-the-client-for-now"><summary><span>D-005 — The room is built on the client for now</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> M4 needed a room on screen. A room can be built by the server into <code>Workspace</code>, where everyone shares it, or by each client into its own <code>Workspace</code>.</li>
+<li><strong>Decision:</strong> Build on the client, in <code>RoomView.create</code>.</li>
+<li><strong>Reason:</strong> While every player has their own robot and their own attempt, there is nothing to agree on, and a client build keeps M4 to one file with no networking.</li>
+<li><strong>Consequences / trade-offs:</strong> This is exactly what M7 has to undo. When players share a room, the room itself becomes the server's and only the robots stay per player. Recorded here so that M7 knows where to look rather than rediscovering it.</li>
+<li><strong>Reversible?</strong> Easily — <code>RoomView</code> takes the parent it builds into.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-006-rooms-are-pictures-not-coordinates"><summary><span>D-006 — Rooms are pictures, not coordinates</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> A room needs walls, a start, a facing and a goal. That can be a list of coordinates or a drawing made of characters.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Coordinates</td><td>Precise, no parsing</td><td>Unreadable in a diff; editing means arithmetic</td></tr>
+<tr><td>A picture made of <code>#</code>, <code>.</code>, <code>R</code>, <code>G</code></td><td>Readable at a glance, editable by moving one character</td><td>Has to be parsed; rows must be kept the same width</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> Pictures, parsed by <code>RobotWorld.create</code>.</li>
+<li><strong>Reason:</strong> The curriculum will be edited far more often than it is written, and a room you can see in the file is a room whose mistake you can see in the file. The width risk is covered by a test asserting every room is rectangular.</li>
+<li><strong>Consequences / trade-offs:</strong> One character per tile, so a tile can carry no extra information. When a room needs more than walls and a goal, this has to grow.</li>
+<li><strong>Reversible?</strong> Easily — only <code>RobotWorld.create</code> reads the picture.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-007-a-profile-that-failed-to-load-is-never-saved"><summary><span>D-007 — A profile that failed to load is never saved over</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> A player joins, the server reads their progress from the DataStore, and later writes it back. If the read fails — DataStore outage, throttling, Studio without API access — the server is holding an empty profile for someone who may have solved every room.</li>
+<li><strong>Options considered:</strong></li>
+</ul>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead><tbody>
+<tr><td>Save anyway</td><td>Simple; the session's work is never lost</td><td>A failed read followed by one save erases everything the player had</td></tr>
+<tr><td>Refuse to save unless the read succeeded</td><td>A bad read can only ever cost one session</td><td>The session's work is lost when the read failed</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Decision:</strong> A session carries a <code>loaded</code> flag. Saving is refused unless it is true.</li>
+<li><strong>Reason:</strong> The two failures are not the same size. Losing one session is a bad evening; overwriting a finished profile with an empty one is unrecoverable and looks, to the player, exactly like the game deleting their work.</li>
+<li><strong>Consequences / trade-offs:</strong> A player whose read failed plays a session that will not be kept, and the game tells them so rather than letting them find out.</li>
+<li><strong>Reversible?</strong> Easily, and should not be.</li>
+</ul>
+</div></details>
+<details class="fold" id="decisions-d-008-profile-keys-are-strings"><summary><span>D-008 — Profile keys are strings</span></summary><div>
+<ul>
+<li><strong>Date:</strong> 2026-09-17</li>
+<li><strong>Status:</strong> active</li>
+<li><strong>Context:</strong> A profile maps a room number to a best line count.</li>
+<li><strong>Decision:</strong> The key is the room number as a <strong>string</strong>: <code>{ best = { ["1"] = 3 } }</code>.</li>
+<li><strong>Reason:</strong> A DataStore stores JSON. A table written with number keys is stored as an object and comes back with string keys, so a profile written as <code>{ [1] = 3 }</code> is not the profile that returns. Using strings on both sides means saving and loading cannot disagree. <code>Progress.sanitize</code> accepts either, so anything written by an earlier version still loads.</li>
+<li><strong>Consequences / trade-offs:</strong> Every lookup goes through <code>tostring</code>, which is why the module has <code>bestFor</code> and <code>isSolved</code> rather than letting callers index <code>best</code> directly.</li>
+<li><strong>Reversible?</strong> No, not without a migration.</li>
+</ul>
+</div></details></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 5 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><details class="fold" id="methods-setup-from-scratch"><summary><span>Setup from scratch</span></summary><div>
+<p>The toolchain is already installed globally (see <code>global/stack.md</code>): Rojo 7.7.0, Lune 0.10.5, StyLua 2.5.2, Selene 0.31.0, Wally 0.3.2.</p>
+<pre><code>cd ~/Desktop/project/game/codebot
+lune run tests/Tokenizer.spec.luau   # should print &quot;all 36 checks passed&quot;</code></pre>
+</div></details>
+<details class="fold" id="methods-daily-commands"><summary><span>Daily commands</span></summary><div>
+<div class="table"><table><thead><tr><th>Purpose</th><th>Command</th></tr></thead><tbody>
+<tr><td>Run every test</td><td><code>for f in tests/*.spec.luau; do lune run "$f"; done</code></td></tr>
+<tr><td>Run one suite</td><td><code>lune run tests/Interp.spec.luau</code></td></tr>
+<tr><td>See how code is cut into tokens</td><td><code>lune run tools/show_tokens.luau '&lt;code&gt;'</code></td></tr>
+<tr><td>See the tree the parser makes</td><td><code>lune run tools/show_tree.luau '&lt;code&gt;'</code></td></tr>
+<tr><td>Watch a program run, step by step</td><td><code>lune run tools/run_code.luau '&lt;code&gt;'</code></td></tr>
+<tr><td>Format</td><td><code>stylua src/ tests/</code></td></tr>
+<tr><td>Lint</td><td><code>selene src/</code></td></tr>
+<tr><td>Live-sync into Studio</td><td><code>rojo serve</code> (port 34872, the plugin's default), then Plugins → Rojo → Connect</td></tr>
+<tr><td>Build a place file, Studio closed</td><td><code>rojo build -o codebot.rbxlx</code></td></tr>
+<tr><td>Open it in Studio</td><td><code>rojo build -o codebot.rbxlx &amp;&amp; open codebot.rbxlx</code></td></tr>
+<tr><td>Rebuild the project record</td><td><code>python3 tools/docs/build_docs.py</code></td></tr>
+<tr><td>Rebuild it and publish</td><td><code>python3 tools/docs/build_docs.py --publish</code></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-folder-structure"><summary><span>Folder structure</span></summary><div>
+<pre><code>src/shared/Interpreter/   the tokenizer, parser and interpreter — plain Luau, no Roblox API
+src/server/               authority: re-runs a winning program before recording a score
+src/client/               the editor, the robot, the room
+tests/                    Lune specs, run with Studio closed
+assets/                   Blender sources and exported meshes
+tools/                    scripts</code></pre>
+</div></details>
+<details class="fold" id="methods-patterns-in-use"><summary><span>Patterns in use</span></summary><div>
+<h4 id="methods-a-module-that-loads-both-in-roblox-and-in-lune">A module that loads both in Roblox and in Lune</h4>
+<p>Roblox resolves a require through the data model (<code>script.Parent.X</code>); Lune resolves it as a file path (<code>"./X"</code>). The <code>script</code> global does not exist in Lune, which gives a clean way to branch:</p>
+<pre><code>local Tokenizer = if script then require(script.Parent.Tokenizer) else require(&quot;./Tokenizer&quot;)</code></pre>
+<p>Verified on 2026-09-17: under Lune, <code>typeof(script)</code> is <code>nil</code>, <code>require("./Mod")</code> resolves, and <code>require("@self/Mod")</code> does <strong>not</strong>.</p>
+<h4 id="methods-errors-are-sentences-not-symbols">Errors are sentences, not symbols</h4>
+<p>Every error the interpreter produces is <code>{ message, line, col }</code> and is returned, never raised — the caller is a game that has to draw the problem on screen. The message is written for someone who has never coded: <em>"This piece of text is missing its closing " mark."</em>, not <em>"unexpected symbol near '\"'"</em>. The tokenizer also keeps a small table of mistakes borrowed from other languages (<code>!=</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>{</code>, <code>;</code>) and answers each with the Luau equivalent.</p>
+<h4 id="methods-syntax-errors-are-raised-then-caught-once">Syntax errors are raised, then caught once</h4>
+<p>The parser is recursive descent, so a failure can happen at any depth. It raises a table carrying a <code>__syntaxError</code> marker and <code>Parser.parse</code> catches it with <code>pcall</code>. The marker matters: anything raised <em>without</em> it is a genuine bug in the parser and is re-raised rather than being reported to the player as bad code. A game that blames the player for our mistakes is worse than one that crashes.</p>
+<h4 id="methods-never-throw-across-a-coroutine-boundary">Never throw across a coroutine boundary</h4>
+<p>Lune converts a table thrown out of a coroutine into a string — <code>coroutine.resume</code> returns <code>false, "runtime error: table: 0x..."</code> — so the message and line are lost. Roblox hands the table back intact. Code that relies on the Roblox behaviour therefore passes in Studio and fails in the tests, or worse, the other way round.</p>
+<p>The interpreter avoids the question: the coroutine body wraps itself in <code>pcall</code> and stores the caught error on the machine, where <code>step()</code> reads it. Yielding from inside a <code>pcall</code> is fine in Luau, so stepping is unaffected. Verified 2026-09-17.</p>
+<h4 id="methods-the-interpreter-never-sees-roblox">The interpreter never sees Roblox</h4>
+<p>Nothing under <code>src/shared/Interpreter/</code> may touch a Roblox API. That is what lets the hardest part of the game be built and tested from the terminal, and what makes the test suite fast.</p>
+<h4 id="methods-the-room-s-shell">The room's shell</h4>
+<p>Each room builds its own enclosure in <code>RoomView.buildShell</code> — a floor slab, four walls, a lit stripe at eye height and a soffit of light fittings — sized from that room's grid, so a room is somewhere rather than a set of tiles in a void. Two things about it are not obvious:</p>
+<p>The soffit is a <strong>ring, not a ceiling</strong>. The camera looks down into the room from well above the wall tops, so a closed ceiling would cover the entire game with a grey rectangle.</p>
+<p>The fittings run along <strong>whichever way the room is longer</strong>. Room 4 is thirteen tiles wide and three deep; spreading the lamps down the short side put them all at the two far ends and left the hall itself dark. <code>PointLight.Range</code> maxes out at 60, which is only just enough to reach the floor from a soffit thirty studs up.</p>
+<h4 id="methods-datastore-in-studio">DataStore in Studio</h4>
+<p><code>DataStoreService</code> only works when the place is published and <strong>Game Settings → Security → Enable Studio Access to API Services</strong> is on. Until then the server logs <code>no DataStore available</code>, the game plays normally, and the message after a solve ends with <em>"(Progress is not being saved.)"</em> — deliberately, because a player silently losing progress is worse than a player being told.</p>
+<h4 id="methods-nothing-from-a-client-is-believed">Nothing from a client is believed</h4>
+<p><code>SubmitSolution</code> receives a room number and a string. Before either is used it is checked for being the shape it claims to be, the room must exist, the room must be unlocked for that player, and a cooldown must have passed. Only then does the server run the code — with the same <code>Solution.run</code> the client used, so there is one definition of <em>solved</em> rather than two. Running a stranger's program is safe because the interpreter hands it nothing but the robot's own actions and stops at a step cap.</p>
+<h4 id="methods-the-project-record">The project record</h4>
+<p><code>docs/index.html</code> is generated from this knowledge base by <code>tools/docs/build_docs.py</code> and published to <a href="https://luqman-docs.netlify.app/codebot/">https://luqman-docs.netlify.app/codebot/</a>. It must be rebuilt and republished whenever the game changes, which is the standing rule for every one of Luqman's games.</p>
+<p>Codebot's copy differs from the other games' in two ways. Its screenshots cannot be taken by a script, because Studio is not a browser — they are captured by hand and dropped into <code>docs/shots/</code>, and any named picture that is not there yet shows as a labelled gap, so the <code>GALLERIES</code> list doubles as the list of pictures still to take. And its <code>header_comment()</code> understands Luau's <code>--</code> and <code>--[[ ]]</code> comments, which the shared engine did not.</p>
+<p>The cover's check count is produced by running the suites, not by counting lines that look like checks, so it cannot drift away from the truth.</p>
+</div></details>
+<details class="fold" id="methods-gotchas-traps"><summary><span>Gotchas / traps</span></summary><div>
+<div class="table"><table><thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td><code>loadstring</code> is not available</td><td><code>LoadStringEnabled</code> defaults to <code>false</code> and is server-only</td><td>Do not use it — we ship our own interpreter. See D-001</td></tr>
+<tr><td><code>require("@self/X")</code> fails under Lune</td><td>Not supported in Lune 0.10.5</td><td>Use <code>require("./X")</code></td></tr>
+<tr><td>Roblox's topbar buttons sit on top of our UI</td><td><code>ScreenGui.IgnoreGuiInset = true</code> draws under a bar that cannot be removed</td><td>Leave it <code>false</code>; the GUI then starts below the topbar</td></tr>
+<tr><td>Lights look blocky and square-edged</td><td><code>Lighting.Technology</code> defaults to Voxel and <strong>cannot be set from a script</strong></td><td>Set it in <code>default.project.json</code> under a <code>Lighting</code> entry: <code>"$properties": { "Technology": "Future" }</code>. Rojo writes it into the place. A running <code>rojo serve</code> has to be restarted after the project file changes, and the plugin reconnected</td></tr>
+<tr><td>Roblox's chat bar covers the room's instructions</td><td>Chat, player list, backpack and health are on by default</td><td><code>SetCoreGuiEnabled(Enum.CoreGuiType.All, false)</code>, <strong>and</strong> <code>TextChatService.ChatWindowConfiguration.Enabled = false</code> — the newer chat is a separate service the CoreGui call does not reach. Retry it: the call fails while the core scripts load, and spawn the retry so it cannot delay the room</td></tr>
+<tr><td>A thrown error arrives as a string in tests</td><td>Lune stringifies tables thrown out of a coroutine; Roblox does not</td><td>Catch inside the coroutine, never across it</td></tr>
+<tr><td><code>stylua</code> reformats and a test then fails</td><td>It shouldn't — but re-run the specs after formatting anyway</td><td><code>lune run tests/*.spec.luau</code> after every <code>stylua</code></td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 6 sections</p>
+  <h2>Relations</h2>
+  <div class="prose"><h3 id="relations-system-map">System map</h3>
+<pre class="mermaid">flowchart LR
+    User --&gt; Frontend
+    Frontend --&gt; API
+    API --&gt; DB[(Database)]
+    API --&gt; Ext[External services]</pre>
+<h3 id="relations-internal-components">Internal components</h3>
+<div class="table"><table><thead><tr><th>Component</th><th>Function</th><th>Depends on</th><th>Used by</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-external-services">External services</h3>
+<div class="table"><table><thead><tr><th>Service</th><th>Used for</th><th>Env var name</th><th>Cost</th><th>If it goes down?</th></tr></thead><tbody>
+<tr><td></td><td></td><td><code>SOME_KEY</code></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-data-models">Data &amp; models</h3>
+<div class="table"><table><thead><tr><th>Entity</th><th>Key fields</th><th>Relationships</th></tr></thead><tbody>
+<tr><td></td><td></td><td>one-to-many with ...</td></tr>
+</tbody></table></div>
+<h3 id="relations-people-roles">People &amp; roles</h3>
+<div class="table"><table><thead><tr><th>Name / role</th><th>Responsibility</th><th>Contact when</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-relationships-with-other-projects">Relationships with other projects</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Type of link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td>shared code / shared data / replacement</td><td></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 5 sections <button class="unfold" type="button" data-for="references">Open all</button></p>
+  <h2>References</h2>
+  <div class="prose"><details class="fold" id="references-project-links"><summary><span>Project links</span></summary><div>
+<div class="table"><table><thead><tr><th>Item</th><th>URL</th></tr></thead><tbody>
+<tr><td>Repo</td><td><code>~/Desktop/project/game/codebot</code> — not pushed yet</td></tr>
+<tr><td>Production</td><td>not published</td></tr>
+<tr><td>Project record</td><td><a href="https://luqman-docs.netlify.app/codebot/">https://luqman-docs.netlify.app/codebot/</a></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="references-external-documentation"><summary><span>External documentation</span></summary><div>
+<div class="table"><table><thead><tr><th>Topic</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td><code>LoadStringEnabled</code> default and history</td><td><a href="https://robloxapi.github.io/ref/class/ServerScriptService.html">https://robloxapi.github.io/ref/class/ServerScriptService.html</a></td><td>Confirms the default is <code>false</code>; changed again in v0.726 (June 2026) and v0.731 (July 2026)</td></tr>
+<tr><td>ServerScriptService reference</td><td><a href="https://create.roblox.com/docs/reference/engine/classes/ServerScriptService">https://create.roblox.com/docs/reference/engine/classes/ServerScriptService</a></td><td>Official page; note it does not state the default</td></tr>
+<tr><td>Why enabling loadstring is dangerous</td><td><a href="https://devforum.roblox.com/t/why-is-using-gameserverscriptserviceloadstringenabled-such-a-bad-thing/1088005">https://devforum.roblox.com/t/why-is-using-gameserverscriptserviceloadstringenabled-such-a-bad-thing/1088005</a></td><td>The RCE argument, from the devforum</td></tr>
+<tr><td>Roblox scripting docs</td><td><a href="https://create.roblox.com/docs/scripting">https://create.roblox.com/docs/scripting</a></td><td>The syntax the game must stay faithful to</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="references-competitors-and-prior-art"><summary><span>Competitors and prior art</span></summary><div>
+<div class="table"><table><thead><tr><th>Thing</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Scripting School</td><td><a href="https://www.roblox.com/games/6557769953/Scripting-School">https://www.roblox.com/games/6557769953/Scripting-School</a></td><td>The only in-game incumbent. 4,380,084 visits, 188,456 favourites, <code>maxPlayers: 1</code>, last updated 2026-02-12. Snapshot on 2026-09-17 showed 5 concurrent players. Teaches Lua, Python, JavaScript and C++</td></tr>
+<tr><td>Luablox</td><td><a href="https://luablox.dev/">https://luablox.dev/</a></td><td>Browser platform for Luau. Outside Roblox</td></tr>
+<tr><td>CodaKid</td><td><a href="https://codakid.com/roblox-coding/">https://codakid.com/roblox-coding/</a></td><td>Paid course. Outside Roblox</td></tr>
+<tr><td>Outschool Roblox Luau classes</td><td><a href="https://outschool.com/classes/roblox-luau-scripting-basics-learn-to-script-MNBPxMNN">https://outschool.com/classes/roblox-luau-scripting-basics-learn-to-script-MNBPxMNN</a></td><td>Paid live classes</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="references-design-prior-art-not-roblox"><summary><span>Design prior art (not Roblox)</span></summary><div>
+<ul>
+<li><strong>Human Resource Machine</strong> — scoring a solved puzzle by lines used is what makes it replayable after it is solved. Taken directly.</li>
+<li><strong>Lightbot</strong> — proves a beginner will accept "your code is the controller" with no explanation at all.</li>
+<li><strong>Shenzhen I/O</strong>, <strong>TIS-100</strong> — evidence that a constrained instruction set is more interesting than a full language, not less.</li>
+</ul>
+</div></details>
+<details class="fold" id="references-useful-api-calls"><summary><span>Useful API calls</span></summary><div>
+<pre><code># place id -&gt; universe id
+curl -s &quot;https://apis.roblox.com/universes/v1/places/&lt;PLACE_ID&gt;/universe&quot;
+# live stats for a universe: playing, visits, favoritedCount, maxPlayers, updated
+curl -s &quot;https://games.roblox.com/v1/games?universeIds=&lt;UNIVERSE_ID&gt;&quot;</code></pre>
+</div></details></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-17"><summary><span>2026-09-17</span></summary><div><h3 id="log-2026-09-17-what-was-done">What was done</h3>
+<ul>
+<li>Luqman asked for a new Roblox Studio game: one where people learn Luau, fun and engaging rather than a lesson. Goals he picked: real players playing it, and a portfolio piece. Audience: someone who has never written a line of code.</li>
+<li>Researched the space. One in-game incumbent, <strong>Scripting School</strong> — 4,380,084 visits, 188,456 favourites, <code>maxPlayers: 1</code>, last updated 2026-02-12, and 5 concurrent players in a snapshot taken today. Demand proven, retention dead.</li>
+<li>Confirmed from the Roblox API reference that <code>ServerScriptService.LoadStringEnabled</code> defaults to <code>false</code>, so player-written Luau cannot be executed directly. Decided to write our own interpreter (D-001).</li>
+<li>Opened the project: <code>~/Desktop/project/game/codebot</code>, notes in the knowledge base, registered in <code>_index/projects.md</code>.</li>
+<li>Wrote <code>01-idea.md</code>, <code>02-planning.md</code> (scope, language subset, room ladder), <code>06-decisions.md</code> (D-001 to D-004), <code>00-overview.md</code>, <code>07-references.md</code>.</li>
+<li>Scaffolded the repo: Rojo project file, StyLua and Selene configs, <code>.gitignore</code> covering <code>.env</code> and Rojo build output, README.</li>
+<li>Built M1, the tokenizer: 470 lines, with line and column on every token and a friendly-mistake table. 36 checks passing headless under Lune.</li>
+<li>First commit <code>c27fd01</code> on <code>main</code>.</li>
+</ul>
+<h3 id="log-2026-09-17-decisions-made">Decisions made</h3>
+<ul>
+<li>D-001 own interpreter over <code>loadstring</code> — the only safe option, and better for teaching because it can step line by line.</li>
+<li>D-002 real Luau syntax entered through a tap-to-build token palette, because most Roblox play is on phones and block-based code would not transfer to Studio.</li>
+<li>D-003 multiplayer, everyone in the same room — the incumbent's exact weakness.</li>
+<li>D-004 interpret on the client for feel, re-run on the server before recording a score.</li>
+</ul>
+<h3 id="log-2026-09-17-stuck-on-problems">Stuck on / problems</h3>
+<ul>
+<li>Nothing yet.</li>
+</ul>
+<h3 id="log-2026-09-17-what-was-learned">What was learned</h3>
+<ul>
+<li>Under Lune 0.10.5, <code>require("./Mod")</code> works, <code>require("@self/Mod")</code> does not, and the <code>script</code> global is <code>nil</code> — which is what makes a single module loadable from both Roblox and the terminal.</li>
+<li><code>LoadStringEnabled</code>'s default has been changed twice recently, in v0.726 (June 2026) and v0.731 (July 2026), landing back on <code>false</code>. Worth re-checking rather than trusting memory.</li>
+</ul>
+<h3 id="log-2026-09-17-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> M2, the parser: tokens to a tree, v1 subset only</li>
+<li><span class="box">to do</span> Decide whether <code>codebot</code> is the name to keep</li>
+<li><span class="box">to do</span> Decide what to do with the empty <code>direct-hit</code> scaffold from this morning</li>
+</ul>
+<h3 id="log-2026-09-17-later-the-same-day-m2-the-parser">Later the same day — M2, the parser</h3>
+<h3 id="log-2026-09-17-what-was-done-2">What was done</h3>
+<ul>
+<li>Confirmed the name <code>codebot</code> stays.</li>
+<li><strong>Did not delete <code>direct-hit</code>.</strong> I had described it as an empty scaffold; checking it properly showed 1,131 lines of GDScript (a battleship game with an AI, an ocean shader, a 517-line cutscene and dev checks), five Sketchfab warship models and 209 MB of assets, with <strong>zero commits</strong>. Luqman clarified that this terminal is for the Roblox game, not that project, so it was left untouched. It remains uncommitted and therefore unrecoverable if lost.</li>
+<li>Built M2, the parser: the whole v1 subset, Lua's operator precedence including right-associative <code>..</code>, and beginner-facing error messages. 61 checks.</li>
+<li>Added <code>tools/show_tree.luau</code> alongside <code>tools/show_tokens.luau</code> so both steps of the interpreter can be watched from the terminal.</li>
+<li>Commit <code>935f346</code>.</li>
+</ul>
+<h3 id="log-2026-09-17-what-was-learned-2">What was learned</h3>
+<ul>
+<li>The first parser reported a missing <code>end</code> at the end of the file. The <em>message</em> said "starting on line 1" correctly, but the error's <code>line</code> field was the last line of the program — so the editor would have highlighted an innocent line while the text said something else. Fixed to report at the opening token. Naming a line and pointing at a line have to agree.</li>
+<li>Checking a folder's top-level listing is not checking a folder. <code>direct-hit</code> looked empty from <code>ls</code> and from its blank knowledge-base notes, and was neither.</li>
+</ul>
+<h3 id="log-2026-09-17-next-2">Next</h3>
+<ul>
+<li><span class="box">to do</span> M3, the stepping interpreter: run the tree one statement at a time, with a step cap so an infinite loop cannot hang the client, and robot built-ins injected by the caller rather than global</li>
+</ul>
+<h3 id="log-2026-09-17-later-still-m3-the-stepping-interpreter-phase">Later still — M3, the stepping interpreter. Phase 1 complete.</h3>
+<h3 id="log-2026-09-17-what-was-done-3">What was done</h3>
+<ul>
+<li>Luqman asked where the game actually was. Answer: nowhere — Studio had never been opened. Showed him the twelve text files, built a <code>.rbxlx</code> place file with <code>rojo build</code> to prove the pipeline, and <strong>installed the Rojo Studio plugin</strong>, which was not present (<code>~/Documents/Roblox/Plugins/RojoManagedPlugin.rbxm</code>).</li>
+<li>Offered to jump to Studio for something visible; he chose to finish M3 first so that the first thing seen in Studio is a robot driven by real code rather than a demo.</li>
+<li>Built M3: <code>Interp.luau</code>. Coroutine-based stepping, scopes, functions, a step cap and a depth cap, and runtime errors as sentences with line numbers.</li>
+<li>Added <code>tools/run_code.luau</code>, which runs a program against a stand-in robot and prints the line, the action and the variables at every step.</li>
+<li>Commit <code>c779567</code>. 152 checks across the three parts, Studio still closed.</li>
+</ul>
+<h3 id="log-2026-09-17-decisions-made-2">Decisions made</h3>
+<ul>
+<li>Stepping via coroutine rather than a hand-rolled state machine, so the evaluator stays ordinary recursive code.</li>
+<li>Errors are caught inside the coroutine, never thrown across it. See below.</li>
+</ul>
+<h3 id="log-2026-09-17-stuck-on-problems-2">Stuck on / problems</h3>
+<ul>
+<li>The step-cap test crashed instead of reporting a friendly error. Cause: <strong>Lune turns a table thrown across a coroutine boundary into a string</strong>, so the error object was lost. Roblox does not do this. Fixed by wrapping the coroutine body in <code>pcall</code> and storing the caught error on the machine.</li>
+</ul>
+<h3 id="log-2026-09-17-what-was-learned-3">What was learned</h3>
+<ul>
+<li>That coroutine difference is the first real Lune-versus-Roblox trap on this project, and it is the dangerous kind: it would have passed in Studio and failed in tests. Any future code that throws must not throw across a coroutine.</li>
+<li>A <code>for</code> loop and a <code>while</code> loop were stepping differently — <code>while</code> reported its final failed check, <code>for</code> did not. Made them match, so the player sees both kinds of loop check one last time before stopping.</li>
+</ul>
+<h3 id="log-2026-09-17-next-3">Next</h3>
+<ul>
+<li><span class="box">to do</span> M4: open Studio. A grid room, the robot, the camera, and the interpreter driving the robot for real.</li>
+</ul>
+<h3 id="log-2026-09-17-m4-studio-at-last">M4 — Studio, at last</h3>
+<h3 id="log-2026-09-17-what-was-done-4">What was done</h3>
+<ul>
+<li>Built the visible half of the game, all of it by code so that nothing has to be assembled by hand in Studio and nothing in the repo is an unreadable binary:</li>
+<ul>
+<li><code>src/shared/Rooms.luau</code> — all eight rooms as pictures.</li>
+<li><code>src/shared/RobotWorld.luau</code> — the rules, with no Roblox in them.</li>
+<li><code>src/client/Theme.luau</code> — colours and sizes in one place, sizes deliberately large.</li>
+<li><code>src/client/RoomView.luau</code> — builds the room and robot out of parts, animates events.</li>
+<li><code>src/client/CodePanel.luau</code> — the panel, code box, line highlight, messages, variables.</li>
+<li><code>src/client/init.client.luau</code> — the loop that is the game.</li>
+<li><code>src/server/init.server.luau</code> — turns off character spawning; nothing else needed yet.</li>
+</ul>
+<li>80 new checks in <code>tests/RobotWorld.spec.luau</code>. <strong>232 across the project.</strong></li>
+<li>Built the place with <code>rojo build</code> and opened it in Studio.</li>
+<li>Commit <code>8559b1f</code>.</li>
+</ul>
+<h3 id="log-2026-09-17-decisions-made-3">Decisions made</h3>
+<ul>
+<li>D-005 the room is built on the client for now, which M7 will have to undo.</li>
+<li>D-006 rooms are pictures rather than coordinates.</li>
+</ul>
+<h3 id="log-2026-09-17-stuck-on-problems-3">Stuck on / problems</h3>
+<ul>
+<li>Two rooms were broken and the test caught both: <em>The Wall</em>'s intended answer turned into a wall, and <em>Your Own Move</em>'s path could not be walked by its own solution. Both redesigned.</li>
+<li><code>CodePanel</code> had a field <code>highlight</code> and a method <code>highlight</code>. Lua finds the field first, so <code>panel:highlight(3)</code> would have tried to call a Frame. Renamed the field.</li>
+</ul>
+<h3 id="log-2026-09-17-what-was-learned-4">What was learned</h3>
+<ul>
+<li>The rules-versus-drawing split is what made the room test possible, and that test is the most valuable one in the project so far: a room whose own answer does not work would stop a player dead and cannot be found by reading.</li>
+<li>A builtin must never wait. Animation happens in the driver between steps, because a builtin that yielded would be read by the interpreter as a step boundary.</li>
+</ul>
+<h3 id="log-2026-09-17-next-4">Next</h3>
+<ul>
+<li><span class="box">to do</span> Luqman presses Play and says what is wrong with it — this is the first thing in the project that can only be judged by looking at it.</li>
+<li><span class="box">to do</span> M5: replace typing with the tap-to-build token palette, then test it on a phone.</li>
+</ul>
+<h3 id="log-2026-09-17-m5-writing-code-without-a-keyboard-and-the-pr">M5 — writing code without a keyboard, and the project record</h3>
+<h3 id="log-2026-09-17-what-was-done-5">What was done</h3>
+<ul>
+<li>Built the tap-to-build palette, which is the reason the game can be played at all on the device most Roblox players actually hold:</li>
+<ul>
+<li><code>src/shared/CodeBuilder.luau</code> — holds the taps, not the string, and assembles them into real Luau with correct spacing and automatic indentation.</li>
+<li><code>src/shared/Palette.luau</code> — which pieces each room offers, growing room by room.</li>
+<li><code>src/client/PaletteView.luau</code> — the buttons, laid out by hand so each is as wide as its own word rather than forced into a grid.</li>
+<li><code>CodePanel.luau</code> rebuilt: a tapped display, a TYPE toggle for keyboards, and a layout scaled from the height of the screen instead of fixed pixels.</li>
+</ul>
+<li>44 new checks. <strong>276 across the project.</strong></li>
+<li>Built Codebot's project record, <code>tools/docs/build_docs.py</code>, from the shared generator, and published it to <a href="https://luqman-docs.netlify.app/codebot/">https://luqman-docs.netlify.app/codebot/</a> — following the rule added to the global instructions today that every game keeps one and republishes it on any change.</li>
+<li>Commits <code>d786db1</code> and <code>b9329d8</code>.</li>
+</ul>
+<h3 id="log-2026-09-17-decisions-made-4">Decisions made</h3>
+<ul>
+<li>Nothing new beyond D-002, which this implements.</li>
+</ul>
+<h3 id="log-2026-09-17-what-was-learned-5">What was learned</h3>
+<ul>
+<li>Holding the taps rather than the finished text is what makes DELETE sensible: tapping <code>move()</code> once and deleting it once are symmetrical, and character deletion never would be.</li>
+<li>The auto-indent fell out of the same design for almost nothing, and may be the most valuable part — a player who was never taught to indent still arrives in Studio writing code that looks right.</li>
+<li>Codebot's record needed two changes to the shared generator: its screenshots cannot be taken by a script, and <code>header_comment()</code> had to learn Luau's <code>--</code> and <code>--[[ ]]</code> comments.</li>
+</ul>
+<h3 id="log-2026-09-17-still-not-true">Still not true</h3>
+<ul>
+<li><strong>Nobody has played this.</strong> Luqman has not pressed Play, and the palette has never been on a phone. Every claim about how it looks and feels is untested.</li>
+</ul>
+<h3 id="log-2026-09-17-next-5">Next</h3>
+<ul>
+<li><span class="box">to do</span> Press Play. Then a phone.</li>
+<li><span class="box">to do</span> M6: the ladder proper — progress and best-line-count saved with DataStore.</li>
+</ul>
+<h3 id="log-2026-09-17-first-time-it-was-played">First time it was played</h3>
+<p>Luqman pressed Play and sent a screenshot. The first thing anyone has seen of this game was Roblox's own interface sitting on top of it: the topbar buttons across the CODEBOT title and the ROOM line, and the chat bar across the room's instructions.</p>
+<p>Two causes, both mine:</p>
+<ul>
+<li><code>ScreenGui.IgnoreGuiInset = true</code>. Roblox's topbar cannot be removed, so ignoring the inset means drawing underneath it. Now <code>false</code>.</li>
+<li>Roblox's chat, player list, backpack and health bar were never turned off. There is no avatar in this game, so none of them mean anything. Turned off with <code>SetCoreGuiEnabled(Enum.CoreGuiType.All, false)</code> plus the newer <code>TextChatService</code> configuration, which that call does not reach. The call fails while the core scripts are loading, so it retries, spawned so it cannot delay the room appearing.</li>
+</ul>
+<p>Commit <code>5c18e5c</code>. <code>rojo serve</code> is now running on port 34872 so further fixes reach Studio without reopening the place.</p>
+<p><strong>The lesson is the obvious one and worth writing down anyway:</strong> 276 passing checks say nothing about whether the game is usable, and the very first thing a player saw was a problem no test could have had an opinion about.</p>
+<h3 id="log-2026-09-17-the-shell">The shell</h3>
+<p>Luqman asked to "finish the shell". In his vocabulary that is the enclosure — the same word he used for Referee For Fun's <em>"sports hall shell with overhead lighting so the court is not floating in a void"</em> — and that is exactly what Codebot's rooms were doing: tiles hanging in fog.</p>
+<p>Each room now builds its own: a floor slab, four walls, a lit stripe at eye height, and a soffit of light fittings overhead, all sized from that room's grid. Lit as an interior, with the sun turned almost off so the cyan robot and the amber goal are the brightest things on screen.</p>
+<p>Three things worth keeping:</p>
+<ul>
+<li>The soffit is a <strong>ring, not a ceiling</strong>. The camera looks down into the room from above the wall tops, so a closed ceiling would be a grey rectangle over the whole game.</li>
+<li>The fittings run along <strong>whichever way the room is longer</strong>. The first version spread them down the short side, which for room 4 — thirteen tiles wide, three deep — put every lamp at the two far ends and left the hall dark. Caught by reading the numbers back, not by a test.</li>
+<li><code>Lighting.Technology</code> cannot be set from a script. It is set to <code>Future</code> in <code>default.project.json</code> instead, which is the first time the Rojo project file has carried a property rather than just a path.</li>
+</ul>
+<p>Commit <code>cd0f4ac</code>. The Rojo server was restarted so the new Lighting entry reaches Studio.</p>
+<h3 id="log-2026-09-17-m6-the-ladder-and-who-decides-what-counts">M6 — the ladder, and who decides what counts</h3>
+<h3 id="log-2026-09-17-what-was-done-6">What was done</h3>
+<ul>
+<li>Rooms now open one at a time. Room 1 is open to everyone and each solved room opens the next; a returning player starts on the first room they have not solved.</li>
+<li>Every room keeps the fewest lines that player has managed on it, shown under the room name.</li>
+<li><code>src/shared/Progress.luau</code> — the unlock rules and the profile, pure and tested.</li>
+<li><code>src/shared/Solution.luau</code> — one definition of <em>solved</em>, used by the client to talk to the player and by the server to decide what is recorded. The first file in <code>shared</code> to require its neighbours, so it carries the dual-target require, which worked as documented.</li>
+<li><code>src/server/init.server.luau</code> — DataStore, session profiles, autosave, and the two remotes.</li>
+<li>63 new checks. <strong>339 across the project.</strong></li>
+<li>Commit <code>146cf94</code>.</li>
+</ul>
+<h3 id="log-2026-09-17-decisions-made-5">Decisions made</h3>
+<ul>
+<li>D-007: a profile that failed to load is never saved over. Losing one session is a bad evening; overwriting a finished profile with an empty one is unrecoverable and looks to the player exactly like the game deleting their work.</li>
+<li>D-008: profile keys are strings, because a DataStore stores JSON and returns number keys as strings. <code>sanitize</code> accepts either, so anything an earlier version wrote still loads.</li>
+</ul>
+<h3 id="log-2026-09-17-what-was-learned-6">What was learned</h3>
+<ul>
+<li>Writing <code>Solution.run</code> once and calling it from both sides is what stops the client and the server ever disagreeing about whether a room was solved. Two implementations of the same rule is the shape of the enum bug that broke Referee For Fun's pricing for a fortnight.</li>
+<li>Everything arriving over a remote is checked for being the shape it claims to be before it is used, and a submission is capped three ways: length, steps and a cooldown. Running a player's program on the server is only safe because the interpreter hands it nothing.</li>
+</ul>
+<h3 id="log-2026-09-17-still-not-true-2">Still not true</h3>
+<ul>
+<li>Nobody has played any of this. Progress, unlocking and saving have never been exercised by a person, and DataStore cannot work at all until the place is published to Roblox with Studio API access switched on.</li>
+</ul>
+<h3 id="log-2026-09-17-next-6">Next</h3>
+<ul>
+<li><span class="box">to do</span> Publish the place so DataStore can work, then play through the ladder.</li>
+<li><span class="box">to do</span> M7: multiplayer — the room becomes the server's, and only the robots stay per player.</li>
+</ul></div></details></div>
+</section>
+<section class="chapter" id="checks">
+  <p class="kicker">What proves it works, from each file's own header comment</p>
+  <h2>Tests and tools</h2>
+  <details class="fold" id="source-shared"><summary><span>The parts with no Roblox in them</span></summary><div><p class="note">Everything here runs in a terminal as happily as in Studio, which is what makes the rest of this page possible.</p><div class="table"><table><thead><tr><th>File</th><th>What it does</th></tr></thead><tbody><tr><td><code>src/shared/CodeBuilder.luau</code></td><td>CodeBuilder — turns tapped pieces into real Luau text. The player on a phone never types. They tap "for", then "i", then "=", and this assembles what they tapped into the thing they would have typed: for  i  =  1  ,  10  do   -&gt;   for i = 1, 10 do Two jobs, and they are both about the result being <em>real</em> Luau rather than a picture of it: * spacing — "move" "(" ")" has to become move(), not move ( ) * indenting — a line after do or then is pushed in, and end comes back out, so the player is shown correctly laid-out code without ever being taught to indent. When they open Studio later, their code will already look right. It holds the taps rather than the finished string, so backspace removes a whole piece — tapping move() once and deleting it once are symmetrical, which is not true of deleting characters. No Roblox in here, so all of it is tested from the terminal.</td></tr><tr><td><code>src/shared/Palette.luau</code></td><td>Palette — which pieces a player can tap in each room. Pieces arrive room by room rather than all at once. Room 1 offers three buttons and nothing else, which is the entire lesson: there is a thing you can say, and saying it makes the robot move. Showing "while" in room 1 would be showing a beginner a wall of words they have no use for. A group becomes available from its room and stays available afterwards, so the palette only ever grows. Nothing a player learned is taken away. No Roblox in here. The important test — that every room's own solution can actually be <em>built</em> out of the pieces that room offers — runs in the terminal.</td></tr><tr><td><code>src/shared/Progress.luau</code></td><td>Progress — what a player has solved, and what they are allowed to open. A profile is deliberately small and dull: { best = { ["1"] = 1, ["2"] = 3 } } room number as a <em>string</em>, best line count as a number. The keys are strings because a profile goes into a DataStore, which stores it as JSON: a table with number keys is written as an object and comes back with string keys, so a profile written as { [1] = 1 } would not be the profile that came back. Using strings on both sides means saving and loading cannot disagree. Nothing here is trusted. <code>sanitize</code> is what a profile goes through on the way out of the DataStore, because what comes back was written by some earlier version of this file and may be anything at all. No Roblox in here, so the rules a player's whole history depends on are tested from a terminal.</td></tr><tr><td><code>src/shared/RobotWorld.luau</code></td><td>RobotWorld — the rules of a room, with nothing drawn. This is what move() and blocked() actually do. It knows where the walls are, where the robot is and which way it faces, and it hands the interpreter the small set of actions a player is allowed to take. It draws nothing and touches no Roblox API, which is deliberate: the rules of the game can then be tested from a terminal, and the part that builds parts and plays tweens only has to make the result visible. When a room behaves wrongly, the test suite can say so without anyone pressing Play. Anything the player does that should be seen is pushed onto a list of events. The view takes that list after each step and animates it. Builtins never wait and never yield — a builtin that yielded would be mistaken by the interpreter for a step boundary.</td></tr><tr><td><code>src/shared/Rooms.luau</code></td><td>Rooms — the curriculum, as data. Each room is drawn as a little picture, which is the whole point: a room is readable in the file, in a diff, and in a code review, and editing one is moving a character rather than editing coordinates. #  wall .  floor R  where the robot starts G  the goal Rooms are ordered so that each one introduces exactly one new idea and the one before it is not enough. "target" is the tidiest solution, used for the par score, not to check the player's answer — any program that reaches the goal is correct. No Roblox in this file. The room is a shape long before it is a place.</td></tr><tr><td><code>src/shared/Solution.luau</code></td><td>Solution — does this code solve this room? One answer, used in two places that must not be allowed to disagree. The client runs it to decide what to say to the player; the server runs it again before writing anything down, because a client can be modified and a best line count is a number worth lying about (D-004). Both call the same function, so there is no second implementation of "solved" to drift out of step with the first. This is also the one file in <code>shared</code> that requires its neighbours, so it carries the dual-target require: Roblox resolves a module through the data model, Lune through the file system, and <code>script</code> exists only in Roblox.</td></tr><tr><td><code>src/shared/Interpreter/Interp.luau</code></td><td>Interp — step 3 of 3 in the interpreter. The part that actually runs. The parser handed us a tree. This walks it and makes things happen. The one thing that makes it different from an ordinary evaluator is that it can stop between statements and be resumed later: local machine = Interp.create(ast, { builtins = ... }) machine:step()   -- runs one statement, says which line it was machine:step()   -- runs the next one That is the whole teaching mechanism. The game steps it about twice a second, highlights the line it reports, and animates the robot doing it. A program that ran all at once would show a beginner nothing. Stepping is done with a coroutine. The evaluator below is written as ordinary recursive code — a while loop really is a while loop — and simply yields at each statement. Hand-rolling a state machine to get the same effect would make every line of this file harder to read for no gain. Two things are deliberately not here: * No globals. move() and blocked() are handed in by whoever creates the machine. Player code can reach nothing we did not give it, which is what makes running a stranger's code safe. * No Roblox. This file can be run and tested from a terminal.</td></tr><tr><td><code>src/shared/Interpreter/Parser.luau</code></td><td>Parser — step 2 of 3 in the interpreter. The tokenizer gave us a flat list of pieces. The parser works out the shape those pieces make: what is inside what. for i = 1, 3 do move() end -&gt;  ForNumeric  (i, from 1, to 3) body: Call (move) A flat list cannot be run, because "inside the loop" is not a thing a list can say. A tree can. This is the step that turns an order of words into a structure with a body, and it is also where we find out that a program is nonsense before anyone tries to run it. Nothing here touches Roblox, and it does not require the Tokenizer either — it just reads a list of tables. That is what lets it be tested from a terminal. The node kinds it produces, and the fields each one carries: Number      value String      value Boolean     value Nil Name        name Binary      op, left, right Unary       op, expr Call        name, args Local       name, expr Assign      name, expr If          branches ({ cond, body }), elseBody While       cond, body ForNumeric  var, from, to, step, body Function    name, params, body Return      expr Break ExprStat    expr Every node also carries the line it started on, because the game highlights the line it is currently running.</td></tr><tr><td><code>src/shared/Interpreter/Tokenizer.luau</code></td><td>Tokenizer — step 1 of 3 in the interpreter. Turns the player's code, which is just one long string of characters, into a flat list of tokens: the smallest pieces that still mean something. "for i = 1, 3 do"  -&gt;  for | i | = | 1 | , | 3 | do It does not care whether the code makes sense. "end end end end" tokenizes perfectly happily. Deciding whether a sequence of tokens is a real program is the Parser's job, and actually running it is the Interpreter's. Every token carries the line and column it came from, because the player is a beginner and every error we show them has to point at a place in their code.</td></tr></tbody></table></div></div></details><details class="fold" id="source-client"><summary><span>The parts you can see</span></summary><div><p class="note">Built by code at run time. Nothing in this game was assembled by hand in Studio.</p><div class="table"><table><thead><tr><th>File</th><th>What it does</th></tr></thead><tbody><tr><td><code>src/client/CodePanel.luau</code></td><td>CodePanel — where the player writes, and where the running line is shown. The code is built by tapping pieces from the palette, and the panel shows the result as ordinary Luau text. Nothing here is a block or a picture of code: what is on screen is what the player would have typed, which is the promise the whole game rests on. A TYPE button swaps the display for a text box, for anyone at a keyboard who would rather write it out. Switching back turns the typed text into pieces again, so DELETE still removes a whole word rather than a letter. Everything is sized from the height of the screen, because this is played on phones as well as desktops and a layout in fixed pixels only ever fits one of them.</td></tr><tr><td><code>src/client/PaletteView.luau</code></td><td>PaletteView — the buttons the player taps to write code. Laid out by hand rather than with a UIGridLayout, because a grid would give "move()" and "," the same width and the palette would read as a wall of identical tiles. Each button is as wide as its own word, wrapped into rows, the way words sit on a page. Pieces that are new in this room are drawn in the accent colour. That is the entire tutorial for a room: the new button is the lesson.</td></tr><tr><td><code>src/client/RoomView.luau</code></td><td>RoomView — the part you can see. Builds a room out of parts from the same picture the rules were read from, puts a robot on it, points the camera at it, and plays back the events the world produced. It holds no rules of its own. Where the robot <em>is</em> was decided by RobotWorld before this file was asked to move anything, which is why the rules could be tested without a screen. If the robot appears somewhere wrong, the bug is here; if it goes somewhere wrong, the bug is there. Everything is built on the client. That is fine while each player has their own room, and is the one thing that has to change for M7, when the room becomes shared and the server builds it.</td></tr><tr><td><code>src/client/Theme.luau</code></td><td>Theme — every colour and size in one place. Sizes are deliberately generous. This is a game played on phones and read by people who are concentrating on unfamiliar words; small text is not a style choice here, it is a way of losing players.</td></tr><tr><td><code>src/client/init.client.luau</code></td><td>The client. Loads a room, draws it, and runs whatever the player wrote. The loop in <code>run</code> is the game: step the interpreter  -&gt;  highlight the line it just ran -&gt;  play whatever the robot did -&gt;  pause, and do it again Solving a room is decided twice. Here, so the player is told immediately; and again on the server, which runs the same code through the same interpreter before writing anything down. The client's answer is for the player's eyes, the server's answer is the one that counts.</td></tr><tr><td><code>src/server/init.server.luau</code></td><td>The server. It owns one thing: what a player has actually solved. Two rules shape the whole file. <strong>Nothing a client says is believed.</strong> A client sends the code it thinks solves a room; the server runs that code itself, with the same interpreter and the same room, and only writes a score down if the robot really reaches the goal (D-004). Running a stranger's program is safe because the interpreter hands it nothing but the robot's own actions, and it stops at a step cap. <strong>A profile that failed to load is never saved over.</strong> If the DataStore is unreachable when a player joins, they play the session with a blank profile — but that blank profile must not be written back, or a moment of DataStore trouble would erase everything they had done. Saving is only ever allowed for a profile we know we read.</td></tr></tbody></table></div></div></details><details class="fold" id="tests"><summary><span>The checks</span></summary><div><p class="note">Run them all with `for f in tests/*.spec.luau; do lune run &quot;$f&quot;; done`. They need Lune and take about a second.</p><div class="table"><table><thead><tr><th>File</th><th>What it does</th></tr></thead><tbody><tr><td><code>tests/CodeBuilder.spec.luau</code></td><td>—</td></tr><tr><td><code>tests/Interp.spec.luau</code></td><td>—</td></tr><tr><td><code>tests/Parser.spec.luau</code></td><td>—</td></tr><tr><td><code>tests/Progress.spec.luau</code></td><td>—</td></tr><tr><td><code>tests/RobotWorld.spec.luau</code></td><td>—</td></tr><tr><td><code>tests/Tokenizer.spec.luau</code></td><td>—</td></tr></tbody></table></div></div></details><details class="fold" id="tools"><summary><span>Watching it work</span></summary><div><p class="note">Three small viewers that show each stage of the interpreter from the command line.</p><div class="table"><table><thead><tr><th>File</th><th>What it does</th></tr></thead><tbody><tr><td><code>tools/run_code.luau</code></td><td>Runs a piece of code the way the game will: one step at a time, printing the line it is on, what the robot did, and the variables as they change. lune run tools/run_code.luau 'for i = 1, 3 do move() end' The robot here lives on a numbered strip rather than in a room. It is only standing in for the real one until the room exists.</td></tr><tr><td><code>tools/show_tokens.luau</code></td><td>Prints how the tokenizer reads a piece of code. Handy for seeing what the first step of the interpreter actually does, without opening Studio. lune run tools/show_tokens.luau 'for i = 1, 8 do move() end'</td></tr><tr><td><code>tools/show_tree.luau</code></td><td>Prints the shape the parser makes out of a piece of code, as an indented tree. Handy for seeing what "inside" means, without opening Studio. lune run tools/show_tree.luau 'for i = 1, 3 do move() end'</td></tr></tbody></table></div></div></details>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>09ac77c</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>146cf94</code></td><td class="nowrap">2026-09-17</td><td>save progress, and make the server check a solve before it counts</td></tr><tr class=""><td><code>133d823</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>cd0f4ac</code></td><td class="nowrap">2026-09-17</td><td>build the room the grid stands in</td></tr><tr class=""><td><code>2884f29</code></td><td class="nowrap">2026-09-17</td><td>rebuild the project record</td></tr><tr class=""><td><code>5c18e5c</code></td><td class="nowrap">2026-09-17</td><td>stop Roblox&#x27;s own UI covering the game</td></tr><tr class=""><td><code>b9329d8</code></td><td class="nowrap">2026-09-17</td><td>add the project record and publish it</td></tr><tr class=""><td><code>d786db1</code></td><td class="nowrap">2026-09-17</td><td>write code by tapping, so it can be played on a phone</td></tr><tr class=""><td><code>f1546c0</code></td><td class="nowrap">2026-09-17</td><td>build the room, the robot and the panel in Studio</td></tr><tr class=""><td><code>c779567</code></td><td class="nowrap">2026-09-17</td><td>add the stepping interpreter</td></tr><tr class=""><td><code>935f346</code></td><td class="nowrap">2026-09-17</td><td>add the parser and a tree viewer</td></tr><tr class=""><td><code>40ec8b5</code></td><td class="nowrap">2026-09-17</td><td>add a tool for viewing how code is tokenized</td></tr><tr class=""><td><code>c27fd01</code></td><td class="nowrap">2026-09-17</td><td>add project scaffold and the interpreter tokenizer</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

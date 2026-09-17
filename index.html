@@ -59,7 +59,12 @@ body::after{width:38vw;height:38vw;background:var(--mint);bottom:-14vw;left:-12v
 img{max-width:100%;display:block}
 a{color:inherit}
 
-.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0}
+/* The body is a column in the middle of the page, with the page showing
+   down both sides of it. The top bar and the contact block below keep the
+   wider measure they had, so the column sits inside them rather than
+   matching them - which is the whole point of the gap. */
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding-inline:20px;padding-block:0}
+@media(max-width:1040px){.wrap{max-width:none}}
 
 /* ============================================================
    Custom cursor
@@ -471,7 +476,13 @@ p{margin:.7em 0}
 /* ============================================================
    Footer
    ============================================================ */
-.foot-wrap{margin:56px 0 28px}
+/* The contact block is the page's footer and keeps the top bar's wider
+   measure, so it breaks back out of the narrow column it sits inside: 130px
+   each side takes the column's 920px of content back up to the bar's 1180.
+   It has to be set here rather than higher up, because this shorthand is the
+   rule that wins and a `margin` shorthand resets the sides. */
+.foot-wrap{margin:56px -130px 28px}
+@media(max-width:1240px){.foot-wrap{margin-inline:0}}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .link-chip{
   display:inline-flex;align-items:center;gap:9px;text-decoration:none;
@@ -545,6 +556,7 @@ p{margin:.7em 0}
     <a class="brand" href="#top"><span class="mark">🫧</span> Luqman Hakeem</a>
     <div class="nav-links">
       <a href="#work">Work</a>
+      <a href="records/index.html">Records</a>
       <a href="#about">About</a>
       <a class="nav-cta" href="#contact">Get in touch</a>
     </div>
@@ -623,7 +635,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Auxetic Chess</h3><span class="cat cat-code">Coding</span></div>
           <p>A chess variant where the board is a mechanism. After every move all sixteen 2&times;2 blocks turn a quarter and carry the pieces round with them &mdash; a1&rarr;a2&rarr;b2&rarr;b1, and because it is a permutation of four squares it can never capture. Everything is carried, pawns included &mdash; a pawn on a4 turns to b4 &mdash; but a pawn&rsquo;s own moves stay forward only, never sideways or backwards, wherever the board puts it. The rule is deterministic, so the twist runs inside the engine&rsquo;s own <em>make</em>/<em>unmake</em> and the search plays the variant properly instead of playing normal chess into a scrambling board. It stands down on any turn that would expose your own king, which is what keeps the game from deadlocking rather than drawing on move three. Each side also gets three stops: press one and the board holds still for your move and the reply. A stop is part of the move itself, so the engine plans with them too, pricing an unused stop at a pawn. The engine underneath matches all 26 published perft reference counts, including 4,865,609 nodes at depth 5. Play it against that engine at four strengths, each with its own leaderboard of wins kept in the browser &mdash; a game where Undo was used is not ranked &mdash; or two-up at one keyboard.</p>
           <div class="chips"><span class="chip">Play it in the browser</span><span class="chip">Canvas 2D</span><span class="chip">Zero dependencies</span><span class="chip">26/26 perft</span><span class="chip">Variant inside the engine</span></div>
-          <div class="foots"><a href="https://juslangit.github.io/auxetic-chess/" target="_blank" rel="noopener">Play the game <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/auxetic-chess/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://juslangit.github.io/auxetic-chess/" target="_blank" rel="noopener">Play the game <span class="arrow">→</span></a><a href="records/auxetic-chess/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv wide" data-cat="code">
@@ -632,7 +644,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Peta Lot Tanah</h3><span class="cat cat-code">Coding</span></div>
           <p>Every cadastral land lot within 5&nbsp;km of a point in Klang, Selangor — 64,770 of them. A Python pipeline pulls lots from PLANMalaysia iPLAN and buildings from OpenStreetMap, joins them and bakes one data file. Colours lots by built-vs-empty, by size, and by JUPEM area code.</p>
           <div class="chips"><span class="chip">Python ETL</span><span class="chip">Leaflet</span><span class="chip">GeoJSON</span><span class="chip">OpenStreetMap</span></div>
-          <div class="foots"><a href="https://luqman-docs.netlify.app/peta-lot-tanah/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="records/peta-lot-tanah/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="code">
@@ -641,7 +653,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Print Quote</h3><span class="cat cat-code">Coding</span></div>
           <p>Drag an STL into the browser and get a printing price. The page parses the triangle mesh itself — no server, no upload — works out solid volume, shell and infill, converts that to grams and hours, then prices it against filament cost, machine rate and margin.</p>
           <div class="chips"><span class="chip">Hand-written STL parser</span><span class="chip">Three.js</span><span class="chip">Vanilla JS</span><span class="chip">Zero backend</span></div>
-          <div class="foots"><a href="https://github.com/juslangit/print-quote" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/print-quote/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://github.com/juslangit/print-quote" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="records/print-quote/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="code">
@@ -650,7 +662,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Claude Chat</h3><span class="cat cat-code">Coding</span></div>
           <p>A WhatsApp-style web app that drives an AI coding agent running on my Mac at home. Each chat on the phone is a real terminal session over a private Tailscale network. Node with built-in modules only — no dependencies, no framework.</p>
           <div class="chips"><span class="chip">Node.js</span><span class="chip">tmux</span><span class="chip">Tailscale</span><span class="chip">PWA</span></div>
-          <div class="foots"><a href="https://github.com/juslangit/claude-chat" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/claude-chat/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://github.com/juslangit/claude-chat" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="records/claude-chat/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="code">
@@ -661,7 +673,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Pipeline</h3><span class="cat cat-code">Coding</span></div>
           <p>A Blender add-on that batch-exports a scene to Unreal with the naming, unit scale, pivots and collision meshes Unreal expects. Four export modes, FBX and glTF. Its tests run Blender headless and re-import the FBX to measure that the pivot, rotation and scale survived the round trip.</p>
           <div class="chips"><span class="chip">Python</span><span class="chip">Blender API</span><span class="chip">25 headless tests</span><span class="chip">GPL-3.0</span></div>
-          <div class="foots"><a href="https://github.com/juslangit/pipeline" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/pipeline/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://github.com/juslangit/pipeline" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="records/pipeline/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="code">
@@ -670,7 +682,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Cerdik — tuition platform</h3><span class="cat cat-code">Coding</span></div>
           <p>A learning platform for a tuition centre: students open materials and track progress, parents see attendance and fees, the centre sees enrolment and revenue. Built as a working demo to answer a client brief rather than claim past work.</p>
           <div class="chips"><span class="chip">Single-file demo</span><span class="chip">Three role views</span><span class="chip">Client work</span></div>
-          <div class="foots"><a href="https://luqman-docs.netlify.app/tuition-lms/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="records/tuition-lms/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="code">
@@ -681,7 +693,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Siti — voice assistant</h3><span class="cat cat-code">Coding</span></div>
           <p>A hands-free AI assistant for the drive to work. Open a page on the phone, tap once, and it listens, answers aloud and listens again. It knows my project notes, can save new facts to a vector store, and searches the web.</p>
           <div class="chips"><span class="chip">Claude API</span><span class="chip">Supabase edge functions</span><span class="chip">pgvector</span><span class="chip">Speech I/O</span></div>
-          <div class="foots"><a href="https://luqman-docs.netlify.app/siti/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="records/siti/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv wide lc-card" data-cat="game">
@@ -722,7 +734,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Referee For Fun</h3><span class="cat cat-game">Game Dev</span></div>
           <p>A first-person game where you are the umpire, not the athlete. The match is physically simulated in front of you and the engine always knows the truth — so you can bend every close call, limited only by how much suspicion the crowd tolerates. Six sports share one official and one reputation, and two TV commentators who remember your whole career. In badminton the night is shot like a broadcast: the umpire leads the players on and tosses the coin, the players shake hands at the end, and a removed umpire is walked off court. Every sport's on-screen score is laid out like its own television broadcast — BWF, FIVB, the tennis tours, WTT — and every venue is dressed like a real Malaysian event, from an indoor Kuala Lumpur tennis stadium to a beach volleyball court at Pantai Cenang, with sponsor boards, TV cameras, courtside crew and flags in the crowd. Sepak takraw is refereed to ISTAF&rsquo;s 2024 rules, down to the tekong&rsquo;s standing foot in the service circle.</p>
           <div class="chips"><span class="chip">Godot 4</span><span class="chip">GDScript</span><span class="chip">Physics simulation</span><span class="chip">macOS + Windows</span></div>
-          <div class="foots"><a href="https://referee-for-fun.netlify.app" target="_blank" rel="noopener">Visit the game site <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/referee-for-fun/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://referee-for-fun.netlify.app" target="_blank" rel="noopener">Visit the game site <span class="arrow">→</span></a><a href="records/referee-for-fun/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="game">
@@ -731,7 +743,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Direct Hit</h3><span class="cat cat-game">Game Dev</span></div>
           <p>Battleships, fought from the bridge of a battleship. There is no chart on a screen: you stand in the Littorio&rsquo;s wheelhouse with your own fleet in company, lay that fleet out on a lit plotting table, call a target on the same table, and take the shot through a director sight that gives you a bearing to lay the guns on. If the round finds something the camera goes to it &mdash; the vessel you hit, taking that shell at the point along her hull where you actually hit her &mdash; and afterwards she stays on your horizon, burning. When they fire back, you are standing on the ship they are shooting at. The wheelhouse you stand in &mdash; deck, bulkheads, deckhead, window band, wheel, telegraphs and all &mdash; is built in code, because a hull model meant to be seen from half a mile away does not survive being stood in.</p>
           <div class="chips"><span class="chip">Godot 4</span><span class="chip">GDScript</span><span class="chip">First-person 3D</span><span class="chip">Shader work</span></div>
-          <div class="foots"><span class="said">In testing</span><a href="https://luqman-docs.netlify.app/direct-hit/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><span class="said">In testing</span><a href="records/direct-hit/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="game">
@@ -740,7 +752,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Kedai Runtuh</h3><span class="cat cat-game">Game Dev</span></div>
           <p>One-thumb mamak stacking game. Food swings from a hook; one tap drops it. Land it and the tower grows, the camera rises, the swing speeds up. Miss and the order collapses — real physics, so it never falls the same way twice.</p>
           <div class="chips"><span class="chip">Godot 4</span><span class="chip">Mobile</span><span class="chip">Rigid-body physics</span><span class="chip">3D art</span></div>
-          <div class="foots"><a href="https://github.com/juslangit/kedai-runtuh" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/kedai-runtuh/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://github.com/juslangit/kedai-runtuh" target="_blank" rel="noopener">View repository <span class="arrow">→</span></a><a href="records/kedai-runtuh/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <div class="work rv" data-cat="game">
@@ -749,7 +761,7 @@ p{margin:.7em 0}
           <div class="work-head"><h3>Scribble Relay</h3><span class="cat cat-game">Game Dev</span></div>
           <p>A drawing party game played on one passed-around phone, tablet or laptop. Write a phrase, the next player draws it, the next guesses the drawing &mdash; then the whole chain is revealed to the room. One HTML file with no libraries and no server; a headless-Chrome test plays a full game with real touch input at phone, tablet and desktop sizes.</p>
           <div class="chips"><span class="chip">HTML / CSS / JS</span><span class="chip">Canvas 2D</span><span class="chip">Mobile + tablet + desktop</span><span class="chip">Zero dependencies</span></div>
-          <div class="foots"><a href="https://juslangit.github.io/scribble-relay/" target="_blank" rel="noopener">Play the game <span class="arrow">→</span></a><a href="https://luqman-docs.netlify.app/scribble-relay/" target="_blank" rel="noopener">Read the record <span class="arrow">→</span></a></div>
+          <div class="foots"><a href="https://juslangit.github.io/scribble-relay/" target="_blank" rel="noopener">Play the game <span class="arrow">→</span></a><a href="records/scribble-relay/index.html">Read the record <span class="arrow">→</span></a></div>
         </div>
       </div>
     <a class="work rv" data-cat="game" href="https://www.behance.net/gallery/203240129/Rotting-Classroom-Final-Year-Project" target="_blank" rel="noopener">

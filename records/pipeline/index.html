@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pipeline Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#checks">Tests and tools</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Pipeline</b><span>Project record · built 2026-09-17 from feat/ue5-verification</span></p>
+  <h1>Pipeline</h1>
+  <p class="thesis">Pipeline is a Blender add-on that batch-exports a scene to Unreal Engine with the naming, unit scale, pivots and collision meshes Unreal expects. It is the first digital product built to be sold online, chosen because it is pure code — no modelling or recording time — and because Luqman will use it himself when building the Malaysian environment asset packs planned as the next product.</p>
+  <div class="stats"><div class="stat"><b>7</b><span>commits</span></div><div class="stat"><b>13</b><span>days of work</span></div><div class="stat"><b>5</b><span>source files</span></div><div class="stat"><b>1,930</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>live — released free and open source, GPL-3.0</td></tr>
+<tr><td>Current phase</td><td>Free release; no longer a commercial product</td></tr>
+<tr><td>Deadline / target</td><td>First listing live within 2 weeks</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/juslangit/pipeline">https://github.com/juslangit/pipeline</a> (public) · local: <code>~/Desktop/project/3d/pipeline</code></td></tr>
+<tr><td>URL / deployment</td><td>Planned: Blender Market, Gumroad or Payhip</td></tr>
+<tr><td>Main stack</td><td>Python 3, Blender API (<code>bpy</code>), Blender 3.6+</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Every Blender-to-Unreal handoff repeats the same manual chores: apply transforms, rename to <code>SM_</code>/<code>SK_</code>, drop the pivot to the floor, keep <code>UCX_</code> collision attached to the right mesh, then export objects one at a time. The work is well understood and universally hated, which makes it a good first product — small scope, obvious value, and an evergreen audience of Unreal developers and students.</p>
+<h3 id="overview-current-state">Current state</h3>
+<ul>
+<li>v1.0.0 written and working: 12 registered classes, four export modes, FBX and glTF output, a validation pass, and a sidebar UI.</li>
+<li>Blender 5.2.1 LTS installed via Homebrew on 2026-09-05.</li>
+<li>25 headless checks pass, including an FBX round trip that measures the re-imported mesh to confirm pivot placement, baked rotation, unit scale and mirrored normals.</li>
+<li>The distributable zip installs and enables as a Blender extension. It is currently installed in the local Blender, so the Pipeline tab is live in the 3D viewport sidebar.</li>
+<li>Not yet verified: how the exported files behave once imported into UE5.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 6 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<p>Getting assets from Blender into Unreal Engine is a chore that never goes away. Unreal expects specific naming (<code>SM_</code>, <code>SK_</code>), collision meshes named <code>UCX_&lt;Mesh&gt;_&lt;n&gt;</code>, clean 1,1,1 transforms, and pivots placed where the asset will be placed in the level. Blender provides none of this by default, so artists apply transforms by hand, rename objects one at a time, and run the FBX exporter once per asset. A scene of forty props is an afternoon of clicking, and any mistake surfaces only after the import into Unreal fails or looks wrong.</p>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<p>A Blender sidebar panel that exports the whole scene in one press. It splits the export by collection, object, selection or scene; bakes transforms and modifiers on temporary copies so the working scene is never modified; re-origins each asset; keeps collision meshes attached to their owner; applies Unreal's naming convention; and validates the set first, refusing to export when two assets would overwrite each other or when a mesh has no UV map.</p>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick us</th></tr></thead><tbody>
+<tr><td>Indie Unreal developers</td><td>Ship assets without a technical artist</td><td>One button, no setup, no per-project config</td></tr>
+<tr><td>3D artists selling asset packs</td><td>Export dozens of props consistently</td><td>Batch mode plus naming and collision handled</td></tr>
+<tr><td>Students and game-dev lecturers</td><td>Learn the correct pipeline without memorising it</td><td>The validation pass teaches the conventions</td></tr>
+<tr><td>Archviz artists moving to Unreal</td><td>Move SketchUp/Blender interiors into UE5</td><td>Pivots and unit scale handled automatically</td></tr>
+</tbody></table></div>
+<h3 id="idea-value-advantage">Value / advantage</h3>
+<ul>
+<li>Solves a chore every Unreal user has, not a niche taste.</li>
+<li>Zero ongoing content cost — unlike an asset pack or a course, it does not need new material to keep selling.</li>
+<li>Non-destructive by design, which is the objection most competing exporters attract.</li>
+<li>Luqman teaches this pipeline daily at Todak Academy, so the failure cases in the validation list come from watching real students break it.</li>
+</ul>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td>The add-on actually runs in Blender 4.x</td><td>Run <code>tests/test_pipeline.py</code> headless</td><td>untested — Blender not installed</td></tr>
+<tr><td>Skeletal mesh export produces a usable skeleton in UE5</td><td>Import an <code>SK_</code> file into UE5</td><td>untested</td></tr>
+<tr><td>People will pay for this rather than use free exporters</td><td>List on Blender Market, watch first 30 days</td><td>untested</td></tr>
+<tr><td>RM 80–150 is the right price</td><td>Compare against competing exporters</td><td>untested</td></tr>
+</tbody></table></div>
+<h3 id="idea-alternatives-considered">Alternatives considered</h3>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Epic's Send to Unreal</td><td>Free, official</td><td>Requires a live UE connection, opinionated, heavy</td><td>Different use case — we write files</td></tr>
+<tr><td>Blender's built-in FBX export</td><td>Free, always there</td><td>No batching, no naming, no collision, no pivots</td><td>This is the problem being solved</td></tr>
+<tr><td>Malaysian asset pack first</td><td>Higher ticket, distinctive</td><td>Weeks of modelling before anything is sellable</td><td>Deferred to product #2</td></tr>
+<tr><td>Lecturer toolkit first</td><td>Highest price per sale</td><td>Needs slides and course material written</td><td>Deferred to product #3</td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 4 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><h3 id="planning-mvp-scope-v1-0-0-built">MVP scope (v1.0.0 — built)</h3>
+<ul>
+<li>Export modes: collection, object, selection, scene</li>
+<li>Formats: FBX and glTF (.glb)</li>
+<li>Automatic <code>SM_</code> / <code>SK_</code> prefixes and Unreal-safe name cleanup</li>
+<li><code>UCX_</code> / <code>UBX_</code> / <code>USP_</code> / <code>UCP_</code> collision matched to its owner mesh</li>
+<li>Pivot re-origin: none, object origin, bounds centre, bounds bottom</li>
+<li>Transforms and modifiers baked on temporary copies</li>
+<li>Skinned meshes keep their armature modifier</li>
+<li>Validation pass that blocks the export on missing UVs and colliding names</li>
+<li>Dry run, per-collection subfolders, optional per-type subfolders</li>
+</ul>
+<h3 id="planning-explicitly-out-of-scope-for-v1">Explicitly out of scope for v1</h3>
+<ul>
+<li>Live connection to a running Unreal editor</li>
+<li>Material and texture translation into Unreal materials</li>
+<li>LOD generation</li>
+<li>Animation-only exports (<code>A_</code> prefix, one file per action)</li>
+</ul>
+<h3 id="planning-before-it-can-be-sold">Before it can be sold</h3>
+<blockquote>Sequenced with dates in <code>store/LAUNCH.md</code>. Storefront decision: Blender Market first, with a direct store as same-week backup.</blockquote>
+<ol>
+<li>Install Blender and run <code>tests/test_pipeline.py</code> — nothing has been executed yet</li>
+<li>Import an <code>SM_</code> and an <code>SK_</code> result into UE5 and confirm scale, pivot and collision</li>
+<li>Record a 60-second demo video — this is what actually sells an add-on</li>
+<li>Write the store listing and take three screenshots of the panel</li>
+<li>Decide the storefront and the price</li>
+<li>Put the source under git</li>
+</ol>
+<h3 id="planning-roadmap-after-launch">Roadmap after launch</h3>
+<ul>
+<li>v1.1 — animation export as separate <code>A_</code> files, LOD suffix support (<code>_LOD0</code>)</li>
+<li>v1.2 — export presets saved per project, a "re-export last set" button</li>
+<li>v2.0 — material slot naming and a texture-set exporter</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 0 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Status</th><th>Done</th></tr></thead><tbody>
+<tr><td>1</td><td>v1.0.0 source complete and packaged</td><td>2026-09-05</td><td>done</td><td>2026-09-05</td></tr>
+<tr><td>2</td><td>Headless test suite passes in Blender</td><td>2026-09-05</td><td>done — 25/25 on Blender 5.2.1</td><td>2026-09-05</td></tr>
+<tr><td>3</td><td>Zip installs and enables as a real extension</td><td>2026-09-05</td><td>done</td><td>2026-09-05</td></tr>
+<tr><td>4</td><td>Source under git, v1.0.0 tagged</td><td>2026-09-05</td><td>done</td><td>2026-09-05</td></tr>
+<tr><td>5</td><td><code>SM_</code> and <code>SK_</code> results verified inside UE5</td><td>—</td><td>not started</td><td></td></tr>
+<tr><td>6</td><td>Demo video and store screenshots</td><td>—</td><td>not started</td><td></td></tr>
+<tr><td>7</td><td>Listed for sale</td><td>—</td><td>not started</td><td></td></tr>
+<tr><td>8</td><td>First sale</td><td>—</td><td>not started</td><td></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 4 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><details class="fold" id="methods-baking-a-transform-without-operators"><summary><span>Baking a transform without operators</span></summary><div>
+<p><code>bpy.ops.object.transform_apply</code> needs a valid context, a selection, and object mode. Writing the world matrix straight into the mesh data avoids all three:</p>
+<pre><code>matrix = obj.matrix_world.copy()
+obj.data.transform(matrix)
+if matrix.determinant() &lt; 0.0:
+    obj.data.flip_normals()   # negative scale would invert the faces
+obj.matrix_world = Matrix.Identity(4)</code></pre>
+<p>The determinant check matters: a mirrored object exported without it arrives in Unreal with its faces inside out, which is one of the most common reports against competing exporters.</p>
+</div></details>
+<details class="fold" id="methods-surviving-blender-version-changes"><summary><span>Surviving Blender version changes</span></summary><div>
+<p>The FBX and glTF exporters change their keyword arguments between releases. Rather than branching on <code>bpy.app.version</code>, build the full argument dictionary and filter it against the operator's own RNA:</p>
+<pre><code>valid = set(bpy.ops.export_scene.fbx.get_rna_type().properties.keys())
+kwargs = {k: v for k, v in kwargs.items() if k in valid}</code></pre>
+</div></details>
+<details class="fold" id="methods-applying-modifiers-without-destroying-skinning"><summary><span>Applying modifiers without destroying skinning</span></summary><div>
+<p><code>bpy.data.meshes.new_from_object(evaluated_object, depsgraph=depsgraph)</code> bakes the whole modifier stack — including the armature modifier, which freezes the pose into the mesh. Meshes with an armature modifier must therefore keep their stack and be copied rather than evaluated, leaving the deformation to Unreal.</p>
+</div></details>
+<details class="fold" id="methods-nested-collections"><summary><span>Nested collections</span></summary><div>
+<p><code>collection.all_objects</code> includes everything in child collections. When exporting one file per collection, a parent collection would re-export everything its children already wrote. The rule used here: a collection with children exports only its direct <code>objects</code>, one without children exports <code>all_objects</code>.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 4 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><h3 id="relations-runtime-dependencies">Runtime dependencies</h3>
+<div class="table"><table><thead><tr><th>Dependency</th><th>Version</th><th>Why</th></tr></thead><tbody>
+<tr><td>Blender</td><td>3.6 or newer</td><td>The host application; <code>bpy</code> is the only API used</td></tr>
+<tr><td>Python</td><td>Bundled with Blender</td><td>No external packages, deliberately</td></tr>
+</tbody></table></div>
+<h3 id="relations-development-tools">Development tools</h3>
+<div class="table"><table><thead><tr><th>Tool</th><th>Status</th><th>Note</th></tr></thead><tbody>
+<tr><td>Blender 5.2.1 LTS</td><td>Installed 2026-09-05</td><td><code>brew install --cask blender</code>, wrapper at <code>/opt/homebrew/bin/blender</code></td></tr>
+<tr><td>Unreal Engine 5</td><td>Not installed</td><td>Needed to verify the exported files import correctly</td></tr>
+</tbody></table></div>
+<h3 id="relations-storefronts-under-consideration">Storefronts under consideration</h3>
+<div class="table"><table><thead><tr><th>Service</th><th>Cut</th><th>Note</th></tr></thead><tbody>
+<tr><td>Blender Market</td><td>~30%</td><td>The audience is already there; strongest discovery</td></tr>
+<tr><td>Gumroad</td><td>~10% + fees</td><td>Full control, no discovery</td></tr>
+<tr><td>Payhip</td><td>Free tier / ~5%</td><td>Merchant of record, handles EU/US tax from Malaysia</td></tr>
+<tr><td>Lemon Squeezy</td><td>~5% + fees</td><td>Merchant of record, cleaner for cross-border tax</td></tr>
+</tbody></table></div>
+<h3 id="relations-related-projects">Related projects</h3>
+<ul>
+<li>The Malaysian environment asset packs (product #2) will be built using this add-on, which is also how its quality gets tested in anger.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 5 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><details class="fold" id="decisions-d1-build-the-blender-add-on-first-not-the-asset-pa"><summary><span>D1 — Build the Blender add-on first, not the asset pack (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> Eight digital product ideas were on the table: Malaysian environment asset packs, a retro-console shader kit, a printable handheld console kit, a Blender-to-UE5 course, a lecturer toolkit, an archviz conversion pack, a VR starter template, and this exporter.</p>
+<p><strong>Decision.</strong> Build the exporter add-on first.</p>
+<p><strong>Why.</strong> It is the only one that is pure code, so it could be built to a finished v1.0 immediately with no modelling or recording time. It is evergreen, needs no new content to keep selling, and it will be used in-house to build the asset packs that are the intended second product — which doubles as the honest quality test.</p>
+<p><strong>Rejected because:</strong> the asset packs need weeks of modelling before anything is sellable; the course and lecturer toolkit need material written and recorded.</p>
+</div></details>
+<details class="fold" id="decisions-d2-ship-as-a-single-folder-carrying-both-bl-info-a"><summary><span>D2 — Ship as a single folder carrying both <code>bl_info</code> and <code>blender_manifest.toml</code> (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> Blender 4.2 introduced the extensions system and deprecated legacy <code>bl_info</code> add-ons, but a large share of users are still on 3.6 LTS and 4.1.</p>
+<p><strong>Decision.</strong> Ship one zip containing a package folder that has both the legacy <code>bl_info</code> dictionary and an extension manifest.</p>
+<p><strong>Why.</strong> One download works on Blender 3.6 through 5.x. Customers on older versions are exactly the ones least likely to debug an install failure, and a support ticket costs more than the duplicated metadata.</p>
+</div></details>
+<details class="fold" id="decisions-d3-bake-on-temporary-copies-rather-than-applying-t"><summary><span>D3 — Bake on temporary copies rather than applying to the scene (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> Applying transforms and modifiers is required for a clean Unreal import, but doing it to the user's objects is destructive and undo-dependent.</p>
+<p><strong>Decision.</strong> Duplicate the objects into a temporary collection, bake the world matrix into the mesh data directly (rather than through <code>bpy.ops.transform_apply</code>), export, then delete the copies and their orphaned data.</p>
+<p><strong>Why.</strong> It is non-destructive, it does not depend on operator context or the undo stack, and negative scale can be detected from the matrix determinant and corrected with a normal flip — which the operator path handles inconsistently.</p>
+</div></details>
+<details class="fold" id="decisions-d4-filter-exporter-arguments-against-the-operator-"><summary><span>D4 — Filter exporter arguments against the operator's RNA at call time (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> Blender's FBX and glTF exporters gain and lose keyword arguments between releases, which is the usual reason an add-on breaks on a new version.</p>
+<p><strong>Decision.</strong> Build the full argument dictionary, then drop any key the running Blender's operator does not declare.</p>
+<p><strong>Why.</strong> One code path supports 3.6 through 5.x without version branches, and a new Blender release degrades gracefully instead of raising a <code>TypeError</code>.</p>
+</div></details>
+<details class="fold" id="decisions-d5-release-pipeline-free-rather-than-sell-it-2026-"><summary><span>D5 — Release Pipeline free rather than sell it (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> The add-on was finished, tested to 26 checks and had a complete store listing written, priced at $19 with Blender Market as the storefront. Luqman then said he still did not understand the add-on.</p>
+<p><strong>Decision.</strong> Release it free and open source under GPL-3.0, repository public, and move on to a new project.</p>
+<p><strong>Why.</strong> A product the owner cannot explain is one he cannot demo, market or support. Selling it would have created a support obligation he was not equipped to meet, and a refund-and-bad-review risk that outweighed the few hundred dollars the launch was realistically worth. Released free it still carries his name, still feeds his portfolio, and costs him nothing to maintain.</p>
+<p><strong>Wider lesson recorded.</strong> The failure was in delivery, not domain — a finished black box built at speed. His next project is also a Blender add-on, so the answer is to build it with him and explain as it goes, not to avoid code.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 3 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-unreal-conventions">Unreal conventions</h3>
+<ul>
+<li>Static mesh <code>SM_</code>, skeletal mesh <code>SK_</code>, animation <code>A_</code></li>
+<li>Collision: <code>UCX_</code> convex, <code>UBX_</code> box, <code>USP_</code> sphere, <code>UCP_</code> capsule, named <code>UCX_&lt;MeshName&gt;_&lt;number&gt;</code></li>
+<li>1 Blender metre = 100 Unreal units (centimetres)</li>
+</ul>
+<h3 id="references-blender-api">Blender API</h3>
+<ul>
+<li><code>bpy.data.meshes.new_from_object</code> — evaluate an object with its modifiers applied</li>
+<li><code>bpy.ops.export_scene.fbx.get_rna_type().properties</code> — the exporter's real argument list</li>
+<li>Blender extensions manifest — <code>blender_manifest.toml</code>, required from 4.2</li>
+</ul>
+<h3 id="references-competitors-to-study-before-pricing">Competitors to study before pricing</h3>
+<ul>
+<li>Epic's Send to Unreal (free, official)</li>
+<li>The various paid batch exporters on Blender Market</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-05"><summary><span>2026-09-05</span></summary><div><h3 id="log-2026-09-05-what-was-done">What was done</h3>
+<ul>
+<li>Reviewed eight digital-product ideas and picked the Blender-to-Unreal exporter add-on as the first product to build.</li>
+<li>Wrote v1.0.0 in full: <code>~/Desktop/project/3d/pipeline/pipeline_ue/__init__.py</code>, roughly 700 lines, 12 registered classes, four export modes, FBX and glTF output, a validation pass and a sidebar UI.</li>
+<li>Added <code>blender_manifest.toml</code> so one zip installs on both Blender 3.6–4.1 and 4.2+, plus <code>build.sh</code>, a README, a changelog and a headless test script.</li>
+<li>Created the knowledge base entry and recorded four decisions.</li>
+</ul>
+<h3 id="log-2026-09-05-decisions-made">Decisions made</h3>
+<ul>
+<li>D1 — build the add-on before the asset packs</li>
+<li>D2 — one zip supporting both the legacy and extension install paths</li>
+<li>D3 — bake on temporary copies, never on the user's objects</li>
+<li>D4 — filter exporter arguments against the operator RNA at call time</li>
+</ul>
+<h3 id="log-2026-09-05-stuck-on-problems">Stuck on / problems</h3>
+<ul>
+<li>Blender is not installed on this Mac, so not a single line has been executed. The add-on is syntax-checked only, and the test suite has never run.</li>
+</ul>
+<h3 id="log-2026-09-05-what-was-learned">What was learned</h3>
+<ul>
+<li>The whole product is achievable in one session because it is pure code — this is what made it the right first product rather than the asset packs.</li>
+</ul>
+<h3 id="log-2026-09-05-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> Install Blender and run <code>blender --background --python tests/test_pipeline.py</code></li>
+<li><span class="box">to do</span> Fix whatever the first real run turns up</li>
+<li><span class="box">to do</span> Import an <code>SM_</code> and an <code>SK_</code> result into UE5 and check scale, pivot, collision</li>
+<li><span class="box">to do</span> Put <code>~/Desktop/project/3d/pipeline</code> under git</li>
+<li><span class="box">to do</span> Record the 60-second demo video</li>
+<li><span class="box">to do</span> Choose the storefront and the price</li>
+</ul>
+<h3 id="log-2026-09-05-session-2-testing">Session 2 — testing</h3>
+<h3 id="log-2026-09-05-what-was-done-2">What was done</h3>
+<ul>
+<li>Installed Blender 5.2.1 LTS with <code>brew install --cask blender</code>.</li>
+<li>Ran the headless suite and grew it from 12 checks to 25, including an FBX round trip that re-imports the exported file and measures it.</li>
+<li>Confirmed the distributable zip installs and enables through Blender 5.2's extension system, with the panel and scene properties registering correctly.</li>
+</ul>
+<h3 id="log-2026-09-05-bugs-found-and-fixed-by-the-first-real-run">Bugs found and fixed by the first real run</h3>
+<ol>
+<li><strong>Objects left in the Scene Collection were never exported.</strong> <code>walk_collections</code> only iterated the master collection's children, so the master itself was never a candidate — and leaving props directly in the Scene Collection is the common case. Fixed with <code>export_collections()</code>, which yields the master first, named after the scene.</li>
+<li><strong><code>view_layer.objects</code> can yield <code>None</code>.</strong> Iterating it to clear the selection crashed with <code>AttributeError: 'NoneType' object has no attribute 'select_set'</code> when the depsgraph had not caught up with objects linked earlier in the same operator. Fixed by clearing from <code>context.selected_objects</code> instead, which is both correct and smaller.</li>
+</ol>
+<h3 id="log-2026-09-05-what-was-learned-2">What was learned</h3>
+<ul>
+<li>The round-trip test is the one that earns its keep: measuring the re-imported mesh proved the pivot sits at z=0, that a 45-degree rotation was genuinely baked in (bounding box widens to 4·√2 = 5.657 m) and that a mirrored object keeps a positive signed volume. None of that is visible from the export call succeeding.</li>
+<li>Blender turns an operator's <code>ERROR</code> report into a Python <code>RuntimeError</code> when called from a script, so tests that assert a refusal must catch it.</li>
+</ul>
+<h3 id="log-2026-09-05-next-2">Next</h3>
+<ul>
+<li><span class="box">to do</span> Install UE5 and import an <code>SM_</code> and an <code>SK_</code> result — check scale, pivot, collision</li>
+<li><span class="box">to do</span> Put <code>~/Desktop/project/3d/pipeline</code> under git</li>
+<li><span class="box">to do</span> Record the 60-second demo video</li>
+<li><span class="box">to do</span> Choose the storefront and the price</li>
+</ul>
+<h3 id="log-2026-09-05-session-3-version-control">Session 3 — version control</h3>
+<h3 id="log-2026-09-05-what-was-done-3">What was done</h3>
+<ul>
+<li><code>git init</code> on <code>~/Desktop/project/3d/pipeline</code>, initial commit on <code>main</code>, tagged <code>v1.0.0</code>.</li>
+<li><code>.gitignore</code> covers <code>.env</code>, <code>dist/</code>, <code>__pycache__</code>, <code>.blend1/.blend2</code> and <code>.DS_Store</code>.</li>
+<li>Full GPLv3 text added as <code>LICENSE</code>, matching the SPDX identifier already declared in <code>blender_manifest.toml</code> and the module header.</li>
+<li>Switched to <code>feat/ue5-verification</code> so the next round of work does not land on <code>main</code>.</li>
+</ul>
+<h3 id="log-2026-09-05-decisions-made-2">Decisions made</h3>
+<ul>
+<li>Git identity is set <strong>locally on this repo only</strong> (<code>Luqman Hakeem</code>, <code>academy@todak.com</code>) rather than globally, so other projects are unaffected.</li>
+<li>The bootstrap commit is on <code>main</code>; the "never commit straight to main" convention applies from here on, which is why the working branch exists already.</li>
+<li><code>dist/</code> is ignored — the zip is a build artefact, rebuilt with <code>./build.sh</code>.</li>
+</ul>
+<h3 id="log-2026-09-05-next-3">Next</h3>
+<ul>
+<li><span class="box">to do</span> Install UE5 and import an <code>SM_</code> and an <code>SK_</code> result — check scale, pivot, collision</li>
+<li><span class="box">to do</span> Create the GitHub remote and push (the manifest already points at <code>github.com/luqmanhakeem/pipeline</code>, which does not exist yet)</li>
+<li><span class="box">to do</span> Record the 60-second demo video</li>
+<li><span class="box">to do</span> Choose the storefront and the price</li>
+</ul>
+<h3 id="log-2026-09-05-session-4-relocation">Session 4 — relocation</h3>
+<ul>
+<li>Moved the repo from <code>~/Projects/pipeline</code> to <code>~/Desktop/project/pipeline</code>, which is where Luqman keeps his code (alongside <code>peta-lot-tanah</code>). <code>~/Projects</code> was removed; it should not have been created in the first place.</li>
+<li>Git history, the <code>v1.0.0</code> tag and the <code>feat/ue5-verification</code> branch all survived the move, and the test suite still passes 25/25 from the new path.</li>
+<li>Path references in <code>00-overview.md</code> and this log updated.</li>
+</ul>
+<h3 id="log-2026-09-05-session-5-store-listing">Session 5 — store listing</h3>
+<ul>
+<li>Wrote <code>store/LISTING.md</code>: paste-ready copy for every storefront field, a five-shot screenshot brief, a 60-second demo script with timecodes, and a price recommendation of $19 USD (~RM 85) with a 25% two-week launch discount.</li>
+<li>Published the same material as an artifact for reading and sharing: <a href="https://claude.ai/code/artifact/00bf3b58-1897-481c-9666-988b8ed9ab9b">https://claude.ai/code/artifact/00bf3b58-1897-481c-9666-988b8ed9ab9b</a></li>
+<li>The listing ends with an honesty gate naming the three claims that depend on a UE5 import nobody has done yet — screenshot 4, the video's 0:34–0:46 beat, and the rigged-characters FAQ answer. Those stay unpublished until the check is done.</li>
+</ul>
+<h3 id="log-2026-09-05-next-4">Next</h3>
+<ul>
+<li><span class="box">to do</span> Import an <code>SM_</code> and an <code>SK_</code> file into UE5 — this now blocks the launch</li>
+<li><span class="box">to do</span> Shoot the five screenshots and record the demo</li>
+<li><span class="box">to do</span> Choose the storefront and publish</li>
+</ul>
+<h3 id="log-2026-09-05-session-6-github">Session 6 — GitHub</h3>
+<ul>
+<li>Created <a href="https://github.com/juslangit/pipeline">https://github.com/juslangit/pipeline</a> as a <strong>private</strong> repo and pushed <code>main</code>, the <code>feat/ue5-verification</code> branch and the <code>v1.0.0</code> tag.</li>
+<li>Private rather than public because publishing the source is not reversible and had not been explicitly agreed. Flip with <code>gh repo edit --visibility public</code>.</li>
+<li>Fixed the placeholder links in <code>blender_manifest.toml</code> and <code>bl_info</code> — they pointed at <code>github.com/luqmanhakeem/pipeline</code>, a username that does not exist. The GitHub account is <strong>juslangit</strong>.</li>
+<li>Rebuilt the zip, revalidated the manifest, tests still 25/25.</li>
+</ul>
+<h3 id="log-2026-09-05-session-7-launch-strategy">Session 7 — launch strategy</h3>
+<p>Luqman's answers, which set the plan:</p>
+<ul>
+<li><strong>Goal:</strong> first money fast — one product listed and earning within two weeks</li>
+<li><strong>UE5 test:</strong> he can run it today or tomorrow</li>
+<li><strong>Storefront:</strong> Blender Market first, accepting the ~30% cut for discovery</li>
+<li><strong>Marketing:</strong> willing to post (screenshots, captioned video, forums), not on camera</li>
+</ul>
+<p>Wrote two working documents into the repo so they can be pulled on whichever machine has Unreal:</p>
+<ul>
+<li><code>store/UE5-CHECK.md</code> — a 20-minute import test with explicit pass/fail criteria for scale, pivot, collision and skeleton, plus the exact UE5 import settings (Auto Generate Collision <strong>off</strong>, One Convex Hull per UCX <strong>on</strong>)</li>
+<li><code>store/LAUNCH.md</code> — the 14-day sequence, the promo channel list ordered by value (Blender Artists forum and BlenderNation first), and a realistic revenue expectation of single digits to a few dozen sales in month one</li>
+</ul>
+<h3 id="log-2026-09-05-next-5">Next</h3>
+<ul>
+<li><span class="box">to do</span> Luqman runs the UE5 check and reports four pass/fail results</li>
+</ul>
+<h3 id="log-2026-09-05-session-8-direction-change">Session 8 — direction change</h3>
+<p>Luqman: <em>"actually i still dont understand this addons. so i want to create a new project."</em></p>
+<ul>
+<li>Pipeline is <strong>released free</strong> under GPL-3.0 instead of sold. Repository made public, README updated, store listing and launch plan marked superseded rather than deleted — the description and FAQ are still the best writing about the tool.</li>
+<li>Recorded as decision D5, and as a standing lesson: the mistake was handing over a finished black box built at speed, not the choice to write code. His next project is another Blender add-on, so the fix is to build it with him and explain as it goes.</li>
+<li>New project opened: a retopology add-on for Blender.</li>
+</ul></div></details></div>
+</section>
+<section class="chapter" id="checks">
+  <p class="kicker">What proves it works, from each file's own header comment</p>
+  <h2>Tests and tools</h2>
+  <details class="fold" id="tests"><summary><span>Tests and checks</span></summary><div><p class="note">Every test file, described by the comment it opens with.</p><div class="table"><table><thead><tr><th>File</th><th>What it does</th></tr></thead><tbody><tr><td><code>tests/make_demo_scene.py</code></td><td>—</td></tr><tr><td><code>tests/test_pipeline.py</code></td><td>—</td></tr></tbody></table></div></div></details>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on feat/ue5-verification, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>e6c0fff</code></td><td class="nowrap">2026-09-17</td><td>Add the project record</td></tr><tr class=""><td><code>2c5a7e4</code></td><td class="nowrap">2026-09-05</td><td>release pipeline free instead of selling it</td></tr><tr class=""><td><code>f542a6a</code></td><td class="nowrap">2026-09-05</td><td>warn when a hidden rig turns a whole collection skeletal</td></tr><tr class=""><td><code>d4ef316</code></td><td class="nowrap">2026-09-05</td><td>add ue5 verification checklist and 14-day launch plan</td></tr><tr class=""><td><code>37f904b</code></td><td class="nowrap">2026-09-05</td><td>point the add-on links at the real repository</td></tr><tr class=""><td><code>f058fae</code></td><td class="nowrap">2026-09-05</td><td>add store listing copy and launch assets brief</td></tr><tr class=""><td><code>8001293</code></td><td class="nowrap">2026-09-05</td><td>add pipeline unreal batch exporter v1.0.0</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

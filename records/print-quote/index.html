@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Print Quote Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Print Quote</b><span>Project record · built 2026-09-17 from main</span></p>
+  <h1>Print Quote</h1>
+  <p class="thesis">A web page where a customer drags an STL file in and gets an instant printing price. The browser reads the triangle mesh itself, works out solid volume, shell and infill, converts that to grams and hours, and prices the job against the shop's own filament cost, machine rate and margin. Built as the portfolio piece that sits on the seam between Luqman's two skills — nobody who only does web can produce the 3D side, and nobody who only does 3D can produce the app.</p>
+  <div class="stats"><div class="stat"><b>2</b><span>commits</span></div><div class="stat"><b>8</b><span>days of work</span></div><div class="stat"><b>2</b><span>source files</span></div><div class="stat"><b>1,467</b><span>lines of code</span></div><div class="stat"><b>6</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>testing</td></tr>
+<tr><td>Current phase</td><td>v1 published, needs real STL files run through it</td></tr>
+<tr><td>Deadline / target</td><td>none</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/juslangit/print-quote">https://github.com/juslangit/print-quote</a> (public)</td></tr>
+<tr><td>URL / deployment</td><td><a href="https://claude.ai/code/artifact/4473ddab-402c-415e-b363-33e7d97ccf59">https://claude.ai/code/artifact/4473ddab-402c-415e-b363-33e7d97ccf59</a></td></tr>
+<tr><td>Main stack</td><td>Single-file HTML/CSS/JS. Three.js r128 (cdnjs UMD) for rendering. STL parser written by hand.</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Research on 2026-09-10 into what makes a portfolio win freelance work said two things clearly: tutorial projects are worthless because every candidate has the same five, and clients do not care about the stack, only about a business result. An "interactive 3D portfolio" is no longer a differentiator either — it is an $85 Fiverr gig with dozens of free GitHub templates.</p>
+<p>The differentiator is that in every one of those templates the 3D model is downloaded. Luqman makes his. He is a Blender and Unreal artist who teaches this at a vocational college and runs a BambuLab printer. A tool that needs both mesh mathematics and web engineering is one that neither side of the freelance market can copy quickly.</p>
+<p>It also has a real buyer. Any 3D printing service that quotes by email is losing hours a week to it, and Malaysian print shops are a reachable market.</p>
+<h3 id="overview-what-counts-as-done">What counts as "done"</h3>
+<p>A print shop owner can put their own filament price, machine rate, setup fee and margin into the settings, hand the page's link to a customer, and get an enquiry with a price attached that they are willing to honour.</p>
+<h3 id="overview-what-is-not-in-scope">What is NOT in scope</h3>
+<ul>
+<li>Real slicing. The estimates are arithmetic on the mesh, not G-code generation.</li>
+<li>Automatic support detection — supports are a checkbox the customer ticks.</li>
+<li>Payment, order management, or a customer account system.</li>
+<li>Formats beyond STL for v1. 3MF and OBJ are v2.</li>
+</ul>
+<h3 id="overview-map-of-files-in-this-folder">Map of files in this folder</h3>
+<ul>
+<li><code>01-idea.md</code> — the original idea, alternatives considered</li>
+<li><code>02-planning.md</code> — scope, phases, requirements, stack</li>
+<li><code>03-milestones.md</code> — milestones &amp; progress</li>
+<li><code>04-methods.md</code> — how to work on this, patterns, commands</li>
+<li><code>05-relations.md</code> — relationships between components/people/systems</li>
+<li><code>06-decisions.md</code> — decision log (why A over B)</li>
+<li><code>07-references.md</code> — links, documentation, references</li>
+<li><code>log/</code> — daily / per-session notes</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 7 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick us</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="idea-value-advantage">Value / advantage</h3>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td></td><td></td><td>untested</td></tr>
+</tbody></table></div>
+<h3 id="idea-alternatives-considered">Alternatives considered</h3>
+<div class="table"><table><thead><tr><th>Option</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td><td>rejected / parked</td></tr>
+</tbody></table></div>
+<h3 id="idea-side-ideas-parking-lot">Side ideas (parking lot)</h3></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 6 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><h3 id="planning-scope">Scope</h3>
+<h4 id="planning-must-have-mvp">Must have (MVP)</h4>
+<h4 id="planning-nice-to-have-v2">Nice to have (v2)</h4>
+<h4 id="planning-won-t-build">Won't build</h4>
+<h3 id="planning-phases">Phases</h3>
+<div class="table"><table><thead><tr><th>Phase</th><th>Goal</th><th>Output</th><th>Estimate</th></tr></thead><tbody>
+<tr><td>1</td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="planning-stack-tooling">Stack &amp; tooling</h3>
+<div class="table"><table><thead><tr><th>Layer</th><th>Choice</th><th>Reason</th></tr></thead><tbody>
+<tr><td>Frontend</td><td></td><td></td></tr>
+<tr><td>Backend</td><td></td><td></td></tr>
+<tr><td>Database</td><td></td><td></td></tr>
+<tr><td>Hosting</td><td></td><td></td></tr>
+<tr><td>Auth</td><td></td><td></td></tr>
+<tr><td>Other</td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="planning-requirements">Requirements</h3>
+<h4 id="planning-functional">Functional</h4>
+<h4 id="planning-non-functional">Non-functional</h4>
+<h3 id="planning-risks">Risks</h3>
+<div class="table"><table><thead><tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr></thead><tbody>
+<tr><td></td><td>high/medium/low</td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="planning-resources-needed">Resources needed</h3></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 4 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><blockquote>Status: <code>not started</code> · <code>in progress</code> · <code>done</code> · <code>stalled</code> · <code>cancelled</code> Use full dates (2026-09-10), never "next week".</blockquote>
+<details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
+<div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M1</td><td></td><td>2026-09-10</td><td></td><td>not started</td><td></td></tr>
+<tr><td>M2</td><td></td><td>2026-09-10</td><td></td><td>not started</td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m1-name"><summary><span>M1 — &lt;name&gt;</span></summary><div>
+<p><strong>Goal:</strong> <strong>Done criteria:</strong></p>
+<p><strong>Dependencies:</strong> <strong>Blockers:</strong></p>
+</div></details>
+<details class="fold" id="milestones-m2-name"><summary><span>M2 — &lt;name&gt;</span></summary><div>
+<p><strong>Goal:</strong> <strong>Done criteria:</strong></p>
+<p><strong>Dependencies:</strong> <strong>Blockers:</strong></p>
+</div></details>
+<details class="fold" id="milestones-completion-history"><summary><span>Completion history</span></summary><div>
+<div class="table"><table><thead><tr><th>Date</th><th>Milestone</th><th>Lesson</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 4 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><details class="fold" id="methods-the-mathematics-so-it-can-be-defended-in-a-client-co"><summary><span>The mathematics, so it can be defended in a client conversation</span></summary><div>
+<h4 id="methods-solid-volume">Solid volume</h4>
+<p>For every triangle, take the signed volume of the tetrahedron formed by the origin and the triangle's three vertices — <code>dot(a, cross(b, c)) / 6</code>. Summed over a closed mesh, the parts outside the solid cancel and what remains is the enclosed volume. This is why the answer is exact for a watertight model and nonsense for one with holes.</p>
+<h4 id="methods-surface-area">Surface area</h4>
+<p>Half the magnitude of the cross product of two edges, per triangle, summed.</p>
+<h4 id="methods-what-is-actually-extruded">What is actually extruded</h4>
+<p>A print is not solid.</p>
+<p>shell     = min(surface_area × walls × line_width, solid_volume) interior  = solid_volume − shell infill    = interior × infill_density extruded  = shell + infill  (+ supports if ticked)</p>
+<p>The <code>min</code> matters: on a thin part the shell <em>is</em> the whole part, and without the clamp the estimate exceeds the solid volume.</p>
+<h4 id="methods-grams">Grams</h4>
+<p><code>extruded_cm³ × density</code>. PLA 1.24, PETG 1.27, ABS 1.04, ASA 1.07, TPU 1.21 g/cm³.</p>
+<h4 id="methods-time">Time</h4>
+<p>Volumetric flow the machine sustains:</p>
+<p>flow = layer_height × line_width × speed × 0.42 × material_factor</p>
+<p>The 0.42 derate covers acceleration, travel moves and cooling — a printer never holds its headline speed. Then:</p>
+<p>seconds = extruded / flow + layers × 0.55 + 240</p>
+<p><code>layers × 0.55</code> is the per-layer change cost; 240 s is heat-up, levelling and the purge line.</p>
+<h4 id="methods-price">Price</h4>
+<p>material  = grams / 1000 × RM per kg machine   = hours × RM per hour failure   = (material + machine) × failure % margin    = (material + machine + failure) × margin % unit      = material + machine + failure + margin total     = unit × quantity + setup fee, floored at the minimum order</p>
+</div></details>
+<details class="fold" id="methods-constants-and-where-they-came-from"><summary><span>Constants and where they came from</span></summary><div>
+<div class="table"><table><thead><tr><th>Constant</th><th>Value</th><th>Why</th></tr></thead><tbody>
+<tr><td>Nozzle</td><td>0.4 mm</td><td>Bambu stock</td></tr>
+<tr><td>Line width</td><td>0.42 mm</td><td>A 0.4 nozzle lays slightly wider than its bore</td></tr>
+<tr><td>Flow efficiency</td><td>0.42</td><td>Derate for accel, travel, cooling</td></tr>
+<tr><td>Layer change</td><td>0.55 s</td><td>Per layer</td></tr>
+<tr><td>Startup</td><td>240 s</td><td>Heat, level, purge</td></tr>
+<tr><td>Support volume</td><td>12% of part volume</td><td>Rough, and the reason it is a checkbox not a computation</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-gotchas-worth-knowing"><summary><span>Gotchas worth knowing</span></summary><div>
+<ul>
+<li><strong>STL carries no units.</strong> A file exported in inches and read as millimetres is wrong by 25.4×. Hence the units selector — this is a real thing that bites print shops, not a decorative control.</li>
+<li><strong>Binary vs ASCII STL.</strong> Do not sniff for the word <code>solid</code> at the start; plenty of binary files begin with it too. Check the arithmetic instead: a binary STL is exactly <code>84 + triangles × 50</code> bytes.</li>
+<li><strong>STL is Z-up, Three.js is Y-up.</strong> The mesh is rotated <code>-PI/2</code> on X so the part sits on the plate correctly.</li>
+<li><strong>Orbit the camera, not the model.</strong> Rotating the group on X tilts the part through the build plate, which looks wrong to anyone who prints.</li>
+</ul>
+</div></details>
+<details class="fold" id="methods-running-it"><summary><span>Running it</span></summary><div>
+<p>Open <code>~/Desktop/project/3d/print-quote/index.html</code> in a browser. No build step, no server, no dependencies beyond the Three.js script tag.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 6 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><h3 id="relations-system-map">System map</h3>
+<pre class="mermaid">flowchart LR
+    User --&gt; Frontend
+    Frontend --&gt; API
+    API --&gt; DB[(Database)]
+    API --&gt; Ext[External services]</pre>
+<h3 id="relations-internal-components">Internal components</h3>
+<div class="table"><table><thead><tr><th>Component</th><th>Function</th><th>Depends on</th><th>Used by</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-external-services">External services</h3>
+<div class="table"><table><thead><tr><th>Service</th><th>Used for</th><th>Env var name</th><th>Cost</th><th>If it goes down?</th></tr></thead><tbody>
+<tr><td></td><td></td><td><code>SOME_KEY</code></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-data-models">Data &amp; models</h3>
+<div class="table"><table><thead><tr><th>Entity</th><th>Key fields</th><th>Relationships</th></tr></thead><tbody>
+<tr><td></td><td></td><td>one-to-many with ...</td></tr>
+</tbody></table></div>
+<h3 id="relations-people-roles">People &amp; roles</h3>
+<div class="table"><table><thead><tr><th>Name / role</th><th>Responsibility</th><th>Contact when</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-relationships-with-other-projects">Relationships with other projects</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Type of link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td>shared code / shared data / replacement</td><td></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 6 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><details class="fold" id="decisions-2026-09-10-a-tool-on-the-3d-web-seam-not-a-3d-port"><summary><span>2026-09-10 — A tool on the 3D/web seam, not a 3D portfolio site</span></summary><div>
+<p>Four candidates were on the table: this calculator, a product configurator, a personal portfolio site with real 3D, and finishing the tuition platform. Research showed "interactive 3D portfolio" has become a commodity — an $85 Fiverr gig with free GitHub templates — so Three.js by itself proves nothing. What cannot be copied is that Luqman produces the 3D assets and understands FDM printing from owning a BambuLab. The calculator is the option where both are load-bearing, and it has an actual buyer in any print shop still quoting by hand.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-10-hand-written-stl-parser-instead-of-a-lo"><summary><span>2026-09-10 — Hand-written STL parser instead of a loader library</span></summary><div>
+<p>cdnjs carries three.js but not <code>STLLoader</code>, which lives in the ESM-only examples directory. Rather than risk a second CDN or inline a library, the parser was written directly — it is about forty lines for both binary and ASCII. Fewer external failure points, and the format knowledge stays in the project.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-10-everything-runs-in-the-browser-nothing-"><summary><span>2026-09-10 — Everything runs in the browser, nothing is uploaded</span></summary><div>
+<p>No server, no file upload. Partly because it makes the result instant, but mainly because a customer's STL is their intellectual property. "The file never leaves your device" is a selling point to anyone quoting a part they have not patented yet, and it removes storage cost and liability from whoever runs the page.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-10-shop-settings-are-exposed-not-hard-code"><summary><span>2026-09-10 — Shop settings are exposed, not hard-coded</span></summary><div>
+<p>Filament RM/kg, machine RM/hour, setup fee, margin, minimum order and failure allowance are all editable on the page. A hard-coded price list makes it a demo; editable settings make it a product a shop can adopt in an afternoon, and it lets Luqman sit with a client and put their real numbers in during the conversation.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-10-estimates-are-labelled-as-estimates"><summary><span>2026-09-10 — Estimates are labelled as estimates</span></summary><div>
+<p>The footer says plainly that real print time depends on geometry, orientation, supports and cooling. Overstating precision would be the fastest way to lose trust with anyone who actually prints — and a shop quotes to confirm anyway, so honest framing costs nothing and buys credibility.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-10-public-repo-under-mit"><summary><span>2026-09-10 — Public repo under MIT</span></summary><div>
+<p>The calculator is the showcase piece, and a portfolio repository that nobody can read does not do the job a portfolio exists to do. A client evaluating Luqman should be able to open the mesh mathematics and see it is his. MIT is the right licence for something whose value is the demonstration rather than the exclusivity.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 5 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-project-links">Project links</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>URL</th></tr></thead><tbody>
+<tr><td>Repo</td><td></td></tr>
+<tr><td>Production</td><td></td></tr>
+<tr><td>Staging</td><td></td></tr>
+<tr><td>Dashboard / analytics</td><td></td></tr>
+<tr><td>Design (Figma etc.)</td><td></td></tr>
+<tr><td>Board / issue tracker</td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-external-documentation">External documentation</h3>
+<div class="table"><table><thead><tr><th>Topic</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-credentials">Credentials</h3>
+<blockquote>⚠️ <strong>Never write key values here.</strong> Env var names only. The real values are stored in <code>~/.claude/.env</code> (chmod 600).</blockquote>
+<div class="table"><table><thead><tr><th>Env var name</th><th>Used for</th><th>Where to get it</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-references-inspiration">References &amp; inspiration</h3>
+<h3 id="references-reading-notes">Reading notes</h3></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-10"><summary><span>2026-09-10</span></summary><div><h3 id="log-2026-09-10-what-happened">What happened</h3>
+<p>Luqman asked for a website to put in his portfolio and asked me to research what would be worth building. Four searches on portfolio strategy, the Malaysian freelance web market, Three.js as a differentiator and common portfolio mistakes.</p>
+<p>The findings that mattered: tutorial projects are worthless, clients care about business outcomes rather than the stack, the Malaysian market pays RM1,500–3,000 for WordPress sites and RM5,000–20,000 for custom web apps, and "3D portfolio" has already been commoditised into an $85 Fiverr gig. The conclusion was that the project had to sit where his 3D skills and web work overlap. He picked the STL quote calculator from four options.</p>
+<h3 id="log-2026-09-10-built">Built</h3>
+<p><code>~/Desktop/project/3d/print-quote/index.html</code>, published at <a href="https://claude.ai/code/artifact/4473ddab-402c-415e-b363-33e7d97ccf59">https://claude.ai/code/artifact/4473ddab-402c-415e-b363-33e7d97ccf59</a></p>
+<ul>
+<li>Hand-written STL parser, binary and ASCII</li>
+<li>Mesh measurement: signed-tetrahedron volume, surface area, bounding box, triangle count</li>
+<li>Three.js r128 viewport with the part sitting on a to-scale Bambu build plate</li>
+<li>Shell + infill model for extruded volume, density table for grams, volumetric-flow model for time</li>
+<li>Printer, material, filament colour, layer height, infill, walls, quantity, units and supports as controls</li>
+<li>Editable shop settings: filament RM/kg, machine RM/hour, setup, margin, minimum order, failure allowance</li>
+<li>Warnings for parts that do not fit the plate, parts that only fit rotated, jobs below the minimum, TPU at fine layers, and tall parts</li>
+<li>Full cost breakdown showing the working, plus a "how the number is worked out" section explaining the mathematics</li>
+</ul>
+<h3 id="log-2026-09-10-fixed-before-publishing">Fixed before publishing</h3>
+<p>Three bugs caught on review: the canvas was opaque and would have painted black over the themed viewport background; vertical dragging rotated the model group, which tilted the part through the build plate; and the sample part was small enough that every quote hit the minimum-order floor, making the cost breakdown look inert. Camera now orbits instead of the model, canvas is alpha, sample part enlarged.</p>
+<h3 id="log-2026-09-10-next">Next</h3>
+<ul>
+<li>Run real STL files through it — Luqman has models and a BambuLab, so the estimates can be checked against Bambu Studio's own slicer output</li>
+<li>If the time or gram figures are off, the constants in <code>04-methods.md</code> are the dials to turn</li>
+<li>Consider 3MF and OBJ support, and a real enquiry form behind the order button</li>
+</ul></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>49fac3a</code></td><td class="nowrap">2026-09-17</td><td>Add the project record</td></tr><tr class=""><td><code>3d0875c</code></td><td class="nowrap">2026-09-10</td><td>add stl quote calculator</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peta Lot Tanah Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Peta Lot Tanah</b><span>Project record · built 2026-09-17 from main</span></p>
+  <h1>Peta Lot Tanah</h1>
+  <p class="thesis">Peta Lot Tanah is an offline map of every cadastral land lot within 5 km of a point in Klang, Selangor — 64,770 of them — that opens straight from <code>index.html</code> with no server and no internet connection. Each lot is shaded by whether anything is built on it, by how big it is, and by the JUPEM area code that says whether it is town land or mukim land. It was built to answer a practical question about a piece of land by looking at the map rather than by reading a title search.</p>
+  <div class="stats"><div class="stat"><b>2</b><span>commits</span></div><div class="stat"><b>8</b><span>days of work</span></div><div class="stat"><b>6</b><span>source files</span></div><div class="stat"><b>1,314</b><span>lines of code</span></div><div class="stat"><b>4</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>live — data built 2026-09-04, imported to git 2026-09-10</td></tr>
+<tr><td>Current phase</td><td>v1 works; the three Python scripts still carry an absolute path from before the project moved</td></tr>
+<tr><td>Deadline / target</td><td>none</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/juslangit/peta-lot-tanah">https://github.com/juslangit/peta-lot-tanah</a></td></tr>
+<tr><td>URL / deployment</td><td>none — <code>open index.html</code>, everything is local</td></tr>
+<tr><td>Main stack</td><td>Python 3 standard library for the pipeline, Leaflet 1.9.4 vendored locally, plain HTML/CSS/JS for the map</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>A cadastral lot boundary is public information, but the official viewers are slow, online and awkward to compare lot against lot. This bakes one area's lots into a single data file and draws them locally, so the whole 5 km radius can be panned, filtered and recoloured instantly and without a connection.</p>
+<h3 id="overview-what-it-covers">What it covers</h3>
+<ul>
+<li>Centre: <strong>3.042481, 101.414478</strong> (Daerah Klang, Selangor), radius <strong>5,000 m</strong>.</li>
+<li><strong>64,770 lots</strong>, fetched a thousand at a time from PLANMalaysia iPLAN's <code>LOT_10</code> service, which is the Selangor layer of the JUPEM NDCDB.</li>
+<li>Buildings and land use from <strong>OpenStreetMap</strong> via the Overpass API, joined onto the lots so a lot can be called built or empty.</li>
+<li>Satellite imagery underneath from <strong>Esri World Imagery</strong>, the one part that needs a connection.</li>
+</ul>
+<h3 id="overview-the-three-colouring-modes">The three colouring modes</h3>
+<ol>
+<li><strong>Built vs empty</strong> — red when a building is detected inside the lot, or the lot sits in residential, commercial or industrial land use; green when neither is true.</li>
+<li><strong>Lot size</strong> — a threshold the viewer can move, defaulting to one acre.</li>
+<li><strong>Town vs mukim</strong> — by JUPEM area code: 70 and above is bandar, 40–69 pekan, below 40 mukim.</li>
+</ol>
+<h3 id="overview-where-things-are">Where things are</h3>
+<div class="table"><table><thead><tr><th>What</th><th>Where</th></tr></thead><tbody>
+<tr><td>Code</td><td><code>~/Desktop/project/web/peta-lot-tanah/</code></td></tr>
+<tr><td>Notes</td><td><code>~/.claude/knowledge/projects/peta-lot-tanah/</code></td></tr>
+<tr><td>The map</td><td><code>index.html</code> — 684 lines, all of the interface and the drawing</td></tr>
+<tr><td>The data</td><td><code>data/lots.js</code>, 6.5 MB, 64,770 lots ready to draw</td></tr>
+<tr><td>The pipeline</td><td><code>fetch_lots.py</code>, <code>fetch_osm.py</code>, <code>build_data.py</code></td></tr>
+<tr><td>Leaflet</td><td><code>vendor/</code> — copied in rather than loaded from a CDN</td></tr>
+</tbody></table></div>
+<h3 id="overview-known-issue">Known issue</h3>
+<p>All three Python scripts hardcode <code>/Users/juslangit/peta-lot-tanah</code> as their base path, which is where the project lived before it moved into <code>~/Desktop/project/web/</code>. The map itself is unaffected — the data is already built — but rebuilding the data will write to the wrong place until those constants are changed.</p></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 1 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><p>Show a piece of land the way a buyer actually asks about it: <em>is anything on it, how big is it, and is it town land or mukim land?</em> — and show it for every lot around it at the same time, so one lot can be judged against its neighbours.</p>
+<p>The official sources answer those questions one lot at a time through a search form. This inverts that: fetch a whole radius once, join it to what OpenStreetMap knows about buildings and land use, and hand the result to a map that recolours instantly.</p>
+<h3 id="idea-what-it-is-not">What it is not</h3>
+<p>It is a reference and planning aid, not a legal instrument. The README says so plainly: ownership, express conditions, restrictions in interest and official area must be confirmed through eTanah or the district land office. The lot boundaries are NDCDB geometry, simplified for drawing.</p></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 2 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><p>v1 is done and in use. The scope was one radius, one state, three colouring modes.</p>
+<h3 id="planning-shape-of-the-work">Shape of the work</h3>
+<ol>
+<li><code>fetch_lots.py</code> pulls lot polygons from the iPLAN ArcGIS REST service in pages of 1,000, retrying with a widening delay, and writes <code>data/lots_raw.json</code> (28 MB).</li>
+<li><code>fetch_osm.py</code> pulls buildings and land use for the same box from Overpass.</li>
+<li><code>build_data.py</code> joins them, computes each lot's area and centroid with a shoelace sum in local metres, and emits <code>data/lots.js</code> (6.5 MB) — a compact payload the page can load as a plain script tag.</li>
+<li><code>index.html</code> draws it with Leaflet and does all the filtering in the browser.</li>
+</ol>
+<h3 id="planning-what-would-come-next-if-it-is-picked-up-again">What would come next, if it is picked up again</h3>
+<ul>
+<li>Fix the hardcoded <code>/Users/juslangit/peta-lot-tanah</code> base path in the three scripts.</li>
+<li>Another state is a one-line change: the service number in <code>fetch_lots.py</code> (<code>LOT_01</code> Johor through <code>LOT_11</code> Terengganu).</li>
+<li>The README is in Malay, from before the move to English notes and interfaces.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 0 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Started</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M1</td><td>Lots downloaded</td><td>2026-09-04</td><td>2026-09-04</td><td>done</td><td>64,770 lots in <code>data/lots_raw.json</code>, paged 1,000 at a time</td></tr>
+<tr><td>M2</td><td>OSM buildings and land use</td><td>2026-09-04</td><td>2026-09-04</td><td>done</td><td>15 MB of buildings, 759 KB of land use</td></tr>
+<tr><td>M3</td><td>Joined payload</td><td>2026-09-04</td><td>2026-09-04</td><td>done</td><td><code>data/lots.js</code>, 6.5 MB, area and centroid per lot</td></tr>
+<tr><td>M4</td><td>The map</td><td>2026-09-04</td><td>2026-09-04</td><td>done</td><td><code>index.html</code>, Leaflet vendored, three colouring modes</td></tr>
+<tr><td>M5</td><td>In git</td><td>2026-09-10</td><td>2026-09-10</td><td>done</td><td><code>e7d381d first import of peta-lot-tanah</code></td></tr>
+<tr><td>M6</td><td>Paths fixed after the move</td><td>—</td><td></td><td>not started</td><td>The three scripts still write to <code>/Users/juslangit/peta-lot-tanah</code></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 3 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><details class="fold" id="methods-opening-it"><summary><span>Opening it</span></summary><div>
+<pre><code>open ~/Desktop/project/web/peta-lot-tanah/index.html</code></pre>
+<p>No server, no build step, no install. The satellite imagery needs a connection; the lots themselves do not.</p>
+</div></details>
+<details class="fold" id="methods-rebuilding-the-data"><summary><span>Rebuilding the data</span></summary><div>
+<pre><code>python3 fetch_lots.py &amp;&amp; python3 fetch_osm.py &amp;&amp; python3 build_data.py</code></pre>
+<p>Change <code>LAT</code>, <code>LON</code> and <code>RADIUS_M</code> in all three scripts first — and note that each also carries an absolute base path that predates the project's move, so fix that too.</p>
+</div></details>
+<details class="fold" id="methods-patterns-in-use"><summary><span>Patterns in use</span></summary><div>
+<h4 id="methods-vendored-not-linked">Vendored, not linked</h4>
+<p>Leaflet 1.9.4 sits in <code>vendor/</code> rather than coming from a CDN, which is what lets the map open with no connection at all.</p>
+<h4 id="methods-data-as-a-script-not-as-a-fetch">Data as a script, not as a fetch</h4>
+<p><code>data/lots.js</code> assigns the lots to a global and is loaded with a <code>&lt;script&gt;</code> tag. A <code>file://</code> page cannot <code>fetch()</code> a local JSON file without a server; a script tag can.</p>
+<h4 id="methods-geometry-in-local-metres">Geometry in local metres</h4>
+<p>Areas and centroids are computed with a shoelace sum after converting degrees to metres at this latitude (110,574 m per degree of latitude, 111,320 × cos(lat) per degree of longitude). Good enough over a 5 km radius and avoids a projection library.</p>
+<h4 id="methods-retry-with-a-widening-delay">Retry with a widening delay</h4>
+<p>The iPLAN service times out under load, so each page is attempted four times, waiting 3, 6, 9 and 12 seconds between tries. The run is logged to <code>data/fetch.log</code>.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 0 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><div class="table"><table><thead><tr><th>Thing</th><th>Why</th><th>Notes</th></tr></thead><tbody>
+<tr><td>PLANMalaysia iPLAN (<code>iPLAN/LOT_10</code>)</td><td>The lot boundaries — JUPEM NDCDB</td><td>ArcGIS REST, public, no key; state per service number</td></tr>
+<tr><td>OpenStreetMap / Overpass API</td><td>Buildings and land use</td><td>Public, rate-limited</td></tr>
+<tr><td>Esri World Imagery</td><td>The satellite basemap</td><td>The only part that needs a connection</td></tr>
+<tr><td>Leaflet 1.9.4</td><td>Drawing the map</td><td>Vendored into <code>vendor/</code>, not a CDN</td></tr>
+<tr><td>Python 3 standard library</td><td>The whole pipeline</td><td><code>urllib</code>, <code>json</code>, <code>math</code> — nothing installed</td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 4 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><details class="fold" id="decisions-d-001-bake-the-data-instead-of-running-a-server"><summary><span>D-001 — Bake the data instead of running a server</span></summary><div>
+<p><strong>Chosen:</strong> ship <code>data/lots.js</code> as a script the page loads. <strong>Over:</strong> a small API in front of the raw GeoJSON. <strong>Why:</strong> the map has to open from a double-click on a laptop with no connection. A <code>file://</code> page cannot fetch a local JSON file, but it can load a script, so the data became a script. The cost is a 6.5 MB file and a rebuild whenever the area changes.</p>
+</div></details>
+<details class="fold" id="decisions-d-002-vendor-leaflet"><summary><span>D-002 — Vendor Leaflet</span></summary><div>
+<p><strong>Chosen:</strong> copy Leaflet 1.9.4 into <code>vendor/</code>. <strong>Over:</strong> the usual CDN tag. <strong>Why:</strong> same reason — offline. It also pins the version for good.</p>
+</div></details>
+<details class="fold" id="decisions-d-003-simplify-the-geometry-at-the-source"><summary><span>D-003 — Simplify the geometry at the source</span></summary><div>
+<p><strong>Chosen:</strong> ask iPLAN for <code>maxAllowableOffset=0.000004</code> and six-figure precision. <strong>Why:</strong> full-precision NDCDB polygons for 64,770 lots are far heavier than a browser wants to draw, and the difference is invisible at the zoom levels this map is used at.</p>
+</div></details>
+<details class="fold" id="decisions-d-004-judge-built-from-two-signals"><summary><span>D-004 — Judge "built" from two signals</span></summary><div>
+<p><strong>Chosen:</strong> a lot counts as built if an OSM building falls inside it <strong>or</strong> it sits in built land use (residential, commercial, industrial and similar). <strong>Why:</strong> OSM building coverage in this area is incomplete, so buildings alone would paint developed neighbourhoods green. Land use fills the gaps at the cost of some false positives, which is the safer error for a first look at an area.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 0 sections</p>
+  <h2>References</h2>
+  <div class="prose"><ul>
+<li>PLANMalaysia iPLAN lot service (Selangor): <code>https://scharms.planmalaysia.gov.my/arcgis/rest/services/iPLAN/LOT_10/MapServer/0/query</code> — state codes: LOT_01 Johor, LOT_02 Kedah, LOT_03 Kelantan, LOT_04 Melaka, LOT_05 Negeri Sembilan, LOT_06 Pahang, LOT_07 Pulau Pinang, LOT_08 Perak, LOT_09 Perlis, LOT_10 Selangor, LOT_11 Terengganu.</li>
+<li><a href="https://overpass-api.de/">Overpass API</a> — buildings and land use.</li>
+<li><a href="https://leafletjs.com/">Leaflet 1.9.4</a> — vendored in <code>vendor/</code>.</li>
+<li>Esri World Imagery — the satellite basemap tiles.</li>
+<li>eTanah and the district land office are the authorities for anything legal; this map is not.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-17"><summary><span>2026-09-17</span></summary><div><p>Luqman asked for documentation for every project in the project folder and for all of it to go on the website. Peta Lot Tanah was the only project with no knowledge-base folder at all, so this one was written from the repository itself — the README, the three Python scripts, <code>index.html</code> and the git history — and nothing in it is assumed.</p>
+<p>Two things surfaced while reading the code:</p>
+<ul>
+<li>The three Python scripts hardcode <code>/Users/juslangit/peta-lot-tanah</code>, the path the project had before it moved into <code>~/Desktop/project/web/</code>. The map still works because the data is already built, but a rebuild would write to the wrong place. Recorded as M6 rather than fixed, since the ask was documentation.</li>
+<li>The README is in Malay. It predates the switch to English and was left as it is.</li>
+</ul>
+<p>The record is at <a href="https://luqman-docs.netlify.app/peta-lot-tanah/">https://luqman-docs.netlify.app/peta-lot-tanah/</a>.</p></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>95656b6</code></td><td class="nowrap">2026-09-17</td><td>Add the project record</td></tr><tr class=""><td><code>e7d381d</code></td><td class="nowrap">2026-09-10</td><td>first import of peta-lot-tanah</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

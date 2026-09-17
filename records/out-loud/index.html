@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Out Loud Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Out Loud</b><span>Project record · built 2026-09-17</span></p>
+  <h1>Out Loud</h1>
+  <p class="thesis">Out Loud is a Japanese class that runs in a browser tab and refuses to move on until you have said the phrase out loud. The teacher speaks first, using a Japanese voice already installed in macOS; the microphone then opens, Chrome turns what Luqman said into Japanese text, and the app compares it to what it asked for. Every lesson drills its phrases and then forces him to use them in a scene where the teacher plays the other person. It exists because Luqman asked to learn languages by speaking rather than by tapping, "like a real person teaching in class".</p>
+  <div class="stats"><div class="stat"><b>9</b><span>source files</span></div><div class="stat"><b>2,435</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>testing — built 2026-09-17, never yet spoken to by a human</td></tr>
+<tr><td>Current phase</td><td>v1: five lessons, drill + scene, 47 passing checks</td></tr>
+<tr><td>Deadline / target</td><td>none</td></tr>
+<tr><td>Repo</td><td>not initialised yet</td></tr>
+<tr><td>URL / deployment</td><td>local only — <code>./run.sh</code> serves it on <code>http://localhost:8722</code></td></tr>
+<tr><td>Main stack</td><td>plain HTML, CSS and ES modules. No build step, no dependencies, no server, no API key</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Luqman wants to learn another language and was explicit about the method: the app should teach by speaking and make him speak back, the way a teacher in a classroom does. The apps that dominate this space teach by tapping — you match a word to a picture and never open your mouth, so the part that actually fails in a real conversation is the part that never gets practised.</p>
+<p>The constraint that shaped everything: he has no paid LLM API key, which is the same reason the <code>siti</code> project is paused. A conversational AI tutor was therefore off the table on 2026-09-17. What is free and already on his machine is macOS speech synthesis (nine Japanese voices) and Chrome speech recognition, and those two together are enough for a genuinely spoken class as long as the lesson plan is written in advance.</p>
+<h3 id="overview-what-counts-as-done">What counts as "done"</h3>
+<p>v1 is done when Luqman can sit down, open it, be spoken to in Japanese, answer out loud, and be told honestly whether he was right — without typing anything and without spending anything. That is built. It is not verified: <strong>nobody has spoken to it yet</strong>, which is the single open item.</p>
+<h3 id="overview-the-three-moving-parts">The three moving parts</h3>
+<div class="table"><table><thead><tr><th>Part</th><th>What does it</th><th>File</th></tr></thead><tbody>
+<tr><td>The teacher's mouth</td><td><code>speechSynthesis</code>, a macOS Japanese voice</td><td><code>js/speech.js</code></td></tr>
+<tr><td>The teacher's ears</td><td>Chrome's <code>SpeechRecognition</code>, <code>lang="ja-JP"</code></td><td><code>js/speech.js</code></td></tr>
+<tr><td>The marking</td><td>compares what was said to what was asked for</td><td><code>js/score.js</code></td></tr>
+<tr><td>The class</td><td>the order it all happens in</td><td><code>js/app.js</code></td></tr>
+<tr><td>The content</td><td>five lessons of phrases and scenes</td><td><code>js/lessons.js</code></td></tr>
+</tbody></table></div>
+<h3 id="overview-known-limits">Known limits</h3>
+<ul>
+<li>Chrome only. Safari's speech recognition is unreliable, Firefox has none.</li>
+<li>The listening half needs internet; Chrome transcribes the audio server-side.</li>
+<li>Recognition is tuned for native speakers, so a beginner's accent can be transcribed badly and read as the app being unfair.</li>
+<li>The teacher cannot improvise. It follows a written lesson plan, because there is no language model behind it.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 6 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<p>Luqman wants to learn a new language. The mainstream apps teach by tapping — matching words to pictures, arranging tiles into sentences — and it is possible to reach a high streak in one without ever having said a sentence aloud. The skill that fails first in a real conversation is the one those apps never exercise. His own words on 2026-09-17: the app should teach "through speaking", he has "to speak to learn", and it should be "like a real person teaching in class".</p>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<p>A browser page that behaves like a classroom. The teacher speaks Japanese first, out loud. The phrase appears on screen with its reading, its sound spelled in English letters, and its meaning. The microphone then opens and Luqman repeats it. What he says is transcribed and compared to what was asked for, and he is told plainly whether he got it, got close, or said something else entirely. He does not advance until he has spoken. Each lesson drills its phrases and then puts them in a scene where the teacher plays a colleague, a waiter or a stall owner and will not continue until he answers.</p>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick us</th></tr></thead><tbody>
+<tr><td>Luqman</td><td>Learn Japanese by speaking, at no cost</td><td>It is the only part of the skill his existing options do not train</td></tr>
+<tr><td>Anyone with a Mac and Chrome</td><td>Speaking practice without a tutor or a subscription</td><td>No account, no key, no fee — and the lesson content is a single editable file</td></tr>
+</tbody></table></div>
+<h3 id="idea-value-advantage">Value / advantage</h3>
+<ul>
+<li>Speaking is not optional. There is no tap-only path through a lesson.</li>
+<li>It costs nothing to run, forever, because both the voice and the transcription are features of software he already has.</li>
+<li>The lesson content is one plain file, so he can add or rewrite lessons without touching any of the machinery.</li>
+<li>The marking explains itself. Being told "you said <em>turn right</em>, I asked for <em>turn left</em>" teaches more than a red cross.</li>
+</ul>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td>Chrome will transcribe a Malaysian beginner's Japanese accurately enough to be fair</td><td>Luqman runs Lesson 1 and reports how often a correct answer is marked wrong</td><td><strong>open — never tested with a real voice</strong></td></tr>
+<tr><td>Being made to speak is motivating rather than exhausting</td><td>Luqman runs a full lesson end to end and says whether he wanted a second</td><td>open</td></tr>
+<tr><td>Three attempts per phrase is the right patience level</td><td>Watch whether he hits "skip" often</td><td>open</td></tr>
+<tr><td>A scripted teacher feels enough like a class without a language model</td><td>His judgement after the first scene</td><td>open</td></tr>
+</tbody></table></div>
+<h3 id="idea-deliberately-not-in-v1">Deliberately not in v1</h3>
+<ul>
+<li>A conversational AI tutor. Rejected on cost grounds on 2026-09-17 — see <code>06-decisions.md</code>.</li>
+<li>Writing practice. Reading hiragana is not the same skill as speaking and would have diluted the one thing the app is for.</li>
+<li>Any language other than Japanese. The machinery is language-agnostic; only the content file and two language tags would change.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 3 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><h3 id="planning-scope-of-v1-built-2026-09-17">Scope of v1 (built 2026-09-17)</h3>
+<p>In:</p>
+<ul>
+<li>Five Japanese lessons: Greetings, Introducing Yourself, At the Restaurant, Finding Your Way, Shopping and Numbers.</li>
+<li>Each lesson: 5–6 phrases drilled, then a scene of 6–9 turns using them.</li>
+<li>Spoken teacher using a macOS Japanese voice, pickable and remembered.</li>
+<li>Spoken answers marked, with the teacher replying out loud in Japanese.</li>
+<li>A review round over whatever was missed, before the scene.</li>
+<li>A report with the best score on each phrase, and a best-ever score per lesson kept in the browser.</li>
+<li>Controls to interrupt: say it again, my turn now, skip this one, leave class.</li>
+</ul>
+<p>Out:</p>
+<ul>
+<li>Any language model. No free conversation, no answering invented questions.</li>
+<li>Any account, server, database or payment.</li>
+<li>Writing or reading drills.</li>
+<li>Mobile. It is built to work on a phone-width screen but has not been tried on one, and iOS Safari does not support the recognition half.</li>
+</ul>
+<h3 id="planning-phases">Phases</h3>
+<div class="table"><table><thead><tr><th>Phase</th><th>Contains</th><th>State</th></tr></thead><tbody>
+<tr><td>0 — decide the method</td><td>Language, teacher's brain, lesson shape</td><td>done 2026-09-17</td></tr>
+<tr><td>1 — build the class</td><td>speech, marking, drill, scene, report</td><td>done 2026-09-17</td></tr>
+<tr><td>2 — a real voice tries it</td><td>Luqman runs Lesson 1 aloud and reports back</td><td><strong>next</strong></td></tr>
+<tr><td>3 — tune on what he finds</td><td>accept lists, attempt counts, pass mark</td><td>not started</td></tr>
+<tr><td>4 — publish</td><td>Netlify, and a project record on the docs site</td><td>not started</td></tr>
+<tr><td>5 — more content, or a second language</td><td>content file only</td><td>not started</td></tr>
+</tbody></table></div>
+<h3 id="planning-phase-2-is-the-whole-job-right-now">Phase 2 is the whole job right now</h3>
+<p>Nothing else should be built until Luqman has spoken to it. The one assumption everything rests on — that Chrome transcribes his Japanese accurately enough for the marking to feel fair — cannot be checked by Claude, who has no voice. If the transcription is poor, the tuning in phase 3 is not cosmetic, it is the difference between a usable app and an infuriating one.</p>
+<p>This is the same trap that killed <code>claude-terminal</code>: built, tested, never once exercised by hand.</p></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 3 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><blockquote>Status: <code>not started</code> · <code>in progress</code> · <code>done</code> · <code>stalled</code> · <code>cancelled</code></blockquote>
+<details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
+<div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M1</td><td>Decide language, teacher's brain and lesson shape</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td>Japanese, free scripted teacher, drill-then-scene</td></tr>
+<tr><td>M2</td><td>Teacher's mouth and ears, never overlapping</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td><code>js/speech.js</code></td></tr>
+<tr><td>M3</td><td>Marking that survives kanji, katakana and near-identical phrases</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td>47 checks passing</td></tr>
+<tr><td>M4</td><td>Five lessons with phrases and scenes</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td><code>js/lessons.js</code></td></tr>
+<tr><td>M5</td><td>Drill, review round, scene and report wired together</td><td>2026-09-17</td><td>2026-09-17</td><td>done</td><td><code>js/app.js</code></td></tr>
+<tr><td>M6</td><td><strong>Luqman speaks to it and reports back</strong></td><td>—</td><td></td><td>not started</td><td>the only thing that matters next</td></tr>
+<tr><td>M7</td><td>Tune the marking on what M6 finds</td><td>—</td><td></td><td>not started</td><td>depends on M6</td></tr>
+<tr><td>M8</td><td>Publish to Netlify + project record on the docs site</td><td>—</td><td></td><td>not started</td><td></td></tr>
+<tr><td>M9</td><td>More lessons, or a second language</td><td>—</td><td></td><td>not started</td><td>content file only</td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m3-marking-that-survives-japanese"><summary><span>M3 — Marking that survives Japanese</span></summary><div>
+<p><strong>Goal:</strong> a correct spoken answer is marked correct, and an incorrect one is not, despite the recogniser writing kanji for kana and despite phrases that differ by a single character.</p>
+<p><strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box done">done</span> Katakana folds to hiragana before comparison</li>
+<li><span class="box done">done</span> Punctuation and spaces the recogniser invents are ignored</li>
+<li><span class="box done">done</span> Every accepted spelling of every phrase scores a pass against itself</li>
+<li><span class="box done">done</span> All five recogniser alternatives are checked, not just the first</li>
+<li><span class="box done">done</span> Saying a different phrase from the same lesson never passes</li>
+<li><span class="box done">done</span> An unfinished answer is distinguished from a wrong one</li>
+</ul>
+<p><strong>What it caught:</strong> the first version of the marking passed 右に曲がってください (turn right) at 90% when the answer was 左に曲がってください (turn left). Marked on text similarity alone, Luqman would have said the wrong direction and been told he was correct. Fixed by scoring every answer against the rest of the lesson too — see <code>06-decisions.md</code>, D-003.</p>
+</div></details>
+<details class="fold" id="milestones-m6-luqman-speaks-to-it"><summary><span>M6 — Luqman speaks to it</span></summary><div>
+<p><strong>Goal:</strong> find out whether Chrome can understand him.</p>
+<p><strong>Done criteria:</strong></p>
+<ul>
+<li><span class="box">to do</span> Runs Lesson 1 end to end, drill and scene, out loud</li>
+<li><span class="box">to do</span> Reports how often a correct answer was marked wrong</li>
+<li><span class="box">to do</span> Reports whether three attempts felt patient or stingy</li>
+<li><span class="box">to do</span> Reports whether the teacher's pace is right</li>
+</ul>
+<p><strong>Why it cannot be done for him:</strong> Claude has no voice and no microphone. Every check that could be automated has been, and the remaining question is exactly the one that needs a person.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 5 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><details class="fold" id="methods-making-a-browser-speak-japanese-and-listen-back"><summary><span>Making a browser speak Japanese and listen back</span></summary><div>
+<p>Two browser features do the whole job and neither costs anything.</p>
+<p><code>speechSynthesis</code> reads text aloud using the voices installed in macOS. Checked on 2026-09-17, Luqman's Mac has nine Japanese voices — Kyoko, Eddy, Flo, Grandma, Grandpa, Reed, Rocko, Sandy, Shelley. Kyoko is the long-standing default and the clearest. <code>getVoices()</code> is populated asynchronously in Chrome, so the list must be read after the <code>voiceschanged</code> event, with a timeout as a safety net because that event occasionally never fires.</p>
+<p><code>SpeechRecognition</code> (as <code>webkitSpeechRecognition</code> in Chrome) turns speech into text. Set <code>lang = 'ja-JP'</code> and it returns Japanese. Two settings matter: <code>maxAlternatives = 5</code> gives five guesses instead of one, which markedly improves the chance that the correct spelling is among them, and <code>interimResults = true</code> lets the screen show that it is hearing something while you are still talking.</p>
+<p><strong>The rule that matters: never run them at the same time.</strong> An open microphone during the teacher's line hears the teacher and marks the learner on her pronunciation. Every step in <code>js/app.js</code> waits for the previous one to finish.</p>
+<p><strong>Chrome's end event is unreliable.</strong> <code>speechSynthesis</code> sometimes never fires <code>onend</code>, which would freeze a lesson forever. The fix is to estimate how long a line should take from its length and the speech rate, and release the lock on a timeout if the event has not arrived.</p>
+</div></details>
+<details class="fold" id="methods-marking-japanese-speech"><summary><span>Marking Japanese speech</span></summary><div>
+<p>Three problems, each needing its own answer.</p>
+<p><strong>The recogniser writes kanji for kana.</strong> Say こんにちは and Chrome may return 今日は. Identical sounds, different characters, and a naive comparison marks a perfect answer wrong. Every phrase therefore carries an <code>accept</code> list of the spellings that count as the same answer, and katakana is folded to hiragana (subtract 0x60 from the character code) before anything is compared.</p>
+<p><strong>Similar text is not similar meaning.</strong> 右に曲がってください and 左に曲がってください are 90% identical as text and opposite as instructions. Edit-distance similarity alone passes the wrong one. The answer is to score every attempt against <em>every other phrase in the same lesson</em> as well. If a different phrase fits better than the one asked for, that is what was said, and it is wrong however close the characters look. It also produces better teaching: the learner is told which phrase they said instead.</p>
+<p><strong>An unfinished answer is not a wrong one.</strong> ありがとうございます minus ございます is ありがとう — 50% similar, which reads as a failure, but it is the casual form of the right answer. When one normalised string is a prefix of the other, it is marked "close" and named as stopping short rather than as an error.</p>
+</div></details>
+<details class="fold" id="methods-testing-an-app-whose-input-is-a-human-voice"><summary><span>Testing an app whose input is a human voice</span></summary><div>
+<p>Claude has no microphone, so everything that can be checked without one is checked without one: <code>tests/score.test.mjs</code> runs 47 assertions over the marking and the lesson data with plain <code>node</code>, no browser. It feeds the scorer the text the recogniser would have produced, including the kanji forms and the deliberate near-misses.</p>
+<p>Two of those checks failed the first time they ran, and both were real bugs that would only have surfaced mid-lesson with a microphone in Luqman's face. That is the argument for writing them: the parts of a voice app that can be tested without a voice should be, because the parts that cannot will absorb all the attention later.</p>
+<p>The data checks matter as much as the logic ones — every scene answer must point at a phrase that exists, and no two phrases in a lesson may be close enough to be confused. Both hold a new lesson to the standard without anyone remembering to.</p>
+</div></details>
+<details class="fold" id="methods-serving-it"><summary><span>Serving it</span></summary><div>
+<p>Chrome only opens a microphone on <code>https://</code> or <code>localhost</code>. Double-clicking <code>index.html</code> shows the page but the listening half silently fails, which looks like a bug in the app. <code>./run.sh</code> serves the folder with <code>python3 -m http.server</code> on port 8722 and opens Chrome at it; <code>./stop.sh</code> stops it. The app also detects <code>window.isSecureContext</code> and says so on screen rather than failing quietly.</p>
+</div></details>
+<details class="fold" id="methods-adding-a-lesson"><summary><span>Adding a lesson</span></summary><div>
+<p>Everything taught lives in <code>js/lessons.js</code>. Nothing else needs touching. A lesson is phrases plus a scene, and each <code>you</code> turn in the scene points at the phrase it expects by its position in the phrase list. Run the tests afterwards — they will catch a scene pointing at a phrase that does not exist, and two phrases too alike to be told apart.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 2 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><h3 id="relations-services-and-dependencies">Services and dependencies</h3>
+<p>There are none. No package manager, no build step, no <code>node_modules</code>, no account, no API key and no server beyond a static file host. This is deliberate and is the reason the app costs nothing to run forever.</p>
+<div class="table"><table><thead><tr><th>Thing it relies on</th><th>What for</th><th>Cost</th><th>Risk if it goes away</th></tr></thead><tbody>
+<tr><td>macOS system voices (ja_JP)</td><td>The teacher's voice</td><td>free, already installed</td><td>The app says so on screen and tells you where to add one</td></tr>
+<tr><td>Chrome <code>SpeechRecognition</code></td><td>Hearing the learner</td><td>free, needs internet</td><td>Non-Chrome browsers are detected and warned; the app becomes listen-only</td></tr>
+<tr><td><code>python3 -m http.server</code></td><td>Serving locally so Chrome will open the microphone</td><td>free, ships with macOS</td><td>Any static server would do</td></tr>
+</tbody></table></div>
+<p>Node is used only to run the tests. The app itself never touches it.</p>
+<h3 id="relations-related-projects">Related projects</h3>
+<ul>
+<li><strong>siti</strong> — paused on 2026-09-13 for want of a paid API key. The same constraint decided this project's teacher (see D-002). If siti ever gets a key, a conversational tutor mode here becomes possible on the same key.</li>
+<li><strong>claude-terminal</strong> — archived 2026-09-14 after being built, tested and never once exercised by hand. Out Loud is at exactly that point now: 47 automated checks pass and no human has spoken to it. M6 exists so the same thing does not happen twice.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 5 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><details class="fold" id="decisions-d-001-japanese-first-2026-09-17"><summary><span>D-001 — Japanese first (2026-09-17)</span></summary><div>
+<p><strong>Chose:</strong> Japanese, over Arabic, Mandarin and Korean. <strong>Why:</strong> Luqman picked it when asked. It also happens to be the best-supported of the four for this approach — nine Japanese voices already on his Mac, and mature <code>ja-JP</code> recognition in Chrome. Mandarin would have been the hardest, because the thing that most needs marking is tone and the recogniser does not expose it. <strong>Consequence:</strong> none structural. The machinery is language-agnostic; a second language is a new content file plus two language tags.</p>
+</div></details>
+<details class="fold" id="decisions-d-002-a-scripted-teacher-not-a-language-model-2026"><summary><span>D-002 — A scripted teacher, not a language model (2026-09-17)</span></summary><div>
+<p><strong>Chose:</strong> the free browser speech features with a written lesson plan, over an LLM-powered conversational tutor. <strong>Why:</strong> Luqman has no paid LLM API key — the same constraint that paused <code>siti</code> on 2026-09-13. He was given the choice explicitly, with the trade-off stated: free and scripted, working today, but unable to improvise; or a real conversation that costs money per lesson and cannot be built until a key exists. He chose free and scripted. <strong>What it costs:</strong> the teacher cannot answer a question Luqman invents or hold a conversation off the lesson plan. Within a lesson it is convincing, because the scenes are written as real exchanges and it genuinely will not continue until he speaks. <strong>Revisit when:</strong> a paid key exists. The drill and the marking stay as they are; an LLM would be a third mode alongside drill and scene, not a replacement.</p>
+</div></details>
+<details class="fold" id="decisions-d-003-mark-against-the-whole-lesson-not-just-the-t"><summary><span>D-003 — Mark against the whole lesson, not just the target phrase (2026-09-17)</span></summary><div>
+<p><strong>Chose:</strong> score every spoken answer against all the other phrases in the lesson as well as the one asked for, and reject it if another fits better. <strong>Why:</strong> the first version of the marking used edit-distance similarity against the target alone. A test comparing every phrase against every other phrase found that 右に曲がってください (turn right) scored 90% when the answer was 左に曲がってください (turn left) — one character different in ten. Luqman would have said the wrong direction and been told he was correct, which is worse than no feedback at all, because he would have learnt the error. <strong>Rejected alternative:</strong> raising the pass mark above 90%. That would have made every longer phrase nearly impossible to pass, punishing real answers to fix a problem that is not about strictness but about meaning. <strong>Bonus:</strong> the app can now say <em>"you said turn right, I asked for turn left"</em>, which teaches the distinction instead of just marking it wrong.</p>
+</div></details>
+<details class="fold" id="decisions-d-004-three-tries-then-move-on-2026-09-17"><summary><span>D-004 — Three tries, then move on (2026-09-17)</span></summary><div>
+<p><strong>Chose:</strong> three attempts per phrase in the drill, two in the scene, then the teacher supplies the answer and continues. Missed phrases return in a review round before the scene. <strong>Why:</strong> being trapped on one phrase is how a learner quits. A teacher moves the class on and comes back to it, which is what the review round is. <strong>Open:</strong> whether three is the right number. Only Luqman using it can say, and it is a one-line change.</p>
+</div></details>
+<details class="fold" id="decisions-d-005-filed-under-web-named-out-loud-2026-09-17"><summary><span>D-005 — Filed under <code>web</code>, named "Out Loud" (2026-09-17)</span></summary><div>
+<p><strong>Chose:</strong> <code>~/Desktop/project/web/out-loud/</code>. <strong>Why:</strong> it is a browser page with no server and no AI service, so <code>web</code> fits better than <code>ai</code>. The name is language-neutral on purpose — if a second language is added the name still describes it, where a Japanese-specific name would not. Luqman was told the choice and can overrule it.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 3 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-the-two-browser-features-this-is-built-on">The two browser features this is built on</h3>
+<ul>
+<li><strong>Web Speech API — speech synthesis</strong> <a href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis">https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis</a> The teacher's voice. Note that <code>getVoices()</code> is asynchronous in Chrome and the <code>voiceschanged</code> event is not guaranteed to fire.</li>
+</ul>
+<ul>
+<li><strong>Web Speech API — speech recognition</strong> <a href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition">https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition</a> The teacher's ears. Chrome only, exposed as <code>webkitSpeechRecognition</code>, and it requires a secure origin plus an internet connection.</li>
+</ul>
+<ul>
+<li><strong>Browser support table</strong> <a href="https://caniuse.com/speech-recognition">https://caniuse.com/speech-recognition</a> Worth rechecking before assuming Safari still cannot be relied on.</li>
+</ul>
+<h3 id="references-checking-the-japanese">Checking the Japanese</h3>
+<p>The lesson content was written to be ordinary polite Japanese, the register a learner should start in. Two things worth verifying with a speaker if the content grows:</p>
+<ul>
+<li>The <code>accept</code> lists are guesses about what Chrome will transcribe. They are supposed to be corrected from real use — if a phrase keeps failing while Luqman is sure he said it right, whatever the app reports hearing should be added to that phrase's list.</li>
+<li>The scenes use ordinary shop and office exchanges (いらっしゃいませ、ご注文は、 では、また). They are natural but not exhaustive.</li>
+</ul>
+<h3 id="references-japanese-voices-on-luqman-s-mac-checked-2026-09-1">Japanese voices on Luqman's Mac (checked 2026-09-17)</h3>
+<p>Kyoko, Eddy, Flo, Grandma, Grandpa, Reed, Rocko, Sandy, Shelley — all <code>ja_JP</code>. Listed with <code>say -v '?' | grep ja_JP</code>. Kyoko is the default in the app.</p></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-17"><summary><span>2026-09-17</span></summary><div><h3 id="log-2026-09-17-what-luqman-asked-for">What Luqman asked for</h3>
+<p>To learn another language, through an app that teaches by speaking and makes him speak back — "like a real person teaching in class".</p>
+<h3 id="log-2026-09-17-what-was-decided-before-anything-was-built">What was decided before anything was built</h3>
+<p>Three questions, three answers: <strong>Japanese</strong>; a <strong>free scripted teacher</strong> rather than a paid conversational LLM; and lessons that <strong>drill the phrases and then make him use them in a scene</strong>.</p>
+<p>The second answer was the one that shaped the project. He has no paid LLM API key, which is why <code>siti</code> is paused, so the choice was between a free teacher that follows a lesson plan and a real conversation that could not be built at all today. He was given both with the trade-off stated and chose the free one.</p>
+<h3 id="log-2026-09-17-what-was-built">What was built</h3>
+<p><code>~/Desktop/project/web/out-loud/</code> — a browser page with no build step, no dependencies, no server and no API key.</p>
+<ul>
+<li><code>js/speech.js</code> — the teacher's mouth (<code>speechSynthesis</code>, a macOS Japanese voice) and ears (Chrome <code>SpeechRecognition</code>, <code>ja-JP</code>), strictly never running at the same time.</li>
+<li><code>js/score.js</code> — the marking.</li>
+<li><code>js/lessons.js</code> — five lessons: Greetings, Introducing Yourself, At the Restaurant, Finding Your Way, Shopping and Numbers. Each has 5–6 phrases and a scene of 6–9 turns.</li>
+<li><code>js/app.js</code> — the class: drill every phrase, review whatever was missed, then play the scene, then report.</li>
+<li><code>tests/score.test.mjs</code> — 47 checks, run with plain <code>node</code>, no browser.</li>
+<li><code>run.sh</code> / <code>stop.sh</code> — serve on <code>localhost:8722</code> and open Chrome, because Chrome will not open a microphone otherwise.</li>
+</ul>
+<h3 id="log-2026-09-17-the-two-bugs-the-tests-caught">The two bugs the tests caught</h3>
+<p>Both would only have shown up mid-lesson, with a microphone open.</p>
+<p><strong>Turn right passed as turn left.</strong> 右に曲がってください and 左に曲がってください are 90% identical as text. Marked on similarity against the target alone, saying the wrong direction scored a pass. Fixed by scoring every answer against the rest of the lesson too: if another phrase fits better than the one asked for, that is what was said. The app now names it — "you said turn right, I asked for turn left" — which teaches the distinction rather than just failing it.</p>
+<p><strong>An unfinished answer was treated as a wrong one.</strong> ありがとう against ありがとうございます scored 50% and was marked flatly wrong. It is the casual form of the right answer, not an error. A prefix check now marks it "close" and says he stopped short.</p>
+<p>A third slip was caught by reading back what had just been written: the voice test button had Korean text pasted into what should have been a Japanese sample.</p>
+<h3 id="log-2026-09-17-where-it-stands">Where it stands</h3>
+<p>Built, renders, 47 checks green, and <strong>nobody has spoken to it</strong>. That last part is the whole of the next step. The single assumption everything rests on — that Chrome transcribes Luqman's Japanese accurately enough for the marking to feel fair — cannot be tested by Claude, who has no voice.</p>
+<p>This is the position <code>claude-terminal</code> was in before it was archived: built, tested, never exercised by hand. M6 exists so that does not repeat.</p></div></details></div>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

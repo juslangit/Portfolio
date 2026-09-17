@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Retopology Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Retopology</b><span>Project record · built 2026-09-17 from main</span></p>
+  <h1>Retopology</h1>
+  <p class="thesis">Retopo Kit is a Blender add-on that takes a sculpt to a game-ready asset in one press. Blender's own <code>Object ▸ Quadriflow Remesh</code> gives you quads and then stops — no UVs, no baked normal map, no LODs, one object at a time, and it asks for a face count nobody can guess. Retopo Kit keeps that remesher as its engine and supplies everything around it: a quad size asked for in centimetres, an automatic unwrap sized for the texture you will bake into, a normal bake with the ray distance worked out from the model itself, LODs named the way Unreal wants them, and a batch that runs the whole chain over a selection. It is for 3D artists doing the sculpt-to-game handoff, Luqman included — it is the second product he built to sell.</p>
+  <div class="stats"><div class="stat"><b>9</b><span>commits</span></div><div class="stat"><b>13</b><span>days of work</span></div><div class="stat"><b>4</b><span>source files</span></div><div class="stat"><b>1,798</b><span>lines of code</span></div><div class="stat"><b>4</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><h3 id="overview-quick-summary">Quick summary</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+<tr><td>Status</td><td>testing — v1.0.0 released on GitHub 2026-09-05, not yet listed for sale</td></tr>
+<tr><td>Current phase</td><td>v1.0.0 on GitHub, verified on real sculpts; not yet listed for sale</td></tr>
+<tr><td>Deadline / target</td><td>none set</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/juslangit/retopo-kit">https://github.com/juslangit/retopo-kit</a> (private) · local: <code>~/Desktop/project/3d/retopology</code></td></tr>
+<tr><td>URL / deployment</td><td>none — installed as a Blender add-on from <code>dist/</code></td></tr>
+<tr><td>Main stack</td><td>Python 3, Blender API (<code>bpy</code>), Blender 3.6+</td></tr>
+</tbody></table></div>
+<h3 id="overview-why-this-project-exists">Why this project exists</h3>
+<p>Turning a sculpt into a game asset is a chain of chores, and Blender automates only the first link. So the artist guesses a face count, unwraps by hand, sets up a bake, gets the cage distance wrong, fixes the black patches, and then does all of it again for the next object. The work is well understood, repetitive and universally disliked — which is what makes it worth automating and worth paying for.</p>
+<p>Two decisions follow from that problem. Quadriflow stays: rewriting a remesher is research-level C++ and a good free one already ships in the box. And the panel asks <strong>how wide a quad should be</strong>, because an artist can answer that, while nobody can answer "how many faces should this have".</p>
+<h3 id="overview-what-counts-as-done">What counts as "done"</h3>
+<p>All five steps of the chain work on real sculpts, in one press and over a selection: remesh by quad size, unwrap for the bake, bake the sculpt's detail into a normal map, batch the whole thing, and generate LODs with Unreal's naming. That is v1.0.0, released on GitHub on 2026-09-05 and verified on real sculpts. What is left before it can be sold is a listing, not code.</p>
+<h3 id="overview-what-is-not-in-scope">What is NOT in scope</h3>
+<ul>
+<li><strong>Writing a remesher.</strong> Quadriflow is the engine and stays the engine.</li>
+<li><strong>Modifying the sculpt.</strong> The original is hidden, never altered or deleted; the low-poly arrives as a new <code>LP_&lt;name&gt;</code> object.</li>
+<li><strong>Hand-finishing.</strong> Seams are written back as real seams so an artist can move them, but the add-on does not pretend to make artistic decisions.</li>
+<li><strong>Anything outside Blender.</strong> The Unreal side of the handoff belongs to <code>pipeline</code>, which is a separate add-on.</li>
+</ul>
+<h3 id="overview-map-of-files-in-this-folder">Map of files in this folder</h3>
+<ul>
+<li><code>01-idea.md</code> — the original idea, alternatives considered</li>
+<li><code>02-planning.md</code> — scope, phases, requirements, stack</li>
+<li><code>03-milestones.md</code> — milestones &amp; progress</li>
+<li><code>04-methods.md</code> — how to work on this, patterns, commands</li>
+<li><code>05-relations.md</code> — relationships between components/people/systems</li>
+<li><code>06-decisions.md</code> — decision log (why A over B)</li>
+<li><code>07-references.md</code> — links, documentation, references</li>
+<li><code>log/</code> — daily / per-session notes</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 5 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-problem">Problem</h3>
+<p>Turning a sculpt into a game-ready asset is a chain of chores, and Blender only automates the first link. <code>Object ▸ Quadriflow Remesh</code> gives you quads and then stops: no UVs, no baked normal map, no LODs, one object at a time, and it asks for a target face count that nobody knows in advance.</p>
+<p>So the artist guesses a number, unwraps by hand, sets up a bake, gets the cage wrong, and repeats all of it for the next object.</p>
+<h3 id="idea-proposed-solution">Proposed solution</h3>
+<p>One press from sculpt to game-ready. Blender's Quadriflow stays as the engine — rewriting it is research-level C++ work and pointless when a good free one ships in the box — and the product is everything the box leaves out:</p>
+<ol>
+<li>Ask for a <strong>quad size in centimetres</strong> instead of a face count, and work the count out from surface area. An artist can answer "how big should each quad be"; nobody can answer "how many faces should this have".</li>
+<li>Unwrap the result automatically.</li>
+<li>Bake the sculpt's detail into a normal map, cage and all.</li>
+<li>Generate LODs.</li>
+<li>Do all of the above for a whole selection, not one object at a time.</li>
+</ol>
+<h3 id="idea-where-the-money-is">Where the money is</h3>
+<p>Quad Remesher sells at $109 and only does the remeshing step, with a better algorithm. The gap it leaves — and that Blender leaves — is the rest of the chain. This product competes on the workflow, not on the algorithm, which is a fight a solo developer can actually win.</p>
+<h3 id="idea-target-users">Target users</h3>
+<div class="table"><table><thead><tr><th>Segment</th><th>Need</th><th>Why they'd pick us</th></tr></thead><tbody>
+<tr><td>Solo game developers</td><td>Sculpt to in-engine without a technical artist</td><td>The whole chain in one press</td></tr>
+<tr><td>3D artists selling asset packs</td><td>Consistent low-polys across dozens of models</td><td>Batch processing</td></tr>
+<tr><td>Students and lecturers</td><td>Learn the correct order of operations</td><td>The workflow is the product</td></tr>
+</tbody></table></div>
+<h3 id="idea-assumptions-to-validate">Assumptions to validate</h3>
+<div class="table"><table><thead><tr><th>Assumption</th><th>How to test</th><th>Status</th></tr></thead><tbody>
+<tr><td>Quadriflow's quality is good enough to build on</td><td>Run it on a real sculpt, not a sphere</td><td>untested</td></tr>
+<tr><td>Quad size in cm is easier than face count</td><td>Ask a few artists</td><td>untested</td></tr>
+<tr><td>People will pay when Blender's remesh is free</td><td>Price against Quad Remesher's $109</td><td>untested</td></tr>
+<tr><td>Baking can be made reliable enough to automate</td><td>Build step 3 and try it on awkward shapes</td><td>untested</td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 7 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><p>Built in small steps. Each step is explained before it is written, works on its own, and Luqman tests it in Blender before the next one starts. This is deliberate: the Pipeline add-on was built as one finished piece in a single session and he could not explain it afterwards, which made it unsellable.</p>
+<h3 id="planning-step-1-remesh-with-a-quad-size-done-2026-09-05">Step 1 — Remesh with a quad size ✅ done 2026-09-05</h3>
+<p>Ask for quad size in centimetres, work out the face count from surface area, run Quadriflow on a copy named <code>LP_&lt;name&gt;</code>, hide the original. Presets for hero prop, game prop and background.</p>
+<p>Verified: a 32,256-face sphere became 2,919 faces, 100% quads, original untouched.</p>
+<h3 id="planning-step-2-automatic-uv-unwrap-done-2026-09-06">Step 2 — Automatic UV unwrap ✅ done 2026-09-06</h3>
+<p>Smart project with the angle limit exposed as a "seam angle", cuts written back as real seams so they can be edited, islands packed with a margin derived from the target texture size (4 pixels at 1K/2K/4K) so the bake cannot bleed. Runs automatically after the remesh, or on its own. Reports how much of the map is used.</p>
+<h3 id="planning-step-3-bake-the-detail-done-2026-09-06">Step 3 — Bake the detail ✅ done 2026-09-06</h3>
+<p>Tangent-space normal bake from sculpt to low-poly. Ray distance derived from the bounding box diagonal (2%) instead of being a number the artist has to guess. The low-poly records its source object at remesh time, so the bake needs no selection. Result is packed into the blend and wired through a Normal Map node into the Principled shader. Cycles is borrowed and restored.</p>
+<h3 id="planning-step-4-batch-done-2026-09-06">Step 4 — Batch ✅ done 2026-09-06</h3>
+<p>Runs the chain over every selected sculpt. Failures are collected on a Result object rather than raised, so one bad mesh is reported and the run continues. Low-polys are skipped so a second run cannot nest prefixes. Both the single-object button and the batch go through one shared <code>process()</code> function.</p>
+<h3 id="planning-step-5-lods-done-2026-09-06">Step 5 — LODs ✅ done 2026-09-06</h3>
+<p><code>LP_&lt;name&gt;_LOD0/1/2</code>. Each level is decimated from the one above, never remeshed from the sculpt, so all levels keep the UVs and share the one baked normal map. Counts are reported in triangles because decimation converts quads to triangles.</p>
+<h3 id="planning-all-five-steps-are-done">All five steps are done</h3>
+<p>The chain runs end to end in one press. What remains is not features but proof: testing on real sculpts, then pricing and packaging.</p>
+<h3 id="planning-out-of-scope">Out of scope</h3>
+<ul>
+<li>Writing a new quad remeshing algorithm. Quadriflow ships free with Blender and beating it is a research project.</li>
+<li>Manual retopology tools. RetopoFlow owns that space.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 4 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><blockquote>Status: <code>not started</code> · <code>in progress</code> · <code>done</code> · <code>stalled</code> · <code>cancelled</code> Use full dates (2026-09-05), never "next week".</blockquote>
+<details class="fold" id="milestones-progress-board"><summary><span>Progress board</span></summary><div>
+<div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Status</th><th>Notes</th></tr></thead><tbody>
+<tr><td>M1</td><td></td><td>2026-09-05</td><td></td><td>not started</td><td></td></tr>
+<tr><td>M2</td><td></td><td>2026-09-05</td><td></td><td>not started</td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="milestones-m1-name"><summary><span>M1 — &lt;name&gt;</span></summary><div>
+<p><strong>Goal:</strong> <strong>Done criteria:</strong></p>
+<p><strong>Dependencies:</strong> <strong>Blockers:</strong></p>
+</div></details>
+<details class="fold" id="milestones-m2-name"><summary><span>M2 — &lt;name&gt;</span></summary><div>
+<p><strong>Goal:</strong> <strong>Done criteria:</strong></p>
+<p><strong>Dependencies:</strong> <strong>Blockers:</strong></p>
+</div></details>
+<details class="fold" id="milestones-completion-history"><summary><span>Completion history</span></summary><div>
+<div class="table"><table><thead><tr><th>Date</th><th>Milestone</th><th>Lesson</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 9 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><blockquote>Anyone (Claude included) who reads this file should be able to start working without asking.</blockquote>
+<details class="fold" id="methods-setup-from-scratch"><summary><span>Setup from scratch</span></summary><div>
+<pre><code># step by step</code></pre>
+</div></details>
+<details class="fold" id="methods-daily-commands"><summary><span>Daily commands</span></summary><div>
+<div class="table"><table><thead><tr><th>Purpose</th><th>Command</th></tr></thead><tbody>
+<tr><td>Run dev</td><td></td></tr>
+<tr><td>Build</td><td></td></tr>
+<tr><td>Test</td><td></td></tr>
+<tr><td>Lint / format</td><td></td></tr>
+<tr><td>Deploy</td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-folder-structure"><summary><span>Folder structure</span></summary><div>
+<pre><code></code></pre>
+</div></details>
+<details class="fold" id="methods-conventions"><summary><span>Conventions</span></summary><div>
+<h4 id="methods-naming">Naming</h4>
+<h4 id="methods-git">Git</h4>
+<ul>
+<li>Branch: </li>
+<li>Commit: </li>
+<li>PR: </li>
+</ul>
+<h4 id="methods-code">Code</h4>
+</div></details>
+<details class="fold" id="methods-patterns-in-use"><summary><span>Patterns in use</span></summary><div>
+<h4 id="methods-pattern-name">&lt;pattern name&gt;</h4>
+<p><strong>When to use:</strong> <strong>How:</strong></p>
+<pre><code></code></pre>
+</div></details>
+<details class="fold" id="methods-gotchas-traps"><summary><span>Gotchas / traps</span></summary><div>
+<div class="table"><table><thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-quadriflow-refuses-non-manifold-meshes-and-cancels-r"><summary><span>Quadriflow refuses non-manifold meshes, and cancels rather than raising</span></summary><div>
+<p><code>bpy.ops.object.quadriflow_remesh</code> returns <code>{'CANCELLED'}</code> instead of raising when it dislikes a mesh. Python code that ignores the return value carries on with an unremeshed copy — which then bakes a flat, useless normal map. The failure looks like success, which makes it far more dangerous than a crash. <strong>Always check the returned set.</strong></p>
+<p>What it actually rejects is <strong>non-manifold geometry</strong>: edges shared by three or more faces. It tolerates open boundaries fine. Three such edges in an 85,000-face sculpt are enough to make it refuse the entire mesh.</p>
+<p>Repair attempts that do <em>not</em> work: voxel remeshing first still leaves 24-40 non-manifold edges; <code>remove_doubles</code> and <code>dissolve_degenerate</code> on voxel output make it dramatically worse (24 edges became 1,712).</p>
+<p>What works: fall back to voxel remeshing entirely, sized from the same quad size the artist chose. Topology is less orderly, but it succeeds on anything.</p>
+</div></details>
+<details class="fold" id="methods-bake-settings-are-inherited-from-the-file"><summary><span>Bake settings are inherited from the file</span></summary><div>
+<p><code>scene.render.bake.target</code> persists in the .blend. A file where someone last baked vertex colours fails with "Mesh does not have an active color attribute", which points nowhere near the real cause. Set every bake setting explicitly rather than assuming defaults.</p>
+</div></details>
+<details class="fold" id="methods-artists-arrive-in-sculpt-mode"><summary><span>Artists arrive in Sculpt Mode</span></summary><div>
+<p>An operator whose <code>poll</code> demands <code>context.mode == "OBJECT"</code> greys out for anyone coming straight from sculpting, with no explanation shown. Accept any mode and call <code>bpy.ops.object.mode_set</code> yourself.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 6 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><h3 id="relations-system-map">System map</h3>
+<pre class="mermaid">flowchart LR
+    User --&gt; Frontend
+    Frontend --&gt; API
+    API --&gt; DB[(Database)]
+    API --&gt; Ext[External services]</pre>
+<h3 id="relations-internal-components">Internal components</h3>
+<div class="table"><table><thead><tr><th>Component</th><th>Function</th><th>Depends on</th><th>Used by</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-external-services">External services</h3>
+<div class="table"><table><thead><tr><th>Service</th><th>Used for</th><th>Env var name</th><th>Cost</th><th>If it goes down?</th></tr></thead><tbody>
+<tr><td></td><td></td><td><code>SOME_KEY</code></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-data-models">Data &amp; models</h3>
+<div class="table"><table><thead><tr><th>Entity</th><th>Key fields</th><th>Relationships</th></tr></thead><tbody>
+<tr><td></td><td></td><td>one-to-many with ...</td></tr>
+</tbody></table></div>
+<h3 id="relations-people-roles">People &amp; roles</h3>
+<div class="table"><table><thead><tr><th>Name / role</th><th>Responsibility</th><th>Contact when</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="relations-relationships-with-other-projects">Relationships with other projects</h3>
+<div class="table"><table><thead><tr><th>Project</th><th>Type of link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td>shared code / shared data / replacement</td><td></td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 4 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><details class="fold" id="decisions-d1-use-blender-s-quadriflow-as-the-engine-2026-09-"><summary><span>D1 — Use Blender's Quadriflow as the engine (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> Luqman asked for an add-on that automatically draws the new mesh, to sell. Blender already ships <code>bpy.ops.object.quadriflow_remesh</code> and voxel remesh for free, and the commercial competitor, Quad Remesher, sells at $109.</p>
+<p><strong>Decision.</strong> Do not write a new remeshing algorithm. Use Quadriflow underneath and sell the workflow around it: quad size in centimetres instead of face count, automatic UVs, automatic normal bake, batch processing and LODs.</p>
+<p><strong>Why.</strong> Field-aligned quad meshing is academic C++ research (Instant Meshes, QuadriFlow); a Python reimplementation would be far too slow to use, and shipping a compiled binary means cross-platform builds and macOS code signing — unreasonable for a first commercial product. Meanwhile the real pain is not the remesh, it is everything Blender leaves undone afterwards. Competing on workflow is a fight a solo developer can win; competing on the algorithm is not.</p>
+</div></details>
+<details class="fold" id="decisions-d2-build-in-small-individually-testable-steps-2026"><summary><span>D2 — Build in small, individually testable steps (2026-09-05)</span></summary><div>
+<p><strong>Context.</strong> The Pipeline add-on was built complete in one session. It passed 26 tests, but Luqman could not explain what it did, which made it impossible for him to demo, market or support — so it was released free instead of sold.</p>
+<p><strong>Decision.</strong> Each step of this add-on is explained in Blender terms before it is written, ships on its own, and gets tested by Luqman before the next step starts.</p>
+<p><strong>Why.</strong> For a product he intends to sell, his understanding of it is a hard requirement, not a nice-to-have.</p>
+</div></details>
+<details class="fold" id="decisions-d3-price-at-29-and-state-both-limitations-in-the-l"><summary><span>D3 — Price at $29 and state both limitations in the listing (2026-09-06)</span></summary><div>
+<p><strong>Context.</strong> Quad Remesher is $139.90 and has a better algorithm. Blender's Quadriflow is free. Retopo Kit sits between them: Blender's engine, plus the four steps neither of them automates.</p>
+<p><strong>Decision.</strong> $29, and the listing says outright that the algorithm is Blender's and that it is not deterministic.</p>
+<p><strong>Why.</strong> $29 is a fifth of Quad Remesher, which makes "just try it" easy, and above the $19 line where a listing starts reading as a weekend script. Stating the limits costs a few sales; discovering them after purchase costs refunds and one-star reviews, which on a small marketplace is much more expensive.</p>
+</div></details>
+<details class="fold" id="decisions-d4-ship-despite-quadriflow-s-non-determinism-2026-"><summary><span>D4 — Ship despite Quadriflow's non-determinism (2026-09-06)</span></summary><div>
+<p><strong>Context.</strong> The same sculpt returns different face counts run to run — 4,197, 3,131 and 1,094 across three identical runs — even with the seed pinned. It lives in Blender's C++ and cannot be fixed from an add-on.</p>
+<p><strong>Decision.</strong> Ship, document it in the README and the listing, and tell users to re-run if a result is too coarse.</p>
+<p><strong>Why.</strong> The alternative is not shipping. It is Blender's behaviour, visible to anyone using Quadriflow directly, and being first to say so reads as competence rather than as a defect being hidden.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 7 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-project-links">Project links</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>URL</th></tr></thead><tbody>
+<tr><td>Repo</td><td></td></tr>
+<tr><td>Production</td><td></td></tr>
+<tr><td>Staging</td><td></td></tr>
+<tr><td>Dashboard / analytics</td><td></td></tr>
+<tr><td>Design (Figma etc.)</td><td></td></tr>
+<tr><td>Board / issue tracker</td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-external-documentation">External documentation</h3>
+<div class="table"><table><thead><tr><th>Topic</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-credentials">Credentials</h3>
+<blockquote>⚠️ <strong>Never write key values here.</strong> Env var names only. The real values are stored in <code>~/.claude/.env</code> (chmod 600).</blockquote>
+<div class="table"><table><thead><tr><th>Env var name</th><th>Used for</th><th>Where to get it</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-references-inspiration">References &amp; inspiration</h3>
+<h3 id="references-reading-notes">Reading notes</h3>
+<h3 id="references-free-test-sculpts">Free test sculpts</h3>
+<p>Blender's own sculpt demo files — real character sculpts, free, no attribution needed for testing:</p>
+<ul>
+<li>Index: <a href="https://download.blender.org/demo/sculpt_mode/">https://download.blender.org/demo/sculpt_mode/</a></li>
+<li>Used here: <code>01_sculpt_grab_silhouette.blend</code> (34 MB, contains an 85,319-face character called Thief)</li>
+<li>Page: <a href="https://www.blender.org/download/demo-files/">https://www.blender.org/download/demo-files/</a></li>
+</ul>
+<p>Other sources worth knowing:</p>
+<ul>
+<li><a href="https://threedscans.com">https://threedscans.com</a> — CC0 scans of real sculptures, very high poly</li>
+<li>Stanford 3D Scanning Repository — the classic Bunny, Armadillo, Dragon, Lucy</li>
+<li><a href="https://sketchfab.com/tags/cc0">https://sketchfab.com/tags/cc0</a> — CC0 models, filter by downloadable</li>
+</ul>
+<h3 id="references-marketplace-facts-checked-2026-09-06">Marketplace facts (checked 2026-09-06)</h3>
+<ul>
+<li>Blender Market is now <strong>Superhive Market</strong> (<a href="https://superhivemarket.com">https://superhivemarket.com</a>)</li>
+<li>Creator commission: 70% by default, up to 90% on a paid creator subscription <a href="https://support.superhivemarket.com/article/32-how-commission-earnings-are-calculated">https://support.superhivemarket.com/article/32-how-commission-earnings-are-calculated</a></li>
+<li>Quad Remesher is $139.90 perpetual, or $22.99 for 3 months <a href="https://exoside.com/quadremesher/quadremesher-buy/">https://exoside.com/quadremesher/quadremesher-buy/</a></li>
+</ul></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 1 session <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-05"><summary><span>2026-09-05</span></summary><div><h3 id="log-2026-09-05-what-was-done">What was done</h3>
+<ul>
+<li>Opened the project after Luqman said he did not understand the Pipeline add-on and wanted to start something new. He chose automatic retopology, to sell.</li>
+<li>Established that Blender already ships Quadriflow and voxel remesh for free, so the product cannot be the algorithm. Recorded as decision D1: use Quadriflow as the engine and sell the workflow around it.</li>
+<li>Built and tested step 1 — remesh by quad size in centimetres rather than face count. A 32,256-face sphere became 2,919 faces, 100% quads, sculpt untouched.</li>
+<li>Created <a href="https://github.com/juslangit/retopo-kit">https://github.com/juslangit/retopo-kit</a>, private, and pushed step 1.</li>
+</ul>
+<h3 id="log-2026-09-05-decisions-made">Decisions made</h3>
+<ul>
+<li>D1 — Quadriflow stays as the engine; the product is the rest of the chain</li>
+<li>D2 — build in small steps, each explained and tested before the next starts</li>
+</ul>
+<h3 id="log-2026-09-05-what-was-learned">What was learned</h3>
+<ul>
+<li>The competitor, Quad Remesher at $109, also stops after the remesh. The gap both it and Blender leave is UVs, baking, batching and LODs — which is where a solo developer can actually compete.</li>
+</ul>
+<h3 id="log-2026-09-05-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> Luqman tests step 1 on a real sculpt, not a sphere, and says whether quad size in centimetres matches how he thinks about density</li>
+<li><span class="box">to do</span> Step 2: automatic UV unwrap</li>
+</ul>
+<h3 id="log-2026-09-05-2026-09-06-steps-1-and-2">2026-09-06 — steps 1 and 2</h3>
+<ul>
+<li>Luqman confirmed step 1 works and asked for the quad size to be labelled "(in cm)". Done, in the field name and in every preset label.</li>
+<li>Built step 2, the automatic unwrap. Margin is derived from the chosen texture size so a later normal bake cannot bleed between islands, and the cuts are written back as seams so they stay visible and editable.</li>
+<li>Found and fixed a false test: it held a <code>scene.retopo</code> reference across <code>read_factory_settings</code>, so every preset change went to a dead datablock and all density cases silently ran at the default. The add-on was correct all along — once fixed, 482 faces at 6 cm versus 45,050 at 0.8 cm.</li>
+<li><strong>Install lesson:</strong> installing a loose <code>__init__.py</code> does not work; Blender names the add-on after the file. The add-on must be built into a zip with a manifest and installed from that, exactly as Pipeline is.</li>
+</ul>
+<h3 id="log-2026-09-05-next-2">Next</h3>
+<ul>
+<li><span class="box">to do</span> Luqman tests steps 1 and 2 on a real sculpt</li>
+<li><span class="box">to do</span> Step 3: bake the sculpt detail into a normal map — the step that makes it worth money, and the fiddliest</li>
+</ul>
+<h3 id="log-2026-09-05-2026-09-06-step-3-the-bake">2026-09-06 — step 3, the bake</h3>
+<ul>
+<li>Built the normal bake. The design decision worth keeping: ray distance is derived from the model's bounding box diagonal (2%) rather than exposed as a raw number, because that single setting is what produces black patches when too short and punch-through when too long, and no artist can guess it in advance.</li>
+<li>The remesh now stores <code>retopo_source</code> on the low-poly, so the bake knows which sculpt to read without the artist selecting anything.</li>
+<li>Baking is Cycles-only; the add-on borrows the engine and hands it back. Under <code>--factory-startup</code> Cycles is not loaded, so tests must enable it explicitly.</li>
+<li>Caught a tautological test of my own — <code>engine != "CYCLES" or True</code> can never fail. Replaced with real assertions. 25 checks now pass.</li>
+</ul>
+<h3 id="log-2026-09-05-next-3">Next</h3>
+<ul>
+<li><span class="box">to do</span> Luqman tests steps 1-3 on a real sculpt</li>
+<li><span class="box">to do</span> Step 4: run the whole chain over a selection</li>
+<li><span class="box">to do</span> Step 5: LODs</li>
+</ul>
+<h3 id="log-2026-09-05-2026-09-06-step-4-the-batch">2026-09-06 — step 4, the batch</h3>
+<ul>
+<li>Merged steps 2 and 3 into <code>main</code> on Luqman's instruction, then built step 4.</li>
+<li>The important part was a refactor, not the feature: extracted <code>process()</code> so the single-object button and the batch share one code path. Two paths would have drifted, and the batch is where the money is.</li>
+<li>Failures are collected on a <code>Result</code> object instead of raised, which is what lets one bad mesh be reported without killing a run of forty.</li>
+<li>Two test bugs of my own again, both the same species as before: objects newly linked to a scene are not selectable until <code>view_layer.update()</code>, so the failure case was silently testing nothing. Worth remembering — Blender's data is not visible to the view layer until it is told.</li>
+<li>33 checks now pass.</li>
+</ul>
+<h3 id="log-2026-09-05-next-4">Next</h3>
+<ul>
+<li><span class="box">to do</span> Step 5: LODs with Unreal's naming</li>
+</ul>
+<h3 id="log-2026-09-05-2026-09-06-step-5-lods-and-the-chain-is-compl">2026-09-06 — step 5, LODs, and the chain is complete</h3>
+<ul>
+<li>Built the LOD step. The design point worth keeping: levels are decimated from the level above, never remeshed from the sculpt, because reducing an existing mesh preserves its UVs and therefore lets every level share the single baked normal map. Remeshing per level would need a texture each.</li>
+<li><strong>A units trap worth remembering:</strong> decimate converts quads to triangles, so face counts are not comparable across levels. 7,690 quads is 15,380 triangles; halving gives 7,690 triangles — the same number, a different unit. This made my test report the first level as unreduced, and I misdiagnosed it as a depsgraph timing problem and "fixed" working code before spotting it. The panel had the same confusion and now reports triangles.</li>
+<li>All five steps now run in one press: sculpt to quads to UVs to normal map to LODs. 46 checks pass.</li>
+</ul>
+<h3 id="log-2026-09-05-next-5">Next</h3>
+<ul>
+<li><span class="box">to do</span> Test on real sculpts, not spheres — everything so far is verified against primitives, which say nothing about quality on organic or hard-surface work</li>
+<li><span class="box">to do</span> Decide pricing and packaging</li>
+</ul>
+<h3 id="log-2026-09-05-2026-09-06-testing-on-a-real-sculpt">2026-09-06 — testing on a real sculpt</h3>
+<p>Downloaded Blender's own demo sculpt (<code>01_sculpt_grab_silhouette.blend</code>, an 85,319-face character) instead of testing against spheres. It found three faults within minutes, none of which primitives could ever have surfaced:</p>
+<ol>
+<li><strong>Operators demanded Object Mode.</strong> The file is saved in Sculpt Mode — where every real user will be — so the buttons greyed out silently.</li>
+<li><strong>Quadriflow cancels rather than raising, and the return value was ignored.</strong> The add-on produced an unremeshed copy presented as a low-poly, then baked a flat normal map from it. Success-shaped failure, the worst kind.</li>
+<li><strong>The bake inherited the file's vertex-colour bake target</strong> and failed with a message pointing nowhere near the cause.</li>
+</ol>
+<p>The interesting finding is <em>why</em> Quadriflow refuses: non-manifold edges, not holes. It tolerates open boundaries. Three three-face edges in 85,000 faces are enough. Voxel remeshing first does not fix it, and my attempted repair with remove_doubles and dissolve_degenerate made it far worse (24 bad edges to 1,712). The answer was to fall back to voxels entirely, driven by the same quad size, and say so in the report.</p>
+<p>Result on the real character: 85,319 to 4,404 faces, 100% quads, UVs 58%, normal map carrying real detail, 3.3 seconds. 53 checks now pass.</p>
+<p><strong>Lesson for the whole project:</strong> every claim verified against primitives was worth very little. The first hour against real work found three shipping-blockers.</p>
+<h3 id="log-2026-09-05-next-6">Next</h3>
+<ul>
+<li><span class="box">to do</span> Test on a second real sculpt — a hard-surface model, to check sharp edges</li>
+<li><span class="box">to do</span> Judge whether voxel-fallback topology is good enough to sell</li>
+</ul>
+<h3 id="log-2026-09-05-2026-09-06-v1-0-0">2026-09-06 — v1.0.0</h3>
+<p>Luqman inspected <code>RESULT_thief.blend</code> and judged the topology good enough. Released.</p>
+<ul>
+<li>Bumped to v1.0.0, tagged, GitHub release with the zip attached.</li>
+<li>Found while finalising: <strong>Quadriflow is not deterministic.</strong> Identical input gave 4,197 / 3,131 / 1,094 faces across three runs, even with <code>seed=0</code>. Cannot be fixed from Python. Documented in the README, stated in the store listing, and the UV coverage test was loosened with the reason written down rather than silently lowered.</li>
+<li>Checked that UV packing options were not the cause first — <code>average_islands_scale</code> and <code>shape_method='CONCAVE'</code> made no difference (~70% either way on a real mesh), so the variance is the remesh, not the packer.</li>
+<li>Wrote <code>store/LISTING.md</code>: $29 against Quad Remesher's $139.90, five-shot screenshot brief, 60-second video script, and both limitations stated on purpose.</li>
+</ul>
+<h3 id="log-2026-09-05-next-7">Next</h3>
+<ul>
+<li><span class="box">to do</span> Shoot the five screenshots and the video from <code>testdata/RESULT_thief.blend</code></li>
+<li><span class="box">to do</span> Apply to Superhive as a creator (review takes days — start it early)</li>
+<li><span class="box">to do</span> Set up a backup storefront the same week</li>
+</ul></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>ca04ae4</code></td><td class="nowrap">2026-09-17</td><td>Add the project record</td></tr><tr class=""><td><code>e86a73f</code></td><td class="nowrap">2026-09-06</td><td>release v1.0.0 and add the store listing</td></tr><tr class=""><td><code>ad4e7fe</code></td><td class="nowrap">2026-09-06</td><td>handle sculpts that quadriflow refuses, found by testing a real one</td></tr><tr class=""><td><code>f48f735</code></td><td class="nowrap">2026-09-06</td><td>add step 5: LODs, completing the chain</td></tr><tr class=""><td><code>2bcf359</code></td><td class="nowrap">2026-09-06</td><td>add step 4: run the whole chain over a selection</td></tr><tr class=""><td><code>29b0ee7</code></td><td class="nowrap">2026-09-06</td><td>add step 3: bake the sculpt detail onto the low-poly</td></tr><tr class=""><td><code>9883667</code></td><td class="nowrap">2026-09-06</td><td>add step 2: unwrap the low-poly for the bake</td></tr><tr class=""><td><code>52fce05</code></td><td class="nowrap">2026-09-05</td><td>package retopo kit as an installable extension zip</td></tr><tr class=""><td><code>9d253d8</code></td><td class="nowrap">2026-09-05</td><td>add retopo kit step 1: remesh by quad size</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>

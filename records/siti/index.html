@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Siti Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root { --ground: #FAF7F2; --surface: #FFFFFF; --ink: #1B1916; --muted: #6B655C; --line: #E2DDD4;
+  --accent: #A8620C; --accent-soft: #F6E8D4; --flag: #E8A33D; --flag-ink: #2A1D00; --done: #2A7148;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --heading-case: none; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; } }
+:root[data-theme="dark"] { --ground: #141210; --surface: #1C1A17; --ink: #F2EFE9; --muted: #A8A29A; --line: #2E2B27;
+  --accent: #E8A33D; --accent-soft: #2B2415; --done: #6CC592; color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); padding-inline: 20px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; padding-block: 32px 96px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; max-height: calc(100vh - 40px); overflow-y: auto; font-size: 14px; }
+nav.toc > ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+nav.toc > ul > li > a { font: 700 16px/1.3 var(--display); letter-spacing: .06em; text-transform: var(--heading-case); color: var(--ink); text-decoration: none; }
+nav.toc ul ul { list-style: none; margin: 2px 0 8px; padding: 0 0 0 10px; border-left: 1px solid var(--line); display: grid; gap: 1px; }
+nav.toc ul ul a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+main { display: grid; gap: 72px; min-width: 0; }
+.eyebrow { display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font: 700 14px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+.eyebrow b { background: var(--flag); color: var(--flag-ink); padding: 5px 9px; }
+.eyebrow span { color: var(--muted); }
+h1 { font: 700 clamp(44px, 7vw, 84px)/.92 var(--display); text-transform: var(--heading-case); margin: 14px 0 12px; text-wrap: balance; }
+.thesis { max-width: 68ch; margin: 0; font-size: 18px; }
+.stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 28px 0; border-block: 2px solid var(--ink); }
+.stat { padding: 12px 14px; display: grid; gap: 2px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; padding-left: 0; }
+.stat b { font: 700 34px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { width: 100%; max-width: 100%; height: auto; max-height: 640px; object-fit: contain; display: block; background: var(--surface); }
+.chapter { display: grid; gap: 14px; scroll-margin-top: 16px; }
+.kicker { margin: 0; font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+h2 { font: 700 48px/1 var(--display); text-transform: var(--heading-case); margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+h3 { font: 700 30px/1.05 var(--display); text-transform: var(--heading-case); margin: 24px 0 4px; scroll-margin-top: 16px; }
+h4 { font: 700 21px/1.1 var(--display); text-transform: var(--heading-case); letter-spacing: .02em; margin: 18px 0 8px; }
+h5 { font: 600 16px/1.3 var(--body); margin: 18px 0 4px; }
+.lede, .note { max-width: 70ch; margin: 0; color: var(--muted); }
+.gallery { scroll-margin-top: 16px; display: grid; gap: 8px; }
+.shots { display: grid; gap: 18px; margin-top: 10px; align-items: start; }
+.shots.wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.shots.tall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shots.odd > .shot:first-child { grid-column: 1 / -1; }
+.shots.odd > .shot:first-child img { max-height: 560px; object-fit: contain; }
+.shot { margin: 0; display: grid; gap: 6px; align-content: start; }
+.shot img { display: block; width: 100%; max-width: 100%; height: auto; background: var(--line); border: 1px solid var(--line); }
+.shot figcaption { font-size: 14px; line-height: 1.4; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.tall .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+.date { font: 500 12px/1 var(--mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.missing .gap { aspect-ratio: 16 / 9; display: grid; place-items: center; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; padding: 16px; text-align: center; }
+.pipeline { list-style: none; counter-reset: step; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.pipeline li { counter-increment: step; padding: 14px 16px 16px; display: grid; gap: 4px; align-content: start; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+.pipeline b { font: 700 20px/1 var(--display); text-transform: var(--heading-case); }
+.pipeline b::before { content: counter(step) "  "; color: var(--accent); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.pipeline span { font-size: 14.5px; }
+.pipeline code { font-size: 12px; color: var(--muted); justify-self: start; }
+.prose { max-width: 82ch; display: grid; gap: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose .table { margin: 0 0 12px; }
+.prose ul, .prose ol { padding-left: 22px; }
+.prose li { margin: 3px 0; }
+.prose blockquote { border-left: 3px solid var(--flag); padding: 4px 0 4px 14px; color: var(--muted); }
+code { font: 500 .86em var(--mono); background: var(--accent-soft); padding: 1px 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface); border: 1px solid var(--line); padding: 12px 14px; overflow-x: auto; }
+pre.mermaid { background: #FFFFFF; text-align: center; }
+pre code { background: none; padding: 0; overflow-wrap: normal; white-space: pre; }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+th { font: 700 14px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); }
+.chapter > .table td:first-child { width: 220px; }
+tr.merge td { color: var(--muted); }
+.nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+del { color: var(--muted); }
+.box { font: 500 11px/1 var(--mono); padding: 2px 5px; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.box.done { color: var(--done); border-color: var(--done); }
+details.fold { border-bottom: 1px solid var(--line); scroll-margin-top: 16px; }
+details.fold > summary { cursor: pointer; list-style: none; padding: 10px 0; display: flex; gap: 10px; align-items: baseline; font: 600 16px/1.35 var(--body); }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::before { content: "+"; font: 500 14px var(--mono); color: var(--accent); width: 12px; flex: none; }
+details.fold[open] > summary::before { content: "\2212"; }
+details.fold > div { padding: 2px 0 18px 22px; }
+.unfold { font: 600 12px/1 var(--body); color: var(--accent); background: var(--surface); border: 1px solid var(--line); padding: 5px 9px; cursor: pointer; }
+.unfold:hover { border-color: var(--accent); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; gap: 24px; }
+  nav.toc { position: static; max-height: none; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+  nav.toc > ul { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  nav.toc ul ul { display: none; }
+  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots.tall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .shots.wide { grid-template-columns: 1fr; }
+  .shots.tall { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pipeline { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(even) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .chapter > .table td:first-child { width: 36%; }
+  h2 { font-size: 38px; }
+  .shot figcaption { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
+  <main>
+<header class="cover" id="top">
+  <p class="eyebrow"><b>Siti</b><span>Project record · built 2026-09-17 from feat/siti-rename</span></p>
+  <h1>Siti</h1>
+  <p class="thesis">Siti is Luqman's personal AI assistant, spoken to rather than typed at. She is named Siti and talks like someone who knows him, not like a formal assistant — the JARVIS idea, in his own words, without the butler act. It is meant for the times his hands are busy — mostly driving between home and Todak Academy — when a thought about a project arrives and would otherwise be lost.</p>
+  <div class="stats"><div class="stat"><b>4</b><span>commits</span></div><div class="stat"><b>12</b><span>days of work</span></div><div class="stat"><b>3</b><span>source files</span></div><div class="stat"><b>988</b><span>lines of code</span></div><div class="stat"><b>13</b><span>decisions recorded</span></div><div class="stat"><b>3</b><span>sessions logged</span></div></div>
+  
+</header>
+<section class="chapter notes" id="overview">
+  <p class="kicker">00-overview.md</p>
+  <h2>Overview</h2>
+  <div class="prose"><p>He opens a web page on his iPhone, taps once, and from that point it is a hands-free conversation: the phone listens, Siti answers out loud, and the phone starts listening again by itself. It knows everything in his knowledge base, can save new facts into Sky AI Brain, and can search the web.</p>
+<h3 id="overview-where-things-live">Where things live</h3>
+<div class="table"><table><thead><tr><th>Piece</th><th>Location</th></tr></thead><tbody>
+<tr><td>Code</td><td><code>~/Desktop/project/ai/siti/</code></td></tr>
+<tr><td>Web page</td><td><a href="https://siti-luqman.netlify.app">https://siti-luqman.netlify.app</a> (Netlify, site <code>siti-luqman</code>)</td></tr>
+<tr><td>Agent function</td><td><code>siti</code> edge function on Supabase project <code>Sky AI Brain</code></td></tr>
+<tr><td>Notes mirror</td><td><code>knowledge</code> table, same Supabase project</td></tr>
+<tr><td>Memory</td><td>existing <code>memory</code> edge function + <code>memories</code> table</td></tr>
+<tr><td>Sync command</td><td><code>siti-sync</code> (linked into <code>~/.local/bin</code>)</td></tr>
+</tbody></table></div>
+<h3 id="overview-secrets-used-names-only">Secrets used (names only)</h3>
+<p><code>ANTHROPIC_API_KEY</code>, <code>SITI_PIN</code>, <code>SKYBRAIN_URL</code>, <code>SKYBRAIN_SERVICE_ROLE_KEY</code>, <code>SUPABASE_ACCESS_TOKEN</code>, <code>NETLIFY_AUTH_TOKEN</code>, <code>NETLIFY_SKY_SITE_ID</code></p></div>
+</section>
+<section class="chapter notes" id="idea">
+  <p class="kicker">01-idea.md · 6 sections</p>
+  <h2>The idea</h2>
+  <div class="prose"><h3 id="idea-the-problem">The problem</h3>
+<p>Luqman drives regularly and thinks about his projects while driving. Typing is impossible and unsafe, so those thoughts are lost by the time he arrives. He also keeps a detailed knowledge base on his Mac that he cannot reach when away from the desk.</p>
+<h3 id="idea-the-idea">The idea</h3>
+<p>An assistant he talks to instead of typing to, reachable from his iPhone at any time, that already knows his projects because it reads the same notes Claude reads on his Mac.</p>
+<h3 id="idea-who-it-is-for">Who it is for</h3>
+<p>Only Luqman. This is a personal tool, not a product to sell. That is why it is protected by a simple PIN rather than real user accounts.</p>
+<h3 id="idea-what-makes-it-different-from-just-using-an-ai-chat-app">What makes it different from just using an AI chat app</h3>
+<p>A generic assistant knows nothing about <code>pipeline</code> or <code>retopology</code>. Siti is handed his entire notebook on every request, so he can ask "where did I leave retopology?" and get a real answer.</p>
+<h3 id="idea-not-doing">Not doing</h3>
+<ul>
+<li>No user accounts, no sign-up, no other users.</li>
+<li>No calendar, email or smart-home control yet.</li>
+<li>No wake word — he taps once to start the conversation.</li>
+</ul>
+<h3 id="idea-2026-09-13-siti-becomes-the-main-agent">2026-09-13 — Siti becomes the main agent</h3>
+<p>Luqman wants Siti to be the one place he asks for anything, and she makes it for him — not only answers. The first "maker" ability is the 3D asset agent: describe an object → Meshy generates it → retopo-kit cleans it in Blender → pipeline exports it for Unreal. It lives under Siti instead of being its own project. How Siti (in the cloud) reaches Blender (on his computer) is still to be decided.</p></div>
+</section>
+<section class="chapter notes" id="planning">
+  <p class="kicker">02-planning.md · 6 sections</p>
+  <h2>Planning</h2>
+  <div class="prose"><h3 id="planning-phase-1-talking-works-end-to-end-current">Phase 1 — talking works end to end (current)</h3>
+<ul>
+<li><span class="box done">done</span> <code>knowledge</code> table on Supabase</li>
+<li><span class="box done">done</span> <code>siti-sync</code> pushes the notebook up from the Mac</li>
+<li><span class="box done">done</span> <code>siti</code> edge function: notes + memory + web search</li>
+<li><span class="box done">done</span> Voice web page with the hands-free listening loop</li>
+<li><span class="box done">done</span> PIN protection</li>
+<li><span class="box done">done</span> Deployed to Netlify</li>
+<li><span class="box done">done</span> Renamed to Siti, with a warm rather than formal personality (2026-09-11)</li>
+<li><span class="box done">done</span> Page reachable on the phone — Netlify account-wide SSO turned off (2026-09-11)</li>
+<li><span class="box">to do</span> <code>ANTHROPIC_API_KEY</code> added to Supabase secrets — <strong>blocked on Luqman creating one at console.anthropic.com</strong>. This is the only thing between him and a working assistant; everything else is deployed and verified.</li>
+<li><span class="box">to do</span> Tested in the car</li>
+</ul>
+<h3 id="planning-phase-2-make-it-a-habit">Phase 2 — make it a habit</h3>
+<ul>
+<li>Automatic <code>siti-sync</code> so the notebook is never stale</li>
+<li>Shorter, more natural spoken answers after real use</li>
+<li>Add to iPhone home screen so it opens like an app</li>
+</ul>
+<h3 id="planning-phase-3-more-it-can-do">Phase 3 — more it can do</h3>
+<p>Only after Phase 1 has been used for a while. Candidates: read back today's log, write a log entry by voice, check the weather, add a milestone.</p>
+<h3 id="planning-out-of-scope">Out of scope</h3>
+<p>Selling it, other users, an App Store app.</p>
+<h3 id="planning-phase-4-siti-makes-things-added-2026-09-13">Phase 4 — Siti makes things (added 2026-09-13)</h3>
+<p>Siti becomes the main agent. First maker ability: 3D assets (Meshy → retopo-kit → pipeline → Unreal). Open question: how cloud Siti hands jobs to the computer that runs Blender. Phase 1 (API key, first real conversation) still comes first.</p>
+<h3 id="planning-paused-2026-09-13">Paused 2026-09-13</h3>
+<p>Luqman chose not to pay for an Anthropic API key. All phases wait. To resume: (1) key + spend limit, (2) switch notebook loading to search, (3) first conversation.</p></div>
+</section>
+<section class="chapter notes" id="milestones">
+  <p class="kicker">03-milestones.md · 0 sections <button class="unfold" type="button" data-for="milestones">Open all</button></p>
+  <h2>Milestones</h2>
+  <div class="prose"><div class="table"><table><thead><tr><th>#</th><th>Milestone</th><th>Target</th><th>Done</th><th>Notes</th></tr></thead><tbody>
+<tr><td>1</td><td>Notes reachable from the internet</td><td>2026-09-06</td><td>2026-09-06</td><td><code>knowledge</code> table + <code>siti-sync</code>, 23 notes</td></tr>
+<tr><td>2</td><td>Agent function live</td><td>2026-09-06</td><td>2026-09-06</td><td><code>siti</code> edge function, PIN gate verified</td></tr>
+<tr><td>3</td><td>Voice page live</td><td>2026-09-06</td><td>2026-09-06</td><td><a href="https://siti-luqman.netlify.app">https://siti-luqman.netlify.app</a></td></tr>
+<tr><td>4</td><td>Renamed to Siti, warm personality</td><td>2026-09-11</td><td>2026-09-11</td><td>function, page, repo, folder, secrets</td></tr>
+<tr><td>5</td><td>Page opens on the phone</td><td>2026-09-11</td><td>2026-09-11</td><td>Netlify SSO was gating every site on the account</td></tr>
+<tr><td>6</td><td>First real conversation</td><td>—</td><td>—</td><td>still waiting on <code>ANTHROPIC_API_KEY</code></td></tr>
+<tr><td>7</td><td>Used while driving</td><td>—</td><td>—</td><td>the real test</td></tr>
+</tbody></table></div></div>
+</section>
+<section class="chapter notes" id="methods">
+  <p class="kicker">04-methods.md · 6 sections <button class="unfold" type="button" data-for="methods">Open all</button></p>
+  <h2>Methods</h2>
+  <div class="prose"><blockquote>Anyone (Claude included) who reads this file should be able to start working without asking.</blockquote>
+<details class="fold" id="methods-setup-from-scratch"><summary><span>Setup from scratch</span></summary><div>
+<pre><code># step by step</code></pre>
+</div></details>
+<details class="fold" id="methods-daily-commands"><summary><span>Daily commands</span></summary><div>
+<div class="table"><table><thead><tr><th>Purpose</th><th>Command</th></tr></thead><tbody>
+<tr><td>Run dev</td><td></td></tr>
+<tr><td>Build</td><td></td></tr>
+<tr><td>Test</td><td></td></tr>
+<tr><td>Lint / format</td><td></td></tr>
+<tr><td>Deploy</td><td></td></tr>
+</tbody></table></div>
+</div></details>
+<details class="fold" id="methods-folder-structure"><summary><span>Folder structure</span></summary><div>
+<pre><code></code></pre>
+</div></details>
+<details class="fold" id="methods-conventions"><summary><span>Conventions</span></summary><div>
+<h4 id="methods-naming">Naming</h4>
+<h4 id="methods-git">Git</h4>
+<ul>
+<li>Branch: </li>
+<li>Commit: </li>
+<li>PR: </li>
+</ul>
+<h4 id="methods-code">Code</h4>
+</div></details>
+<details class="fold" id="methods-patterns-in-use"><summary><span>Patterns in use</span></summary><div>
+<h4 id="methods-pattern-name">&lt;pattern name&gt;</h4>
+<p><strong>When to use:</strong> <strong>How:</strong></p>
+<pre><code></code></pre>
+</div></details>
+<details class="fold" id="methods-gotchas-traps"><summary><span>Gotchas / traps</span></summary><div>
+<div class="table"><table><thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div></details></div>
+</section>
+<section class="chapter notes" id="relations">
+  <p class="kicker">05-relations.md · 1 sections</p>
+  <h2>What it depends on</h2>
+  <div class="prose"><div class="table"><table><thead><tr><th>Service</th><th>Role</th><th>Cost</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Anthropic Claude API</td><td>The agent's thinking</td><td>pay per use</td><td><code>claude-opus-5</code>; needs <code>ANTHROPIC_API_KEY</code></td></tr>
+<tr><td>Supabase (Sky AI Brain)</td><td><code>siti</code> + <code>memory</code> functions, <code>knowledge</code> + <code>memories</code> tables</td><td>free tier</td><td>project ref in <code>SKYBRAIN_PROJECT_REF</code></td></tr>
+<tr><td>Netlify</td><td>Hosts the voice web page</td><td>free tier</td><td>site <code>siti-luqman</code></td></tr>
+<tr><td>iOS Safari</td><td>Speech in and speech out</td><td>free</td><td><code>webkitSpeechRecognition</code> + <code>speechSynthesis</code></td></tr>
+</tbody></table></div>
+<h3 id="relations-depends-on">Depends on</h3>
+<ul>
+<li>The <code>memory</code> edge function (shared with the <code>mem</code> CLI) — do not change its request shape without updating <code>siti</code> too.</li>
+<li><code>~/.claude/knowledge/</code> on the Mac — the source of truth. Supabase only holds a copy, refreshed by <code>siti-sync</code>.</li>
+</ul></div>
+</section>
+<section class="chapter notes" id="decisions">
+  <p class="kicker">06-decisions.md · 13 sections <button class="unfold" type="button" data-for="decisions">Open all</button></p>
+  <h2>Decisions</h2>
+  <div class="prose"><details class="fold" id="decisions-2026-09-06-a-web-page-not-a-siri-shortcut"><summary><span>2026-09-06 — A web page, not a Siri Shortcut</span></summary><div>
+<p><strong>Chose:</strong> a web page opened in Safari. <strong>Over:</strong> a Siri Shortcut, Telegram voice notes, a WhatsApp bot. <strong>Why:</strong> Luqman picked it. A Shortcut would be more hands-free, so the page compensates with a listening loop — one tap starts it and it keeps listening until he stops it. Nothing to install and nothing to approve.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-06-send-the-whole-notebook-don-t-search-it"><summary><span>2026-09-06 — Send the whole notebook, don't search it</span></summary><div>
+<p><strong>Chose:</strong> load all 23 notes into the prompt on every request. <strong>Over:</strong> vector search over the notes, like <code>mem recall</code> does. <strong>Why:</strong> the notebook is only about 52 KB. Searching would add a moving part that can return the wrong note, for no benefit at this size. Prompt caching makes the repeated cost small. Revisit if the notebook passes roughly 300 KB.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-06-reuse-the-existing-memory-function"><summary><span>2026-09-06 — Reuse the existing <code>memory</code> function</span></summary><div>
+<p><strong>Chose:</strong> the <code>siti</code> function calls the <code>memory</code> function already in use by <code>mem</code>. <strong>Over:</strong> talking to the <code>memories</code> table directly. <strong>Why:</strong> the embedding logic lives in one place. Anything Siti saves while driving appears in <code>mem recall</code> on the Mac, and vice versa.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-06-a-pin-not-real-accounts"><summary><span>2026-09-06 — A PIN, not real accounts</span></summary><div>
+<p><strong>Chose:</strong> one shared PIN in a request header, checked by the function. <strong>Over:</strong> Supabase Auth. <strong>Why:</strong> one user. The PIN's job is to stop a stranger who finds the URL from spending his API credit. Accounts would be a lot of machinery for one person.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-06-claude-opus-5-at-low-effort"><summary><span>2026-09-06 — Claude Opus 5 at low effort</span></summary><div>
+<p><strong>Chose:</strong> <code>claude-opus-5</code> with <code>output_config.effort</code> set to <code>low</code>. <strong>Over:</strong> a smaller model, or Opus at default effort. <strong>Why:</strong> in a car, waiting is worse than a slightly less thorough answer. Low effort keeps replies quick while staying on the strongest model. Raise it if answers start feeling shallow.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-06-the-phone-does-the-speech-not-a-paid-se"><summary><span>2026-09-06 — The phone does the speech, not a paid service</span></summary><div>
+<p><strong>Chose:</strong> iOS built-in speech recognition and speech synthesis. <strong>Over:</strong> a transcription API such as Whisper, and a voice API such as ElevenLabs. <strong>Why:</strong> free, instant, no extra keys, and no audio leaves the phone. The voice is less natural than a paid service — an acceptable trade for a personal tool.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-11-siti-is-sky-renamed-not-a-new-build"><summary><span>2026-09-11 — Siti is Sky renamed, not a new build</span></summary><div>
+<p><strong>Chose:</strong> rename the existing Sky project to Siti. <strong>Over:</strong> starting a fresh project for Siti. <strong>Why:</strong> Luqman asked for "an AI persona called Siti, like JARVIS — speak to her on my phone, she replies by speaking, she knows everything I know plus the internet." That is exactly what Sky already was, built 2026-09-06 and never once used because two blockers stopped it. Rebuilding would have thrown away working code to arrive back at the same place. He chose the rename with that stated.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-11-warm-and-familiar-not-formal"><summary><span>2026-09-11 — Warm and familiar, not formal</span></summary><div>
+<p><strong>Chose:</strong> a personality that talks like a friend who knows his projects. <strong>Over:</strong> the JARVIS register (formal, dry, "sir"), or purely terse answers. <strong>Why:</strong> he picked it from three options. The formal register costs words on every reply, and words are time when the answer is being read aloud in a car. The rule about staying to two or three spoken sentences still overrides personality — that block in <code>systemPrompt</code> is marked as mattering most.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-11-keep-the-free-phone-voice-for-now"><summary><span>2026-09-11 — Keep the free phone voice for now</span></summary><div>
+<p><strong>Chose:</strong> iOS built-in speech, as before, but preferring a female voice. <strong>Over:</strong> ElevenLabs, which would sound convincingly human. <strong>Why:</strong> he chose to spend nothing until the assistant proves it sticks. Revisit once he has actually used her on a few drives. Note the ElevenLabs key is not in <code>~/.claude/.env</code> anyway, despite <code>global/stack.md</code> listing it as available.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-11-skybrain-and-sky-ai-brain-keep-their-na"><summary><span>2026-09-11 — SKYBRAIN_* and "Sky AI Brain" keep their name</span></summary><div>
+<p><strong>Chose:</strong> rename everything Siti-specific; leave the memory backend alone. <strong>Over:</strong> renaming every trace of "Sky". <strong>Why:</strong> "Sky AI Brain" is the Supabase project holding the <code>memories</code> table, and the <code>mem</code> CLI on the Mac reads it through the same <code>SKYBRAIN_*</code> variables. Renaming those would break memory everywhere for a purely cosmetic gain. What did move: <code>SKY_PIN</code> → <code>SITI_PIN</code> (in <code>.env</code> and Supabase secrets), the request header <code>x-sky-pin</code> → <code>x-siti-pin</code>, the function slug, the Netlify site, the GitHub repo, the project folder and <code>sky-sync</code> → <code>siti-sync</code>.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-11-netlify-sso-off"><summary><span>2026-09-11 — Netlify SSO off</span></summary><div>
+<p><strong>Chose:</strong> turn off the "require a Netlify login to view" setting. <strong>Over:</strong> leaving it on and finding another way onto the phone. <strong>Why:</strong> it was set account-wide, so every site Luqman deploys returned 401 to anyone not logged in — including his phone. It also explains why other published pages were unreachable. The page itself holds no secrets; the PIN checked by the <code>siti</code> function is what actually protects his API credit, which was the design from 2026-09-06.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-13-siti-hands-make-jobs-to-claude-code-on-"><summary><span>2026-09-13 — Siti hands "make" jobs to Claude Code on the Todak Academy PC</span></summary><div>
+<p><strong>Chose:</strong> Siti writes a job into Supabase; a small helper on the Todak Academy PC picks it up and runs Claude Code headless, which does the actual making. <strong>Over:</strong> giving Siti one custom tool per ability (Meshy, retopo-kit, pipeline), or a cloud-only flow that calls Meshy and skips Blender. <strong>Why:</strong> Luqman picked it. Claude Code already drives Blender, Meshy, sfx and Godot, so "ask Siti for anything" works without a new tool per ability, and heavy work runs on his Claude Code plan instead of API credit. He chose the PC over the Mac although the PC is likely off outside work hours — jobs sent then must wait in the queue, not fail.</p>
+</div></details>
+<details class="fold" id="decisions-2026-09-13-siti-paused-no-paid-api-key"><summary><span>2026-09-13 — Siti paused: no paid API key</span></summary><div>
+<p><strong>Chose:</strong> pause Siti rather than buy Anthropic API credit. <strong>Over:</strong> paying roughly $10–15/month for the key, or rebuilding her brain on Claude Code on the Todak Academy PC (free, but only works while the PC is on). <strong>Why:</strong> Luqman does not want to spend money right now. Without the key the edge function cannot answer, search the web, save memories or queue maker jobs, so every Siti feature is blocked. Nothing was deleted: the Netlify page and the Supabase function stay deployed on free tiers and cost nothing while idle. The "main agent" direction and the PC-worker decision above still stand if resumed. Before resuming, fix the notebook size: it is ~760 KB, far past the 300 KB point where sending all of it with each question stops making sense.</p>
+</div></details></div>
+</section>
+<section class="chapter notes" id="references">
+  <p class="kicker">07-references.md · 5 sections</p>
+  <h2>References</h2>
+  <div class="prose"><h3 id="references-project-links">Project links</h3>
+<div class="table"><table><thead><tr><th>Item</th><th>URL</th></tr></thead><tbody>
+<tr><td>Repo</td><td></td></tr>
+<tr><td>Production</td><td></td></tr>
+<tr><td>Staging</td><td></td></tr>
+<tr><td>Dashboard / analytics</td><td></td></tr>
+<tr><td>Design (Figma etc.)</td><td></td></tr>
+<tr><td>Board / issue tracker</td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-external-documentation">External documentation</h3>
+<div class="table"><table><thead><tr><th>Topic</th><th>Link</th><th>Notes</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-credentials">Credentials</h3>
+<blockquote>⚠️ <strong>Never write key values here.</strong> Env var names only. The real values are stored in <code>~/.claude/.env</code> (chmod 600).</blockquote>
+<div class="table"><table><thead><tr><th>Env var name</th><th>Used for</th><th>Where to get it</th></tr></thead><tbody>
+<tr><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<h3 id="references-references-inspiration">References &amp; inspiration</h3>
+<h3 id="references-reading-notes">Reading notes</h3></div>
+</section>
+<section class="chapter notes" id="log">
+  <p class="kicker">log/ · 3 sessions <button class="unfold" type="button" data-for="log">Open all</button></p>
+  <h2>Session log</h2>
+  <div class="prose"><details class="fold" id="log-2026-09-13"><summary><span>2026-09-13</span></summary><div><h3 id="log-2026-09-13-what-was-done">What was done</h3>
+<ul>
+<li>Decided Siti would become the main agent, with the 3D asset agent as her first maker ability.</li>
+<li>Chose the job handoff design: Supabase job list → helper on the Todak Academy PC → Claude Code.</li>
+<li>Checked the cost of an API key: pay-as-you-go, about $10–15/month estimated for daily drives.</li>
+</ul>
+<h3 id="log-2026-09-13-decisions-made">Decisions made</h3>
+<ul>
+<li>Paused Siti: Luqman does not want to spend money on an API key (see 06-decisions.md).</li>
+</ul>
+<h3 id="log-2026-09-13-stuck-on-problems">Stuck on / problems</h3>
+<ul>
+<li>Notebook is ~760 KB; sending it all per question would be expensive. Needs search before any resume.</li>
+<li>The copy on this PC (<code>~/Desktop/project/sky</code>) is the old pre-rename code; the current code is on the Mac.</li>
+</ul>
+<h3 id="log-2026-09-13-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> Nothing until Luqman chooses to resume.</li>
+</ul></div></details><details class="fold" id="log-2026-09-11"><summary><span>2026-09-11</span></summary><div><h3 id="log-2026-09-11-what-was-done">What was done</h3>
+<ul>
+<li>Luqman asked for "an AI persona called Siti, like JARVIS" — speak to her on his phone, she replies out loud, she knows his knowledge base and the internet. That was already built as Sky on 2026-09-06 and had never run.</li>
+<li>Renamed Sky to Siti end to end: edge function slug, Netlify site (<code>siti-luqman.netlify.app</code>), GitHub repo (<code>juslangit/siti</code>), project folder <code>~/Desktop/project/ai/siti</code>, <code>sky-sync</code> → <code>siti-sync</code> with its <code>~/.local/bin</code> symlink, <code>SKY_PIN</code> → <code>SITI_PIN</code> in <code>.env</code> and Supabase secrets, and the <code>x-sky-pin</code> request header. Old <code>sky</code> function deleted.</li>
+<li>Rewrote <code>systemPrompt</code> for a warm, familiar personality — no "sir", uses his name naturally, keeps the two-or-three-spoken-sentences rule on top.</li>
+<li>Page prefers a female voice where the phone offers one.</li>
+<li>Deployed; branch <code>feat/siti-rename</code> pushed.</li>
+</ul>
+<h3 id="log-2026-09-11-decisions-made">Decisions made</h3>
+<ul>
+<li>Five, all recorded in <code>06-decisions.md</code> (2026-09-11): rename over rebuild, warm over formal, free voice for now, keep <code>SKYBRAIN_*</code>, Netlify SSO off.</li>
+</ul>
+<h3 id="log-2026-09-11-stuck-on-problems">Stuck on / problems</h3>
+<ul>
+<li><strong><code>ANTHROPIC_API_KEY</code> is still missing from Supabase secrets.</strong> Verified: with the right PIN the function returns "Could not resolve authentication method". Only Luqman can create the key at console.anthropic.com. Everything else is live and tested.</li>
+<li><code>~/.claude/.env</code> line 7 has <code># ANTHROPIC_API_KEY=</code> commented out.</li>
+<li>Netlify had account-wide SSO on, so every site he deploys returned 401 to anyone not logged in. Turned off — this likely also unblocked the tuition-lms client demo and print-quote pages.</li>
+</ul>
+<h3 id="log-2026-09-11-what-was-learned">What was learned</h3>
+<ul>
+<li>The notebook is now 89 notes / ~543 KB, sent on every question. The 2026-09-06 decision said to revisit vector search past roughly 300 KB, so that threshold has been crossed and the first reply of each drive will be slow.</li>
+</ul>
+<h3 id="log-2026-09-11-next">Next</h3>
+<ul>
+<li><span class="box">to do</span> Luqman creates <code>ANTHROPIC_API_KEY</code>; add it to Supabase secrets and <code>.env</code></li>
+<li><span class="box">to do</span> First real conversation, then add to the iPhone home screen</li>
+<li><span class="box">to do</span> Decide what to do about the 543 KB notebook</li>
+</ul></div></details><details class="fold" id="log-2026-09-06"><summary><span>2026-09-06</span></summary><div><p>Luqman asked for an AI agent he could speak to from his iPhone while driving, rather than typing. Chose a web page front end, a Supabase edge function as the agent, and Claude Opus 5 as the brain.</p>
+<h3 id="log-2026-09-06-built">Built</h3>
+<ul>
+<li><code>knowledge</code> table on Supabase, with row level security so only the service key can read it.</li>
+<li><code>scripts/siti-sync</code> — pushes every note from <code>~/.claude/knowledge</code> to that table and deletes notes that no longer exist locally. Linked into <code>~/.local/bin</code>. First run pushed 23 notes, about 52 000 characters.</li>
+<li><code>supabase/functions/siti/index.ts</code> — checks the PIN, loads the notebook into a cached system prompt, and runs a tool loop with <code>save_memory</code>, <code>recall_memory</code> and Claude's built-in web search.</li>
+<li><code>web/index.html</code> — dark full-screen voice page. One tap starts a hands-free loop: listen, answer aloud, listen again. Holds a screen wake lock so the phone does not sleep mid-drive. PIN and function address are stored in the browser only.</li>
+</ul>
+<h3 id="log-2026-09-06-verified">Verified</h3>
+<ul>
+<li>Wrong PIN is refused with 401; correct PIN passes the gate.</li>
+<li><code>siti-sync --list</code> shows all 23 notes in Supabase.</li>
+<li>Netlify deploy live at <a href="https://siti-luqman.netlify.app">https://siti-luqman.netlify.app</a></li>
+</ul>
+<h3 id="log-2026-09-06-blocked">Blocked</h3>
+<p><code>ANTHROPIC_API_KEY</code> is not created yet — the function reaches Anthropic and fails there, which is the only remaining step. Luqman is creating the key.</p>
+<h3 id="log-2026-09-06-next">Next</h3>
+<p>Add the key, hold the first conversation, then test it in the car.</p></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on feat/siti-rename, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>a967033</code></td><td class="nowrap">2026-09-17</td><td>Add the project record</td></tr><tr class=""><td><code>4146c29</code></td><td class="nowrap">2026-09-13</td><td>update install path to ~/Desktop/project/ai/siti</td></tr><tr class=""><td><code>9e6ee14</code></td><td class="nowrap">2026-09-11</td><td>rename sky to siti and give her a warmer personality</td></tr><tr class=""><td><code>7666e27</code></td><td class="nowrap">2026-09-06</td><td>add sky voice agent: web page, edge function, knowledge sync</td></tr></tbody></table></div></div></details>
+</section></main>
+</div>
+<!--mermaid-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: "neutral" });</script>
+<!--/mermaid-->
+<script>
+document.querySelectorAll(".unfold").forEach(function (button) {
+  button.addEventListener("click", function () {
+    var section = document.getElementById(button.dataset.for);
+    var folds = section.querySelectorAll("details.fold");
+    var opening = button.textContent === "Open all";
+    folds.forEach(function (d) { d.open = opening; });
+    button.textContent = opening ? "Close all" : "Open all";
+  });
+});
+// A link to something inside a closed fold opens the fold.
+function openTarget() {
+  var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  for (var node = target; node; node = node.parentElement) {
+    if (node.tagName === "DETAILS") node.open = true;
+  }
+  if (target) target.scrollIntoView();
+}
+window.addEventListener("hashchange", openTarget);
+openTarget();
+</script>
+</body>
+</html>
