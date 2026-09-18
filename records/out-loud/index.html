@@ -121,13 +121,13 @@ details.fold > div { padding: 2px 0 18px 22px; }
 </head>
 <body>
 <div class="layout">
-  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li></ul></nav>
+  <nav class="toc" aria-label="Contents"><ul><li><a href="#overview">Overview</a></li><li><a href="#idea">The idea</a></li><li><a href="#planning">Planning</a></li><li><a href="#milestones">Milestones</a></li><li><a href="#methods">Methods</a></li><li><a href="#relations">What it depends on</a></li><li><a href="#decisions">Decisions</a></li><li><a href="#references">References</a></li><li><a href="#log">Session log</a></li><li><a href="#history">Git history</a></li></ul></nav>
   <main>
 <header class="cover" id="top">
-  <p class="eyebrow"><b>Out Loud</b><span>Project record · built 2026-09-17</span></p>
+  <p class="eyebrow"><b>Out Loud</b><span>Project record · built 2026-09-18 from main</span></p>
   <h1>Out Loud</h1>
   <p class="thesis">Out Loud is a Japanese class that runs in a browser tab and refuses to move on until you have said the phrase out loud. The teacher speaks first, using a Japanese voice already installed in macOS; the microphone then opens, Chrome turns what Luqman said into Japanese text, and the app compares it to what it asked for. Every lesson drills its phrases and then forces him to use them in a scene where the teacher plays the other person. It exists because Luqman asked to learn languages by speaking rather than by tapping, "like a real person teaching in class".</p>
-  <div class="stats"><div class="stat"><b>9</b><span>source files</span></div><div class="stat"><b>2,435</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
+  <div class="stats"><div class="stat"><b>1</b><span>commits</span></div><div class="stat"><b>1</b><span>days of work</span></div><div class="stat"><b>9</b><span>source files</span></div><div class="stat"><b>2,435</b><span>lines of code</span></div><div class="stat"><b>5</b><span>decisions recorded</span></div><div class="stat"><b>1</b><span>sessions logged</span></div></div>
   
 </header>
 <section class="chapter notes" id="overview">
@@ -138,7 +138,7 @@ details.fold > div { padding: 2px 0 18px 22px; }
 <tr><td>Status</td><td>testing — built 2026-09-17, never yet spoken to by a human</td></tr>
 <tr><td>Current phase</td><td>v1: five lessons, drill + scene, 47 passing checks</td></tr>
 <tr><td>Deadline / target</td><td>none</td></tr>
-<tr><td>Repo</td><td>not initialised yet</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/juslangit/out-loud">https://github.com/juslangit/out-loud</a> (private, created 2026-09-18) · <code>~/Desktop/project/web/out-loud</code></td></tr>
 <tr><td>URL / deployment</td><td>local only — <code>./run.sh</code> serves it on <code>http://localhost:8722</code></td></tr>
 <tr><td>Main stack</td><td>plain HTML, CSS and ES modules. No build step, no dependencies, no server, no API key</td></tr>
 </tbody></table></div>
@@ -384,6 +384,11 @@ details.fold > div { padding: 2px 0 18px 22px; }
 <h3 id="log-2026-09-17-where-it-stands">Where it stands</h3>
 <p>Built, renders, 47 checks green, and <strong>nobody has spoken to it</strong>. That last part is the whole of the next step. The single assumption everything rests on — that Chrome transcribes Luqman's Japanese accurately enough for the marking to feel fair — cannot be tested by Claude, who has no voice.</p>
 <p>This is the position <code>claude-terminal</code> was in before it was archived: built, tested, never exercised by hand. M6 exists so that does not repeat.</p></div></details></div>
+</section>
+<section class="chapter" id="history">
+  <p class="kicker">git log on main, newest first</p>
+  <h2>Git history</h2>
+  <details class="fold"><summary><span>Every commit</span></summary><div><div class="table"><table><thead><tr><th>Commit</th><th>Date</th><th>Change</th></tr></thead><tbody><tr class=""><td><code>5de6c33</code></td><td class="nowrap">2026-09-18</td><td>build out loud, a speaking japanese class in the browser</td></tr></tbody></table></div></div></details>
 </section></main>
 </div>
 <!--mermaid-->
